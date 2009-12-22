@@ -1,5 +1,16 @@
 
+Severs
+======
 watcher - used in devserver mode to auto refresh all attached clients.
-static  - server static files in devmode
-main    - psgi application server (you main server if you choose)
+static  - server static files in devmode; optionally production
+wsgi    - (Web Server Gateway Interface) application server (you main server if you choose)
+
+Directories
+===========
+configure  - json configuration for servers
+library    - vendor code and other chuncks of functionality
+servers    - node servers including watcher, wsgi and static
+static     - all media files to be servered css, images, js, media, flash
+templates  - files to be rendered by template engine and delivered by wsgi
+utility    - scripts and tools, some will compress and distribute static content
 

@@ -28,10 +28,12 @@ var server      = http.createServer(function (req, res) {
         res.sendBody('hello to all that are kjel akjsel.\n');
         res.finish();
     }, 2000);
-    */
+*/
 });
+server.listen(8002);
 
 
+/*
 process.watchFile( file, function(curr, prev) {
     if ( curr.size == prev.size ) return;
 
@@ -40,7 +42,6 @@ process.watchFile( file, function(curr, prev) {
         callbacks.shift()(content + ' length: ' + callbacks.length);
     }
 } );
-
-server.listen(8002);
 sys.puts("Server running at http://127.0.0.1:8000/");
 
+*/
