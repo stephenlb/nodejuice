@@ -1,0 +1,18 @@
+<div style="flavor">12345434</div>
+
+<script src="http://www.google.com/jsapi"></script>
+<script>google.load("jquery", "1.3.2");
+ 
+google.setOnLoadCallback(function() {
+    setTimeout(function(){
+        $.ajax({
+        url: '/?watch=true',
+        success: function(resp){
+            location.reload(true);
+            
+            }
+        });
+    }, 12);
+});
+</script>
+

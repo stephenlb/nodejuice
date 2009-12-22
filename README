@@ -1,0 +1,5 @@
+
+watcher - used in devserver mode to auto refresh all attached clients.
+static  - server static files in devmode
+main    - psgi application server (you main server if you choose)
+
