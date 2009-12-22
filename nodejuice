@@ -1,3 +1,4 @@
 #!/bin/bash
 
-## 
+## walkthrough of setup if files do not exist (file pointers in the config file)
+## if walkthrough is needed allow the user to exit and modify the file manually (./configure/nodejuice.json.js)
