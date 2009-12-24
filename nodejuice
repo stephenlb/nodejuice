@@ -1,4 +1,25 @@
-#!/bin/bash
+#!/usr/bin/js
+/*
+    Usage:
+    ======
+    ./nodejuice [action]
 
-## walkthrough of setup if files do not exist (file pointers in the config file)
-## if walkthrough is needed allow the user to exit and modify the file manually (./configure/nodejuice.json.js)
+    [action] options: [d]evelopment, [w]atcher, [s]tatic, ws[g]i, [p]roduction
+    [action] default is [d]evelopment
+    [action] [d]evelopment will launch all servers to host locally.
+
+    Example:
+    ========
+    This will launch all servers locally. "d" stands for [d]development.
+        ./nodejuice d
+
+    This will launch only the WSGI server depending on configuration.
+*/
+
+/*
+walkthrough of setup if files do not exist (file pointers in the config file)
+if walkthrough is needed allow the user to exit and modify the file manually (./configure/nodejuice.json.js)
+*/
+print(1234);
+
+

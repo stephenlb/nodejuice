@@ -1,5 +1,6 @@
 {
     'watch'   : '/opt/nodejuice/templates',
+    'ignore'  : [ '.git', '.svn', '.cvs' ],
     'host'    : null,
     'port'    : 8002,
     'restart' : {
