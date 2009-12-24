@@ -2,8 +2,9 @@
 /*
     Usage:
     ======
-    ./nodejuice [action]
+    ./nodejuice application directory [action]
 
+    AppDir   Application Directory to run you wsgi server or just the watcher.
     [action] options: [d]evelopment, [w]atcher, [s]tatic, ws[g]i, [p]roduction
     [action] default is [d]evelopment
     [action] [d]evelopment will launch all servers to host locally.

@@ -8,29 +8,56 @@ var sys         = require('sys')
 // Start By Loading Config and Directories
 posix.cat('./configure/watcher.json.js').addCallback(function(config) {
     config = JSON.parse(config);
-    sys.print(sys.inspect(config));
+    // sys.print(sys.inspect(config));
 
-    // Recurse through all directories.
-    posix.readdir(config.watch).addCallback(function(dirs) {
-        
-    });
+    recdirectory( config.watch, config.ignore, function( file, stats ) {
+        sys.puts(file);
+    } );
 });
 
 // Recursive Directory File Gathering
-var redirect = function( start, ignore ) {
+var recdirectory = function( start, ignore, callback ) {
+    // sys.puts( ' 1 <-----> ' + start);
     posix.readdir(start).addCallback(function(files) {
-        // Get Status of Each File
         files.forEach(function(file) {
-            posix.stat().addCallback(function (stats) {
-                sys.puts("stats: " + JSON.stringify(stats));
-            });
+            // Ignored Files/Directories
+            if (ignore.filter(function(item) {
+                return (new RegExp(item)).test(file)
+            }).length) return;
+
+            recdirectory(
+                start + '/' + file, ignore, callback
+            );
+
+            callback(start + '/' + file);
         });
-        //redirect
     });
+    // sys.puts( ' 2 <-----> ' + start);
+    // Get Status of Each File
+    // sys.puts(sys.inspect(files));
+    /*
+    files.forEach(function(file) {
+        // sys.puts(file);
+        // Ignore This File/Dir?
+        if (ignore.filter(function(item) {
+            return (new RegExp(item)).test(file)
+        }).length) return;
+        // sys.puts(file);
+        var stats = posix.stat(file).wait();
+        if ( stats.isDirectory() ){
+// sys.puts('------>' + file);
+// sys.puts(start + '/' + file);
+        return recdirectory(
+            start + '/' + file, ignore, callback
+        );
+        }
+        callback(file);
+    });
+    */
 };
 
-
 // Start Watcher Server
+/*
 http.createServer(function (req, res) {
     callbacks.push(function(wait) {
         res.sendHeader( 200, {"Content-Type": "text/plain"} );
@@ -41,6 +68,7 @@ http.createServer(function (req, res) {
     sys.puts('\nCallback Length: ' + callbacks.length);
     sys.puts('\nConnections: '     + connections++);
 }).listen(8002);
+*/
 
 
 

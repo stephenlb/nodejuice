@@ -1,6 +1,6 @@
 {
-    'watch'   : '/opt/nodejuice/templates',
-    'ignore'  : [ '.git', '.svn', '.cvs' ],
+    'watch'   : '/opt/nodejuice',
+    'ignore'  : [ '.git$', '.svn$', '.cvs$', '.swp$' ],
     'host'    : null,
     'port'    : 8002,
     'restart' : {
@@ -8,7 +8,7 @@
         'in' : [ 'library', 'servers', 'configure' ],
         'by' : 'killall node && ./nodejuice'
     }
-    /* Apache Restart
+    /* Apache Restart Example
     'restart' : {
         'on' : [ '.php', '.conf' ],
         'in' : [ 'lib', 'public', 'config' ],
