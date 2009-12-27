@@ -2,19 +2,20 @@
 /*
     Usage:
     ======
-    ./nodejuice application directory [action]
+    ./nodejuice directory [action]
 
-    AppDir   Application Directory to run you wsgi server or just the watcher.
-    [action] options: [d]evelopment, [w]atcher, [s]tatic, ws[g]i, [p]roduction
-    [action] default is [d]evelopment
-    [action] [d]evelopment will launch all servers to host locally.
+    directory Application Directory to run you wsgi server or just the watcher.
+    ???[action] options: [d]evelopment, [w]atcher, [s]tatic, ws[g]i, [p]roduction
+    [action]  options: [w]atcher, ws[g]i
+    [action]  default is [d]evelopment
+    [action]  [d]evelopment will launch all servers to host locally.
 
     Example:
     ========
     This will launch all servers locally. "d" stands for [d]development.
-        ./nodejuice d
+        ./nodejuice /home/me/application
 
-    This will launch only the WSGI server depending on configuration.
+    This will launch both WSGI and watcher servers.
 */
 
 /*

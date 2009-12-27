@@ -1,4 +1,4 @@
-{
+exports.watcher = {
     'watch'   : '/opt/nodejuice',
     'ignore'  : [ '.git$', '.svn$', '.cvs$', '.swp$' ],
     'host'    : null,
@@ -15,4 +15,4 @@
         'by' : '/etc/init.d/apache2 stop && /etc/init.d/apache2 start'
     }
     */
-}
+};
