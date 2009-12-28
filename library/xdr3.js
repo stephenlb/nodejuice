@@ -316,10 +316,12 @@ var now = function() {
     xhr.send('?json=' + escape(stringify(setup.data)));
 };
 
-
+ 
 /* ~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`
 ============================ Your Code Starts Here ============================
 ~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~`~` */
 
+/* The following line is a marker for automatic population */
+/* INPUT-HERE */
 
 })()

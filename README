@@ -1,16 +1,17 @@
 
-Severs
+SEVERS
 ======
-watcher - used in devserver mode to auto refresh all attached clients.
-static  - server static files in devmode; optionally production
-wsgi    - (Web Server Gateway Interface) application server (you main server if you choose)
+wsgi    - (Web Server Gateway Interface) application and static content server.
+mongodb - python rest interface to MongoDB for disk storage.
+          http://api.mongodb.org/python
+watcher - used in devserver mode to auto refresh all attached clients. 
+          watcher server can be used with other webservers.
+          check out ./demos/watcher to see an example.
 
-Directories
+DIRECTORIES
 ===========
-configure  - json configuration for servers
-library    - vendor code and other chuncks of functionality
-servers    - node servers including watcher, wsgi and static
-static     - all media files to be servered css, images, js, media, flash
-templates  - files to be rendered by template engine and delivered by wsgi
-utility    - scripts and tools, some will compress and distribute static content
+library  - vendor code and other chuncks of functionality.
+servers  - node servers including watcher and wsgi.
+demos    - example configurations and folders to show how nodejuice works.
+symlinks - to other needed applications.
 

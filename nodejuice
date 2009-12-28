@@ -1,27 +1,80 @@
-#!/usr/bin/js
-/*
-    Usage:
-    ======
-    ./nodejuice directory [action]
+#!/bin/bash
 
-    directory Application Directory to run you wsgi server or just the watcher.
-    ???[action] options: [d]evelopment, [w]atcher, [s]tatic, ws[g]i, [p]roduction
-    [action]  options: [w]atcher, ws[g]i
-    [action]  default is [d]evelopment
-    [action]  [d]evelopment will launch all servers to host locally.
+# Usage:
+# ======
+# ./nodejuice directory [action]
+# 
+# directory = Application Directory to run you wsgi server or just the watcher.
+# [action]  = options: [d]evelopment, [p]roduction
+# [action]  = default is [d]evelopment
+# [action]  = [d]evelopment will launch all servers to host locally.
+# 
+# Example:
+# ========
+# This will launch all watcher and wsgi servers.
+# ./nodejuice /home/stephen/application-directory
+# 
+# 
+# This will launch only wsgi server only.
+# ./nodejuice /home/stephen/application-directory p
+# ./nodejuice /home/stephen/application-directory prod
+# ./nodejuice /home/stephen/application-directory production
+# ./nodejuice /home/stephen/application-directory k3i8sljf
 
-    Example:
-    ========
-    This will launch all servers locally. "d" stands for [d]development.
-        ./nodejuice /home/me/application
+application=`echo $1 | sed -e 's#/\+$##'`
+nodecheck="$application/configure/wsgi.js"
+nodejuice=`dirname $0`
+watcher="$nodejuice/servers/watcher.js"
+wsgi="$nodejuice/servers/wsgi.js"
+node="$nodejuice/system/node"
 
-    This will launch both WSGI and watcher servers.
-*/
+## Check if Application Directory exixts
+if [ ! -e $application ]
+then
+    echo -e "\nDirectory does not exist: $application"
+    exit
+fi
 
-/*
-walkthrough of setup if files do not exist (file pointers in the config file)
-if walkthrough is needed allow the user to exit and modify the file manually (./configure/nodejuice.json.js)
-*/
-print(1234);
+## Check for configurations files
+if [ ! -e "$nodecheck" ]
+then
+    echo -e "\nNot a valid nodejuice application: $application"
+    exit
+fi
 
+## Check for node symlink
+if [ ! -e "$node" ]
+then
+    ## check `which` for node
+    if [ ! -e `which node` ]
+    then
+        ## Create Symlink for user
+        which_node=`which node`
+        `ln -s $which_node $node`
+    else
+        ask_for_node
+    fi
+fi
 
+## Execute Watcher Server
+echo -e "$node $watcher $application $nodejuice"
+$node $watcher $application $nodejuice
+
+ask_for_node() {
+    echo -e "Node server not detected on your system."
+    echo -e "Node must be installed to use nodejuice."
+    echo -e "Download node at: http://nodejs.org/"
+    echo -e "\nIf Node is installed in a different directory, "
+    echo "type /location/to/node/node and press [enter] : "
+
+    read usr_node
+
+    if [ ! -e "$usr_node" ]
+    then
+        echo -e "\nThat's not a file try again :("
+        exit
+    else
+        ## Create Symlink for user based on entered directory.
+        `ln -s $usr_node $node`
+    fi
+}
