@@ -3,7 +3,7 @@ var sys         = require('sys')
 ,   appdir      = process.ARGV[2]
 ,   njdir       = process.ARGV[3]
 ,   devmode     = !process.ARGV[4]
-,   config      = require(appdir + '/configure/watcher').watcher
+,   config      = require(appdir + '/configure/seeker').seeker
 ,   utility     = require(njdir + '/library/utility')
 ,   clients     = []
 ,   connections = 0;
@@ -17,7 +17,7 @@ http.createServer(function (req, res) {
         res.finish();
     });
 }).listen( config.port, config.host );
-sys.puts("Server Watcher("+process.pid+"): " + JSON.stringify(config));
+sys.puts("Seeker Server("+process.pid+"): " + JSON.stringify(config));
 
 utility.recurse( appdir, config.ignore, function( file, stats ) {
     process.watchFile( file, function(curr, prev) {

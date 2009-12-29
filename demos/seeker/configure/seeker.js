@@ -1,4 +1,4 @@
-exports.watcher = {
+exports.seeker = {
     host    : null,
     port    : 8002,
     ignore  : [

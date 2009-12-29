@@ -4,14 +4,14 @@ SEVERS
 wsgi    - (Web Server Gateway Interface) application and static content server.
 mongodb - python rest interface to MongoDB for disk storage.
           http://api.mongodb.org/python
-watcher - used in devserver mode to auto refresh all attached clients. 
-          watcher server can be used with other webservers.
-          check out ./demos/watcher to see an example.
+seeker  - used in devserver mode to auto refresh all attached clients. 
+          seeker server can be used with other webservers.
+          check out ./demos/seeker to see an example.
 
 DIRECTORIES
 ===========
 library  - vendor code and other chuncks of functionality.
-servers  - node servers including watcher and wsgi.
+servers  - node servers including seeker and wsgi.
 demos    - example configurations and folders to show how nodejuice works.
 symlinks - to other needed applications.
 

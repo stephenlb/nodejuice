@@ -5,7 +5,7 @@
 #
 # ./nodejuice directory [action]
 # 
-# directory = Application Directory to run you wsgi server or just the watcher.
+# directory = Application Directory to run you wsgi server or just the seeker.
 # [action]  = options: [d]evelopment, [p]roduction
 # [action]  = default is [d]evelopment
 # [action]  = [d]evelopment will launch all servers to host locally.
@@ -13,7 +13,7 @@
 # Examples:
 # =========
 #
-# This will launch all watcher and wsgi servers.
+# This will launch all seeker and wsgi servers.
 # ./nodejuice /home/stephen/application-directory
 # 
 # 
@@ -33,7 +33,7 @@ then
     nodejuice="`pwd`"
 fi
 
-watcher="$nodejuice/servers/watcher.js"
+seeker="$nodejuice/servers/seeker.js"
 wsgi="$nodejuice/servers/wsgi.js"
 node="$nodejuice/symlinks/node"
 
@@ -73,11 +73,11 @@ leave() {
     killall node
 }
 
-## Execute Watcher Server
+## Execute Seeker Server
 ## Execute WSGI Server
-echo -e "$node $watcher $application $nodejuice $mode"
+echo -e "$node $seeker $application $nodejuice $mode"
 echo -e "$node $wsgi $application $nodejuice $mode"
-$node $watcher $application $nodejuice $mode &
+$node $seeker $application $nodejuice $mode &
 $node $wsgi $application $nodejuice $mode
 
 
