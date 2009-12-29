@@ -13,7 +13,7 @@ http.createServer(function (req, res) {
         res.sendBody(wait);
         res.finish();
     });
-}).listen(config.port);
+}).listen( config.port, config.host );
 
 sys.puts(
     "\nServer Watching(" + process.pid + "): " + appdir + " on http://" +

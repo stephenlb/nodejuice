@@ -1,21 +1,66 @@
-var http    = require("http")
-,   process = require("posix")
-,   sys     = require("sys")
-,   mime    = require("/opt/nodejuice/library/mime").mime
-,   utility = require("/opt/nodejuice/library/utility")
-,   wsgi    = exports
-,   get     = {};
+var http     = require("http")
+,   posix    = require("posix")
+,   sys      = require("sys")
+,   appdir   = process.ARGV[2]
+,   njdir    = process.ARGV[3]
+,   config   = require(appdir + "/configure/wsgi").wsgi
+,   mime     = require(njdir  + "/library/mime").mime
+,   utility  = require(njdir  + "/library/utility")
+,   wsgi     = exports
+,   requests = {};
 
+/*
+    the plan:
+    ----------
+    load config
+    start server with fun(req, res){
+        check request if matches 
+            check if is a dir or a js file.
+            if js file require or use already cached required
+            if dir, then it's a bunch of static files.
+        if not match, send 404
+    }
+*/
 
-function notFound( req, res ) {
-    var notfound = req.uri.path;
+http.createServer(function ( req, res ) {
+
+    var static = /\/$/
+    ,   action = (config.url.filter(function(url) {
+        return url[0].test(req.uri.path) ? url[1] : 0
+    })[0] || [])[1];
+    
+    // Leave if we don't know what to do.
+    if (!action) return error404( req, res );
+
+    // Is this a static directory?
+    if (static.test(action)) {
+        sys.puts('STATIC: ' + action);
+        sys.puts(sys.inspect(action));
+        // do static
+    }
+    else {
+        // do script
+    }
+
+}).listen( config.port, config.host );
+sys.puts("Server WSGI("+process.pid+"): " + JSON.stringify(config));
+
+function error404( req, res ) {
+    var response = "Non-configured pathname: " + JSON.stringify(req.uri);
+    log( 404, req.uri );
     res.sendHeader( 404, [
         ["Content-Type", "text/plain"],
-        ["Content-Length", notfound.length]
+        ["Content-Length", response.length]
     ] );
-    res.sendBody(notfound);
+    res.sendBody(response);
     res.finish();
 }
+
+function log( code, obj ) {
+    sys.puts( code + ": " + JSON.stringify(obj) );
+}
+
+/*
 
 wsgi.get = function ( path, handler ) {
     get[path] = handler;
@@ -95,3 +140,4 @@ wsgi.staticHandler = function (filename) {
   }
 };
 
+*/

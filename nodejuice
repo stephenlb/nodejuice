@@ -24,9 +24,15 @@
 application=`echo $1 | sed -e 's#/\+$##'`
 nodecheck="$application/configure/wsgi.js"
 nodejuice=`dirname $0`
+
+if [ nodejuice='.' ]
+then
+    nodejuice="`pwd`"
+fi
+
 watcher="$nodejuice/servers/watcher.js"
 wsgi="$nodejuice/servers/wsgi.js"
-node="$nodejuice/system/node"
+node="$nodejuice/symlinks/node"
 
 ## Check if Application Directory exixts
 if [ ! -e $application ]
@@ -56,9 +62,21 @@ then
     fi
 fi
 
+trap leave INT TERM EXIT
+
+leave() {
+    echo -e "Goodbye"
+    trap - INT TERM EXIT
+    killall node
+}
+
 ## Execute Watcher Server
+## Execute WSGI Server
 echo -e "$node $watcher $application $nodejuice"
-$node $watcher $application $nodejuice
+echo -e "$node $wsgi $application $nodejuice"
+$node $watcher $application $nodejuice &
+$node $wsgi $application $nodejuice
+
 
 ask_for_node() {
     echo -e "Node server not detected on your system."

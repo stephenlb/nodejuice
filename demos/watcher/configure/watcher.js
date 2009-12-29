@@ -1,10 +1,9 @@
 exports.watcher = {
-    'ignore'  : [ 'git$', 'svn$', 'cvs$', 'swp$' ],
-    'host'    : null,
-    'port'    : 8002,
-    'restart' : {
-        'on' : [ '.js$' ],
-        'in' : [ 'configure' ]
+    ignore  : [ /git$/, /svn$/, /cvs$/, /swp$/ ],
+    host    : null,
+    port    : 8002,
+    restart : {
+        on : [ /js$/ ]
     }
     /* Apache Restart Example
     'restart' : {
