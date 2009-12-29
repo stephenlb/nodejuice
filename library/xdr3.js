@@ -168,18 +168,15 @@ var now = function() {
     return document.getElementsByTagName('body')[0]
 
 /**
- * STRINGIFY
- * =========
- * var json_string = stringify({obj:'dat'});
+ * URLIZE
+ * ======
+ * var query_string = urlize({key:'dat'});
  */
-},  stringify = function(data) {
-    return JSON && JSON.stringify(data) ||
-        '({'+ map( data, function( k, v ) {
-            return '"' + k.replace( json_r, '\\$1' ) +
-               '":' + ( typeof v === 'string' ?
-               '"' + v.replace( json_r, '\\$1' ) + '"' : v
-               )
-    } ).join(',') + '})'
+},  urlize = function( data, url ) {
+    if (!data) return '';
+    var params = [], key = '';
+    for ( key in data ) params.push( key + '=' + data[key] );
+    return (url.indexOf('?') === -1 ? '?' : '&') + params.join('&')
 
 /**
  * PARSE
@@ -253,7 +250,7 @@ var now = function() {
     } );
 
     // prepare json
-    script.src = setup.url + '?json=' + escape(stringify(setup.data));
+    script.src = setup.url + urlize( setup.data, setup.url );
 
     setTimeout( function() { body().appendChild(script) } , 1 )
 
@@ -313,7 +310,7 @@ var now = function() {
     );
 
     // Send
-    xhr.send('?json=' + escape(stringify(setup.data)));
+    xhr.send(urlize( setup.data, setup.url ));
 };
 
  

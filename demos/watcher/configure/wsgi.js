@@ -8,7 +8,8 @@ exports.wsgi = {
         max  : 5
     },
     url   : [
+        [/^\/watch.*/ , '/myapp.js'],
         [/^\/static\//, '/static/'],
-        [/^\/.*?\/?/, '/static/']
+        [/^\/.*?\/?/  , '/static/']
     ]
 };
