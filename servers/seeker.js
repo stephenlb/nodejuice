@@ -21,7 +21,7 @@ sys.puts("Seeker Server("+process.pid+"): " + JSON.stringify(config));
 
 utility.recurse( appdir, config.ignore, function( file, stats ) {
     process.watchFile( file, function(curr, prev) {
-        sys.puts(JSON.stringify({file: file, connections: clients.length}));
+        utility.inform({file: file, connections: clients.length});
 
         while (clients.length > 0) clients.shift()();
     } );

@@ -21,7 +21,7 @@ http.createServer(function ( req, res ) {
 
     res.attack = function( code, type, response, headers, encoding ) {
         headers = headers || [];
-        utility.log({ code: code, type: type, uri: req.uri});
+        utility.inform({ code: code, type: type, uri: req.uri.full});
         res.sendHeader( code, [
             ["Content-Type", type],
             ["Content-Length", response.length]
