@@ -11,9 +11,9 @@ var sys         = require('sys')
 if (!devmode) process.exit();
 
 http.createServer(function (req, res) {
-    clients.push(function(wait) {
+    clients.push(function() {
         res.sendHeader( 200, {"Content-Type": "text/plain"} );
-        res.sendBody(wait);
+        res.sendBody("\n");
         res.finish();
     });
 }).listen( config.port, config.host );
@@ -23,8 +23,6 @@ utility.recurse( appdir, config.ignore, function( file, stats ) {
     process.watchFile( file, function(curr, prev) {
         sys.puts(JSON.stringify({file: file, connections: clients.length}));
 
-        while (clients.length > 0) {
-            clients.shift()(content + ' length: ' + clients.length);
-        }
+        while (clients.length > 0) clients.shift()();
     } );
 } );

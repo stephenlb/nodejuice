@@ -17,14 +17,14 @@ http.createServer(function ( req, res ) {
         return url[0].test(req.uri.path) ? url[1] : 0
     })[0];
 
-    res.attack = function( code, type, response, headers ) {
+    res.attack = function( code, type, response, headers, encoding ) {
         headers = headers || [];
         log({ code: code, type: type, uri: req.uri});
         res.sendHeader( code, [
             ["Content-Type", type],
             ["Content-Length", response.length]
         ].concat(headers) );
-        res.sendBody(response);
+        res.sendBody( response, encoding || 'utf8' );
         res.finish();
     };
 
@@ -49,7 +49,7 @@ function log( obj ) {
     sys.puts(JSON.stringify(obj));
 }
 
-function send_file( req, res, action ) {
+function send_file( req, res, action, retries ) {
     var path     = req.uri.path.replace( action[0], action[1] )
     ,   syspath  = appdir + path + (path.slice(-1) === '/' ? config.root : '')
     ,   type     = mime.get(syspath)
@@ -58,14 +58,23 @@ function send_file( req, res, action ) {
 
     log({syspath: syspath, path: path, encoding: encoding })
 
+    function retry() {
+        retries = retries || 0;
+
+        log({ retry : retries, syspath: syspath });
+
+        if ( retries < config.retry.max ) setTimeout( function() {
+            send_file( req, res, action, retries + 1 )
+        }, config.retry.wait );
+        else return error404( req, res );
+    }
+
     file.addCallback(function(data) {
-        if (!data) return error404( req, res );
-        res.attack( 200, type, data );
+        if (!data) return retry();
+        res.attack( 200, type, data, [], encoding );
     });
 
-    file.addErrback(function() {
-        return error404( req, res );
-    });
+    file.addErrback(function() { retry() });
 }
 
 function send_script( req, res, action ) {
