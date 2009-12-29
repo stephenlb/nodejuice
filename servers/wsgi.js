@@ -25,18 +25,27 @@ var http     = require("http")
 http.createServer(function ( req, res ) {
 
     var static = /\/$/
-    ,   action = (config.url.filter(function(url) {
+    ,   action = config.url.filter(function(url) {
         return url[0].test(req.uri.path) ? url[1] : 0
-    })[0] || [])[1];
-    
+    })[0];
+
+    res.sender = function( code, type, response, headers ) {
+        headers = headers || [];
+        log({ code: code, type: type, uri: req.uri});
+        res.sendHeader( code, [
+            ["Content-Type", type],
+            ["Content-Length", response.length]
+        ].concat(headers) );
+        res.sendBody(response);
+        res.finish();
+    };
+
     // Leave if we don't know what to do.
     if (!action) return error404( req, res );
 
     // Is this a static directory?
-    if (static.test(action)) {
-        sys.puts('STATIC: ' + action);
-        sys.puts(sys.inspect(action));
-        // do static
+    if (static.test(action[1])) {
+        send_file( req, res, req.uri.path.replace( action[0], action[1] ) );
     }
     else {
         // do script
@@ -47,17 +56,22 @@ sys.puts("Server WSGI("+process.pid+"): " + JSON.stringify(config));
 
 function error404( req, res ) {
     var response = "Non-configured pathname: " + JSON.stringify(req.uri);
-    log( 404, req.uri );
-    res.sendHeader( 404, [
-        ["Content-Type", "text/plain"],
-        ["Content-Length", response.length]
-    ] );
-    res.sendBody(response);
-    res.finish();
+    res.sender( 404, "text/plain", response );
 }
 
-function log( code, obj ) {
-    sys.puts( code + ": " + JSON.stringify(obj) );
+function log( obj ) {
+    sys.puts(JSON.stringify(obj));
+}
+
+function send_file( req, res, path ) {
+    var type     = mime.get(path)
+    ,   encoding = (type.slice(0,4) === "text" ? "utf8" : "binary")
+    ,   file     = posix.cat( appdir + path, encoding );
+
+    file.addCallback(function(data) {
+        if (!data) return error404( req, res );
+        res.sender( 200, type, data );
+    });
 }
 
 /*

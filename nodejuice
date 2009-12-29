@@ -65,7 +65,7 @@ fi
 trap leave INT TERM EXIT
 
 leave() {
-    echo -e "Goodbye"
+    echo -e "\n\nnodejuice shuting down... goodbye"
     trap - INT TERM EXIT
     killall node
 }

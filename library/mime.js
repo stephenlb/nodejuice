@@ -1,10 +1,11 @@
 // stolen from fu node_chat demo who stole from jack- thanks
-exports.mime = {
+var mime = exports.mime = {
   // returns MIME type for extension, or fallback, or octet-steam
-  get : function( ext, fallback ) {
-      return fu.mime.TYPES[ext.toLowerCase()] ||
-             fallback ||
-             'application/octet-stream';
+  get : function( file, fallback ) {
+      var index = file.lastIndexOf(".") + 1;
+      return mime.TYPES[
+          (index < 0 ? "" : file.substring(index)).toLowerCase()
+      ] || fallback || 'application/octet-stream';
   },
   
   // List of most common mime-types, stolen from Rack.

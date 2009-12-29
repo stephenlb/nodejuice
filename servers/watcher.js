@@ -14,16 +14,12 @@ http.createServer(function (req, res) {
         res.finish();
     });
 }).listen( config.port, config.host );
-
-sys.puts(
-    "\nServer Watching(" + process.pid + "): " + appdir + " on http://" +
-    (config.host || 'localhost') + ":" +
-    config.port
-);
+sys.puts("Server Watcher("+process.pid+"): " + JSON.stringify(config));
 
 utility.recurse( appdir, config.ignore, function( file, stats ) {
     process.watchFile( file, function(curr, prev) {
-        sys.puts(file + ' connections: ' + clients.length);
+        sys.puts(JSON.stringify({file: file, connections: clients.length}));
+
         while (clients.length > 0) {
             clients.shift()(content + ' length: ' + clients.length);
         }
