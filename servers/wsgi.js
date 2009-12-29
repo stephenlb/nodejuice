@@ -3,33 +3,21 @@ var http     = require("http")
 ,   sys      = require("sys")
 ,   appdir   = process.ARGV[2]
 ,   njdir    = process.ARGV[3]
+,   devmode  = !process.ARGV[4]
 ,   config   = require(appdir + "/configure/wsgi").wsgi
 ,   mime     = require(njdir  + "/library/mime").mime
 ,   utility  = require(njdir  + "/library/utility")
 ,   wsgi     = exports
-,   requests = {};
-
-/*
-    the plan:
-    ----------
-    load config
-    start server with fun(req, res){
-        check request if matches 
-            check if is a dir or a js file.
-            if js file require or use already cached required
-            if dir, then it's a bunch of static files.
-        if not match, send 404
-    }
-*/
+,   requests = {}
+,   rxstatic = /\/$/
+,   rxnojs   = /\.js$/;
 
 http.createServer(function ( req, res ) {
-
-    var static = /\/$/
-    ,   action = config.url.filter(function(url) {
+    var action = config.url.filter(function(url) {
         return url[0].test(req.uri.path) ? url[1] : 0
     })[0];
 
-    res.sender = function( code, type, response, headers ) {
+    res.attack = function( code, type, response, headers ) {
         headers = headers || [];
         log({ code: code, type: type, uri: req.uri});
         res.sendHeader( code, [
@@ -44,114 +32,58 @@ http.createServer(function ( req, res ) {
     if (!action) return error404( req, res );
 
     // Is this a static directory?
-    if (static.test(action[1])) {
-        send_file( req, res, req.uri.path.replace( action[0], action[1] ) );
-    }
-    else {
-        // do script
-    }
+    if (rxstatic.test(action[1]))
+        send_file( req, res, action );
+    else
+        send_script( req, res, action  );
 
 }).listen( config.port, config.host );
 sys.puts("Server WSGI("+process.pid+"): " + JSON.stringify(config));
 
 function error404( req, res ) {
     var response = "Non-configured pathname: " + JSON.stringify(req.uri);
-    res.sender( 404, "text/plain", response );
+    res.attack( 404, "text/plain", response );
 }
 
 function log( obj ) {
     sys.puts(JSON.stringify(obj));
 }
 
-function send_file( req, res, path ) {
-    var type     = mime.get(path)
+function send_file( req, res, action ) {
+    var path     = req.uri.path.replace( action[0], action[1] )
+    ,   syspath  = appdir + path + (path.slice(-1) === '/' ? config.root : '')
+    ,   type     = mime.get(syspath)
     ,   encoding = (type.slice(0,4) === "text" ? "utf8" : "binary")
-    ,   file     = posix.cat( appdir + path, encoding );
+    ,   file     = posix.cat( syspath, encoding );
+
+    log({syspath: syspath, path: path, encoding: encoding })
 
     file.addCallback(function(data) {
         if (!data) return error404( req, res );
-        res.sender( 200, type, data );
+        res.attack( 200, type, data );
+    });
+
+    file.addErrback(function() {
+        return error404( req, res );
     });
 }
 
-/*
+function send_script( req, res, action ) {
+    if (!devmode) return require(appdir + req.uri.path
+        .replace( action[0], action[1] )
+        .replace( rxnojs, '' )
+    ).journey( req, res );
 
-wsgi.get = function ( path, handler ) {
-    get[path] = handler;
-};
+    var path   = appdir + action[1]
+    ,   script = posix.cat(path);
 
-var server = http.createServer(function (req, res) {
-  if (req.method === "GET" || req.method === "HEAD") {
-    var handler = get[req.uri.path] || notFound;
+    script.addCallback(function(code) {
+        if (!code) return error404( req, res );
+        eval(code).journey( req, res );
+    });
 
-    res.simpleText = function (code, body) {
-      res.sendHeader(code, [ ["Content-Type", "text/plain"]
-                           , ["Content-Length", body.length]
-                           ]);
-      res.sendBody(body);
-      res.finish();
-    };
-
-    res.simpleJSON = function (code, obj) {
-      var body = JSON.stringify(obj);
-      res.sendHeader(code, [ ["Content-Type", "text/json"]
-                           , ["Content-Length", body.length]
-                           ]);
-      res.sendBody(body);
-      res.finish();
-    };
-
-    handler(req, res);
-  }
-});
-
-server.listen( port, host );
-
-wsgi.close = function () { server.close(); };
-
-function extname (path) {
-  var index = path.lastIndexOf(".");
-  return index < 0 ? "" : path.substring(index);
+    script.addErrback(function() {
+        return error404( req, res );
+    });
 }
 
-wsgi.staticHandler = function (filename) {
-  var body, headers;
-  var content_type = wsgi.mime.lookupExtension(extname(filename));
-  var encoding = (content_type.slice(0,4) === "text" ? "utf8" : "binary");
-
-  function loadResponseData(callback) {
-    if (body && headers && !DEBUG) {
-      callback();
-      return;
-    }
-
-    sys.puts("loading " + filename + "...");
-    var promise = process.cat(filename, encoding);
-
-    promise.addCallback(function (data) {
-      body = data;
-      headers = [ [ "Content-Type"   , content_type ]
-                , [ "Content-Length" , body.length ]
-                ];
-      if (!DEBUG)
-        headers.push(["Cache-Control", "public"]);
-       
-      sys.puts("static file " + filename + " loaded");
-      callback();
-    });
-
-    promise.addErrback(function () {
-      sys.puts("Error loading " + filename);
-    });
-  }
-
-  return function (req, res) {
-    loadResponseData(function () {
-      res.sendHeader(200, headers);
-      res.sendBody(body, encoding);
-      res.finish();
-    });
-  }
-};
-
-*/

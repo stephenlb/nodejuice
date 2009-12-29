@@ -2,6 +2,7 @@
 
 # Usage:
 # ======
+#
 # ./nodejuice directory [action]
 # 
 # directory = Application Directory to run you wsgi server or just the watcher.
@@ -9,8 +10,9 @@
 # [action]  = default is [d]evelopment
 # [action]  = [d]evelopment will launch all servers to host locally.
 # 
-# Example:
-# ========
+# Examples:
+# =========
+#
 # This will launch all watcher and wsgi servers.
 # ./nodejuice /home/stephen/application-directory
 # 
@@ -21,6 +23,7 @@
 # ./nodejuice /home/stephen/application-directory production
 # ./nodejuice /home/stephen/application-directory k3i8sljf
 
+mode="$2"
 application=`echo $1 | sed -e 's#/\+$##'`
 nodecheck="$application/configure/wsgi.js"
 nodejuice=`dirname $0`
@@ -72,10 +75,10 @@ leave() {
 
 ## Execute Watcher Server
 ## Execute WSGI Server
-echo -e "$node $watcher $application $nodejuice"
-echo -e "$node $wsgi $application $nodejuice"
-$node $watcher $application $nodejuice &
-$node $wsgi $application $nodejuice
+echo -e "$node $watcher $application $nodejuice $mode"
+echo -e "$node $wsgi $application $nodejuice $mode"
+$node $watcher $application $nodejuice $mode &
+$node $wsgi $application $nodejuice $mode
 
 
 ask_for_node() {

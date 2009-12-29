@@ -4,7 +4,7 @@ exports.wsgi = {
     port : 8080,
     root : 'index.htm',
     url  : [
-        [/^\/static/, '/static/'],
-        [/^\/app.*/   , 'app.js']
+        [/^\/static\//, '/static/'],
+        [/^\/app.*/   , '/app.js']
     ]
 };
