@@ -21,11 +21,19 @@ http.createServer(function ( req, res ) {
 
     res.attack = function( code, type, response, headers, encoding ) {
         headers = headers || [];
+
+        if (devmode) {
+            headers.push(["Cache-Control", 'no-cache']);
+            headers.push(["Expires", new Date]);
+        }
+
         utility.inform({ code: code, type: type, uri: req.uri.full});
+
         res.sendHeader( code, [
             ["Content-Type", type],
             ["Content-Length", response.length]
         ].concat(headers) );
+
         res.sendBody( response, encoding || 'utf8' );
         res.finish();
     };
