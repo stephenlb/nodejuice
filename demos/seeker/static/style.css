@@ -1,7 +1,10 @@
 body {
-    font-family: Arial, Helvetica
+    font-family: Arial, Helvetica;
     color: #fff;
     background-color: #3b3b3b;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
 }
 div {
     color: #fff;
@@ -9,6 +12,17 @@ div {
 }
 
 strong {
-    font-family: mono
+    font-family: mono;
 }
 
+h1 {
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 28px;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: #fff;
+}
