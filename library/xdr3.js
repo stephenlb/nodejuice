@@ -160,12 +160,12 @@ var now = function() {
     else  el[ 'on' + type ] = fun;
 
 /**
- * BODY
+ * HEAD
  * ====
- * body().appendChild(elm);
+ * head().appendChild(elm);
  */
-},  body = function() {
-    return document.getElementsByTagName('body')[0]
+},  head = function() {
+    return document.getElementsByTagName('head')[0]
 
 /**
  * URLIZE
@@ -205,24 +205,31 @@ var now = function() {
  * });
  */
 },  xdr = function( setup ) {
-    var script = document.createElement('script')
-    ,   unique = 'xdr3:' + now()
-    ,   json_r = /([\\"])/g
-    ,   done   = function() {
+    var script  = document.createElement('script')
+    ,   unique  = 'xdr3-' + now()
+    ,   json_r  = /([\\"])/g
+    ,   timeout = setTimeout( function() { done(1) }, setup.timeout || 30000 )
+    ,   data    = setup.data    || {}
+    ,   fail    = setup.fail    || function(){}
+    ,   success = setup.success || function(){}
+    ,   done    = function(failed) {
+            clearTimeout(timeout);
+            if (!script) return;
+            failed && fail.call( script, unescape(script.src) );
             script.onload = script.onreadystatechange = script.onerror = null;
-            body().removeChild(script);
+            head().removeChild(script);
         };
 
     script.onload = script.onreadystatechange = function(e) {
         // nothing untill it's loaded.
-        var state = this.readystate;
+        var state = this.readyState;
         if ( !(!state ||
                 state == "loaded" ||
                 state == "complete")) return;
 
-        var wkey     = escape(unescape(unique))
-        ,   response = unescape( window[wkey] || '' )
-        ,   success  = setup.success;
+        var response = unescape( window[unique] || '' );
+
+        if ( !response ) return done(1);
 
         // setup type supplied
         switch(setup.type) {
@@ -234,25 +241,19 @@ var now = function() {
         }
 
         // invoke user defined function
-        success && success.call( script, response );
+        success.call( script, response );
 
         // destroy
-        window[wkey] = '';
-        done();
+        window[unique] = '';
+        done(0);
     };
 
-    bind( 'error', script, function() {
-        // invoke user defined function
-        setup.fail && setup.fail.call( script, unescape(script.src) );
+    bind( 'error', script, function() { done(1) } );
 
-        // destroy
-        done();
-    } );
+    data.unique = unique;
+    script.src  = setup.url + urlize( data, setup.url );
 
-    // prepare json
-    script.src = setup.url + urlize( setup.data, setup.url );
-
-    setTimeout( function() { body().appendChild(script) } , 1 )
+    setTimeout( function() { head().appendChild(script) }, 1 )
 
 /**
  * AJAX

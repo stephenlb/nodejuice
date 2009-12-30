@@ -5,7 +5,7 @@ var posix    = require("posix")
 ,   devmode  = !process.ARGV[4]
 ,   config   = require(appdir + "/configure/wsgi").wsgi
 ,   mime     = require(njdir  + "/library/mime").mime
-,   rxclever = /("[^"]+"):/g;
+,   rxclever = /"([^"]+)":/g;
 
 config.retry = config.retry || { max: 3, wait: 100 };
 
@@ -26,7 +26,7 @@ var recurse = exports.recurse = function( start, ignore, callback ) {
 
 var inform = exports.inform = function(obj ) {
     sys.puts(JSON.stringify(obj).replace( rxclever, function( _, key ) {
-        return "\033[0;35;1m" + key + "\033[0m:"
+        return "\033[0;35;1m " + key + "\033[0m : "
     } ));
 };
 
@@ -54,4 +54,10 @@ var noble = exports.noble = function( file, success, fail, retries ) {
             inform({ fail: 'true', file: file });
         };
     }
+};
+
+var earliest = exports.earliest = function() { return+new Date };
+
+exports.vigilant = function( text, unique ) {
+    return 'window["' + unique + '"] = "' + text + '";'
 };
