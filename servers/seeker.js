@@ -5,13 +5,26 @@ var sys     = require('sys')
 ,   devmode = !process.ARGV[4]
 ,   config  = require(appdir + '/configure/seeker').seeker
 ,   utility = require(njdir + '/library/utility')
-,   clients = [];
+,   clients = []
+,   rxhost  = /!host!/;
 
 if (!devmode) process.exit();
 
 http.createServer(function (req, res) {
+    // Deliver Client JS
+    if (!req.uri.params.unique) {
+        return utility.noble( njdir + '/library/seeker.min.js',
+        function( type, js ) {
+            var host = req.headers.host.split(':')[0] + ':' + config.port;
+            res.sendHeader( 200, {"Content-Type" : type} );
+            res.sendBody(js.replace( rxhost, host ));
+            res.finish();
+        } );
+    }
+
+    // Deliver Update Notice
     clients.push({ already : utility.earliest(), vow : function(ready) {
-        res.sendHeader( 200, {"Content-Type": "text/javascript"} );
+        res.sendHeader( 200, {"Content-Type" : "application/javascript"} );
         res.sendBody(utility.vigilant(
             ready ? 'success' : '', req.uri.params.unique
         ));

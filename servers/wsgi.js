@@ -5,9 +5,12 @@ var http     = require("http")
 ,   njdir    = process.ARGV[3]
 ,   devmode  = !process.ARGV[4]
 ,   config   = require(appdir + "/configure/wsgi").wsgi
+,   seeker   = require(appdir + "/configure/seeker").seeker
 ,   utility  = require(njdir  + "/library/utility")
 ,   wsgi     = exports
 ,   requests = {}
+,   seekin   = '<script src=http://'
+,   seekout  = ':' + seeker.port + '></script>'
 ,   rxstatic = /\/$/
 ,   rxnojs   = /\.js$/
 ,   rxmagic  = /{{([\w\-]+)}}/g;
@@ -40,6 +43,9 @@ http.createServer(function ( req, res ) {
 
     res.impress = function( file, args ) {
         utility.noble( appdir + file, function( type, data, encoding ) {
+            if (devmode)
+                data += seekin + req.headers.host.split(':')[0] + seekout;
+
             res.attack( 200, type, data.replace( rxmagic, function( _, key ) {
                 return args[key] || ''
             } ), [], encoding )
