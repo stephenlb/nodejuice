@@ -2,14 +2,7 @@
 
 # TODO
 # ====
-# -closure compiler the same as node symlink
-# -auto build of xdr3 lib client files.
-# -don't double connect with seeker server if already made connection.
-# -merge config files.
-# -join config files.
-# -config, configure and ./
-# -different config dirs
-# -startup command sux  ./nodejuice ... :(
+# -website
 
 # Usage:
 # ======
@@ -43,7 +36,10 @@ then
     application="`echo $cwd/$1 | sed -e 's#/\+$##'`"
 fi
 
-nodecheck="$application/configure/wsgi.js"
+nodeconfig1="$application/configure/nodejuice.js"
+nodeconfig2="$application/config/nodejuice.js"
+nodeconfig3="$application/nodejuice.js"
+
 nodejuice=`dirname $0`
 
 if [ nodejuice='.' ]
@@ -63,11 +59,26 @@ then
 fi
 
 ## Check for configurations files
-if [ ! -e "$nodecheck" ]
+if [[ ! -e "$nodeconfig1" && ! -e "$nodeconfig2" && ! -e "$nodeconfig3" ]]
 then
     echo -e "\nNot a valid nodejuice application: $application"
     exit
 fi
+
+if [ -e "$nodeconfig1" ]
+then
+    nodeconfig="$nodeconfig1"
+fi
+if [ -e "$nodeconfig2" ]
+then
+    nodeconfig="$nodeconfig2"
+fi
+if [ -e "$nodeconfig3" ]
+then
+    nodeconfig="$nodeconfig3"
+fi
+
+nodeconfig="`echo $nodeconfig | sed -e 's#\.js$##'`"
 
 ## Check for node symlink
 if [ ! -e "$node" ]
@@ -93,10 +104,10 @@ leave() {
 
 ## Execute Seeker Server
 ## Execute WSGI Server
-echo -e "$node $seeker $application $nodejuice $mode"
-echo -e "$node $wsgi $application $nodejuice $mode"
-$node $seeker $application $nodejuice $mode &
-$node $wsgi $application $nodejuice $mode
+# echo -e "$node $seeker $application $nodejuice $nodeconfig $mode"
+# echo -e "$node $wsgi $application $nodejuice $nodeconfig $mode"
+$node $seeker $application $nodejuice $nodeconfig $mode &
+$node $wsgi $application $nodejuice $nodeconfig $mode
 
 
 ask_for_node() {

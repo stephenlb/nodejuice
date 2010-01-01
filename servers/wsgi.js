@@ -3,9 +3,9 @@ var http     = require("http")
 ,   sys      = require("sys")
 ,   appdir   = process.ARGV[2]
 ,   njdir    = process.ARGV[3]
-,   devmode  = !process.ARGV[4]
-,   config   = require(appdir + "/configure/wsgi").wsgi
-,   seeker   = require(appdir + "/configure/seeker").seeker
+,   njconfig = process.ARGV[4]
+,   devmode  = !process.ARGV[5]
+,   config   = require(njconfig)
 ,   utility  = require(njdir  + "/library/utility")
 ,   wsgi     = exports
 ,   requests = {}
@@ -14,7 +14,7 @@ var http     = require("http")
 ,   rxhtml   = /html/;
 
 http.createServer(function ( req, res ) {
-    var action = config.url.filter(function(url) {
+    var action = config.wsgi.url.filter(function(url) {
         return url[0].test(req.uri.path) ? url[1] : 0
     })[0];
 
@@ -54,8 +54,9 @@ http.createServer(function ( req, res ) {
     if (rxstatic.test(action[1])) send_file( req, res, action );
     else                          send_script( req, res, action );
 
-}).listen( config.port, config.host );
-sys.puts("WSGI Server("+process.pid+"): " + JSON.stringify(config));
+}).listen( config.wsgi.port, config.wsgi.host );
+sys.puts("\nWSGI Server("+process.pid+")");
+utility.inform(config.wsgi);
 
 function error404( req, res, file ) {
     utility.impress( njdir + '/provision/404.htm', {
@@ -65,7 +66,7 @@ function error404( req, res, file ) {
 
 function send_file( req, res, action, retries ) {
     var path    = req.uri.path.replace( action[0], action[1] )
-    ,   syspath = appdir + path + (path.slice(-1) === '/' ? config.root : '');
+    ,   syspath = appdir + path + (path.slice(-1) === '/' ? config.wsgi.root : '');
 
     utility.noble( syspath, function( type, data, encoding ) {
         res.attack( data, 200, type, [], encoding )
