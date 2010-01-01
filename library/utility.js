@@ -4,10 +4,34 @@ var posix    = require("posix")
 ,   njdir    = process.ARGV[3]
 ,   devmode  = !process.ARGV[4]
 ,   config   = require(appdir + "/configure/wsgi").wsgi
+,   seeker   = require(appdir + "/configure/seeker").seeker
+,   seekin   = '$1<script src="http://'
+,   seekout  = ':' + seeker.port + '"></script>'
 ,   mime     = require(njdir  + "/library/mime").mime
-,   rxclever = /"([^"]+)":/g;
+,   rxclever = /"([^"]+)":/g
+,   rxmagic  = /{{([\w\-]+)}}/g
+,   rxsneaky = /^\s*((?:<\!?doctype[^>]*>\s*)?(?:<html[^>]*>)?)?/i;
+
 
 config.retry = config.retry || { max: 3, wait: 100 };
+
+var amuse = exports.amuse = function( text, req ) {
+    return text.replace(
+        rxsneaky, seekin + req.headers.host.split(':')[0] + seekout
+    );
+};
+
+var supplant = exports.supplant = function( text, args ) {
+    return text.replace( rxmagic, function( _, key ) {
+        return args[key] || ''
+    } );
+};
+
+var impress = exports.impress = function( file, args, success, fail ) {
+    noble( file, function( type, data, encoding ) {
+        success( type, supplant( data, args ), encoding )
+    }, fail || function(){} )
+};
 
 // Non Blocking Recursive Directory
 var recurse = exports.recurse = function( start, ignore, callback ) {
@@ -36,7 +60,7 @@ var noble = exports.noble = function( file, success, fail, retries ) {
     ,   noblefile  = posix.cat( file, encoding );
 
     noblefile.addCallback(function(data) {
-        if (!data) return retry();
+        if (typeof data !== 'string') return retry();
         success && success( type, data, encoding );
     });
 

@@ -9,11 +9,9 @@ var http     = require("http")
 ,   utility  = require(njdir  + "/library/utility")
 ,   wsgi     = exports
 ,   requests = {}
-,   seekin   = '<script src=http://'
-,   seekout  = ':' + seeker.port + '></script>'
 ,   rxstatic = /\/$/
 ,   rxnojs   = /\.js$/
-,   rxmagic  = /{{([\w\-]+)}}/g;
+,   rxhtml   = /html/;
 
 http.createServer(function ( req, res ) {
     var action = config.url.filter(function(url) {
@@ -22,47 +20,47 @@ http.createServer(function ( req, res ) {
 
     res.utility = utility;
 
-    res.attack = function( code, type, response, headers, encoding ) {
-        headers = headers || [];
+    res.attack = function( response, code, type, headers, encoding ) {
+        code    = code || 200;
+        type    = type || 'text/html';
+        headers = [ ["Content-Type", type] ].concat( headers || [] );
 
         if (devmode) {
             headers.push(["Cache-Control", 'no-cache']);
             headers.push(["Expires", new Date]);
+
+            if (rxhtml.test(type)) response = utility.amuse( response, req );
         }
 
-        utility.inform({ code: code, type: type, uri: req.uri.full});
+        headers.push(["Content-Length", response.length]);
+            
+        utility.inform({ code: code, type: type, uri: req.uri.full });
 
-        res.sendHeader( code, [
-            ["Content-Type", type],
-            ["Content-Length", response.length]
-        ].concat(headers) );
+        res.sendHeader( code, headers );
 
         res.sendBody( response, encoding || 'utf8' );
         res.finish();
     };
 
     res.impress = function( file, args ) {
-        utility.noble( appdir + file, function( type, data, encoding ) {
-            if (devmode)
-                data += seekin + req.headers.host.split(':')[0] + seekout;
-
-            res.attack( 200, type, data.replace( rxmagic, function( _, key ) {
-                return args[key] || ''
-            } ), [], encoding )
-        }, function() { error404( req, res ) } );
+        utility.impress( appdir + file, args,
+        function( type, data, encoding ) {
+            res.attack( data, 200, type, [], encoding )
+        }, function() { error404( req, res, appdir + file ) } )
     };
 
-    if (!action) return error404( req, res );
+    if (!action) return error404( req, res, appdir + file );
 
     if (rxstatic.test(action[1])) send_file( req, res, action );
-    else                          send_script( req, res, action  );
+    else                          send_script( req, res, action );
 
 }).listen( config.port, config.host );
 sys.puts("WSGI Server("+process.pid+"): " + JSON.stringify(config));
 
-function error404( req, res ) {
-    var response = "locked or missing: " + JSON.stringify(req.uri);
-    res.attack( 404, "text/plain", response );
+function error404( req, res, file ) {
+    utility.impress( njdir + '/provision/404.htm', {
+        request : sys.inspect(req.uri), file : file
+    }, function( type, data ) { res.attack( data, 404 ) } )
 }
 
 function send_file( req, res, action, retries ) {
@@ -70,8 +68,8 @@ function send_file( req, res, action, retries ) {
     ,   syspath = appdir + path + (path.slice(-1) === '/' ? config.root : '');
 
     utility.noble( syspath, function( type, data, encoding ) {
-        res.attack( 200, type, data, [], encoding )
-    }, function() { error404( req, res ) } );
+        res.attack( data, 200, type, [], encoding )
+    }, function() { error404( req, res, syspath ) } );
 }
 
 function send_script( req, res, action ) {
@@ -81,6 +79,12 @@ function send_script( req, res, action ) {
     ).journey( req, res );
 
     utility.noble( appdir + action[1], function( type, data, encoding ) {
-        eval(data).journey( req, res )
-    }, function() { error404( req, res ) } );
+        try { eval(data).journey( req, res ) }
+        catch(e) {
+            utility.impress( njdir + '/provision/500.htm', {
+                file : action[1], message : e.message,
+                path : appdir,    stack   : e.stack
+            }, function( type, data ) { res.attack( data, 500 ) } )
+        }
+    }, function() { error404( req, res, appdir + action[1] ) } );
 }

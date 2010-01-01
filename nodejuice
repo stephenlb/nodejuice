@@ -4,8 +4,12 @@
 # ====
 # -closure compiler the same as node symlink
 # -auto build of xdr3 lib client files.
-# -different config dirs
 # -don't double connect with seeker server if already made connection.
+# -merge config files.
+# -join config files.
+# -config, configure and ./
+# -different config dirs
+# -startup command sux  ./nodejuice ... :(
 
 # Usage:
 # ======
@@ -35,7 +39,8 @@ application=`echo $1 | sed -e 's#/\+$##'`
 
 if [ "${application:0:1}" != "/" ]
 then
-    application="`pwd`/$1"
+    cwd=`pwd`
+    application="`echo $cwd/$1 | sed -e 's#/\+$##'`"
 fi
 
 nodecheck="$application/configure/wsgi.js"
