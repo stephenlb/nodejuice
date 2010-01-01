@@ -80,13 +80,35 @@ fi
 
 nodeconfig="`echo $nodeconfig | sed -e 's#\.js$##'`"
 
+ask_for_node() {
+    echo -e "Node server not detected on your system."
+    echo -e "Node must be installed to use nodejuice."
+    echo -e "Download node at: http://nodejs.org/"
+    echo -e "\nIf Node is installed in a different directory, "
+    echo "type /location/to/node/node and press [enter] : "
+
+    read usr_node
+
+    if [ ! -e "$usr_node" ]
+    then
+        echo -e "\nThat's not a file try again :("
+        exit
+    else
+        ## Create Symlink for user based on entered directory.
+        rm "$node"
+        `ln -s $usr_node $node`
+    fi
+}
+
 ## Check for node symlink
-if [ ! -e "$node" ]
+if [[ !( -e "$node" && -e "`readlink $node`" ) ]]
 then
+
     ## check `which` for node
-    if [ ! -e `which node` ]
+    if [ -e `which node` ]
     then
         ## Create Symlink for user
+        rm "$node"
         which_node=`which node`
         `ln -s $which_node $node`
     else
@@ -110,21 +132,3 @@ $node $seeker $application $nodejuice $nodeconfig $mode &
 $node $wsgi $application $nodejuice $nodeconfig $mode
 
 
-ask_for_node() {
-    echo -e "Node server not detected on your system."
-    echo -e "Node must be installed to use nodejuice."
-    echo -e "Download node at: http://nodejs.org/"
-    echo -e "\nIf Node is installed in a different directory, "
-    echo "type /location/to/node/node and press [enter] : "
-
-    read usr_node
-
-    if [ ! -e "$usr_node" ]
-    then
-        echo -e "\nThat's not a file try again :("
-        exit
-    else
-        ## Create Symlink for user based on entered directory.
-        `ln -s $usr_node $node`
-    fi
-}
