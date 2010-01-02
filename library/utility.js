@@ -10,10 +10,10 @@ var posix    = require("posix")
 ,   mime     = require(njdir  + "/library/mime").mime
 ,   rxclever = /"([^"]+)":/g
 ,   rxmagic  = /{{([\w\-]+)}}/g
-,   rxsneaky = /^\s*((?:<\!?doctype[^>]*>\s*)?(?:<html[^>]*>)?)?/i;
+,   rxsneaky = /^\s*((?:<!?doc[^>]*>\s*)?(?:<htm[^>]*>\s*)?(?:<hea[^>]*>)?)?/i;
 
 
-config.wsgi.retry = config.wsgi.retry || { max: 3, wait: 100 };
+config.wsgi.retry = config.wsgi.retry || { max: 4, wait: 120 };
 
 var amuse = exports.amuse = function( text, req ) {
     return text.replace(

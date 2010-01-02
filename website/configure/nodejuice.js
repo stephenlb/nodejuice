@@ -2,7 +2,11 @@ exports.wsgi = {
     host : null,
     port : 80,
     root : 'index.htm',
-    url  : [ [/^\/.*?\/?/, '/static/'] ]
+    url  : [
+        [/^\/[a-z]+$/, '/controller.js'],
+        [/^\/$/, '/controller.js'],
+        [/^\/.*?/, '/static/']
+    ]
 };
 
 exports.seeker = {

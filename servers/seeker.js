@@ -7,6 +7,7 @@ var sys      = require('sys')
 ,   config   = require(njconfig)
 ,   utility  = require(njdir + '/library/utility')
 ,   clients  = []
+,   seeking  = {}
 ,   rxhost   = /!host!/;
 
 if (!devmode) process.exit();
@@ -37,13 +38,24 @@ http.createServer(function (req, res) {
 sys.puts("\nSeeker Server("+process.pid+")");
 utility.inform(config.seeker);
 
-utility.recurse( appdir, config.seeker.ignore, function( file, stats ) {
-    process.watchFile( file, function(curr, prev) {
-        utility.inform({ file: file, connections: clients.length });
-        while (clients.length > 0) clients.shift().vow(1);
-    } );
-} );
+function update( file ) {
+    utility.inform({ file: file, connections: clients.length });
+    while (clients.length > 0) clients.shift().vow(1);
+}
 
+function seek( radical ) {
+    utility.recurse( appdir, config.seeker.ignore, function( file, stats ) {
+        if (seeking[file]) return;
+        else radical ? update(file) : 0;
+
+        seeking[file] = 1;
+        process.watchFile( file, function() { update(file) } );
+    } );
+}
+
+seek();
+
+setInterval( function() { seek(true) }, 4000 );
 setInterval( function() {
     var instant = utility.earliest();
     while (clients.length > 0 && (instant - clients[0].already > 25000))

@@ -9,16 +9,23 @@ var http     = require("http")
 ,   utility  = require(njdir  + "/library/utility")
 ,   wsgi     = exports
 ,   requests = {}
-,   rxstatic = /\/$/
 ,   rxnojs   = /\.js$/
 ,   rxhtml   = /html/;
 
 http.createServer(function ( req, res ) {
+    if (devmode) utility.noble( njconfig+'.js',
+    function( type, data, encoding ) {
+        try { config = eval('(function(){'+data+'return exports})()') }
+        catch(e) { error500( req, res, njconfig+'.js', e ) }
+    } );
+    if (!config.wsgi.url[0]) return;
+
     var action = config.wsgi.url.filter(function(url) {
-        return url[0].test(req.uri.path) ? url[1] : 0
+        return req.uri.path.match(url[0])
     })[0];
 
     res.utility = utility;
+    res.appdir  = appdir;
 
     res.attack = function( response, code, type, headers, encoding ) {
         code    = code || 200;
@@ -51,8 +58,8 @@ http.createServer(function ( req, res ) {
 
     if (!action) return error404( req, res, appdir + file );
 
-    if (rxstatic.test(action[1])) send_file( req, res, action );
-    else                          send_script( req, res, action );
+    if (rxnojs.test(action[1])) send_script( req, res, action );
+    else                        send_file( req, res, action );
 
 }).listen( config.wsgi.port, config.wsgi.host );
 sys.puts("\nWSGI Server("+process.pid+")");
@@ -62,6 +69,13 @@ function error404( req, res, file ) {
     utility.impress( njdir + '/provision/404.htm', {
         request : sys.inspect(req.uri), file : file
     }, function( type, data ) { res.attack( data, 404 ) } )
+}
+
+function error500( req, res, file, e ) {
+    utility.impress( njdir + '/provision/500.htm', {
+        file : file,   message : e.message,
+        path : appdir, stack   : e.stack
+    }, function( type, data ) { res.attack( data, 500 ) } )
 }
 
 function send_file( req, res, action, retries ) {
@@ -81,11 +95,6 @@ function send_script( req, res, action ) {
 
     utility.noble( appdir + action[1], function( type, data, encoding ) {
         try { eval(data).journey( req, res ) }
-        catch(e) {
-            utility.impress( njdir + '/provision/500.htm', {
-                file : action[1], message : e.message,
-                path : appdir,    stack   : e.stack
-            }, function( type, data ) { res.attack( data, 500 ) } )
-        }
+        catch(e) { error500( req, res, action[1], e ) }
     }, function() { error404( req, res, appdir + action[1] ) } );
 }
