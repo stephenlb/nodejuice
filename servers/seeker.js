@@ -44,18 +44,20 @@ function update( file ) {
 }
 
 function seek( radical ) {
-    utility.recurse( appdir, config.seeker.ignore, function( file, stats ) {
+    utility.recurse( appdir, config.seeker.ignore, function( file ) {
         if (seeking[file]) return;
-        else radical ? update(file) : 0;
+        else if (radical) update(file);
 
         seeking[file] = 1;
-        process.watchFile( file, function() { update(file) } );
+        process.watchFile( file, function() {
+            seek(true);
+            update(file);
+        } );
     } );
 }
 
 seek();
 
-setInterval( function() { seek(true) }, 4000 );
 setInterval( function() {
     var instant = utility.earliest();
     while (clients.length > 0 && (instant - clients[0].already > 25000))
