@@ -6,7 +6,9 @@ var posix    = require("posix")
 ,   njconfig = process.ARGV[4]
 ,   devmode  = process.ARGV[5]
 ,   mime     = require(njdir  + "/library/mime").mime
-,   rxclever = /"([^"]+)":/g
+,   rxclever = /"([^"]+)"(:)?/g
+,   rxdigi   = /\d+/g
+,   rxdelma  = /\s*([},])\s*/g
 ,   rxmagic  = /{{([\w\-]+)}}/g
 ,   rxsneaky = /^\s*((?:<!?doc[^>]*>\s*)?(?:<htm[^>]*>\s*)?(?:<hea[^>]*>)?)?/i;
 
@@ -66,8 +68,15 @@ var recurse = exports.recurse = function( start, ignore, callback ) {
 };
 
 var inform = exports.inform = function(obj) {
-    sys.puts(JSON.stringify(obj).replace( rxclever, function( _, key ) {
-        return "\033[0;35;1m " + key + "\033[0m : "
+    if (!devmode) return sys.puts(JSON.stringify(obj));
+
+    sys.puts(JSON.stringify(obj).replace( rxdigi, function( num ) {
+        return "\033[0;36;1m" + num + "\033[0m";
+    } ).replace( rxclever, function( _, key, del ) {
+        return (del ? ' \033[0;35;1m' : '\033[0;32;1m"') + key +
+            (del ? '\033[0m: ' : '"\033[0m ');
+    } ).replace( rxdelma, function( _, del ) {
+        return " " + del + " ";
     } ));
 };
 

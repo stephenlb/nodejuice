@@ -9,6 +9,7 @@ a:hover,#node,#juice,.n,.j{color:#ffcb16}
 body{background-color:#3b3b3b}
 #git{background-color:#ffcb16}
 
+.comment{color:#4e9a06}
 .keyword{color:#ffda58}
 .string{color:#83c6ff}
 .code{color:#f9f1d4}

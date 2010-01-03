@@ -1,3 +1,84 @@
 <h1>Documentation</h1>
 Watch the tutorial video.
 <a href=http://vimeo.com/8495268>Watch The Simple Web Application Tutorial</a>.
+
+<h2>Basic Static Setup</h2>
+To launch <div class=n>node</div><div class=j>Juice</div> 
+as a static web server, simply execute the following command:
+<pre class=code>./nodejuice /path/to/directory</pre>
+This will launch both WSGI and Seeker Server.
+Open your browser and go to:
+<pre class=code>http://localhost:8080/<em>some-file-name-here.htm</em></pre>
+Now you can edit these files and they will update automatically in your web browser.  No need to press reload every time you make a change.
+
+<h2>Setup for Web Applications</h2>
+<ol>
+    <li>
+        Make a file called <strong>app.js</strong> in your application directory.
+    </li>
+    <li>Copy the following text into the app.js file.
+<pre class=code><span class=keyword>var</span> app = exports;
+app.journey = <span class=keyword>function</span>( request, response ) {
+    response.impress( <span class=string>'/static/index.htm'</span>, {
+        dynamic : <span class=keyword>new</span> Date
+    } );
+};</pre>
+    </li>
+    <li>
+        Have the following configuration file in your application root directory.
+    </li>
+</ol>
+
+<h2>Configuration File</h2>
+This file needs to be in your application's root directory.
+<pre class=code><span class=comment>// FILE: nodejuice.js</span>
+exports.wsgi = {
+    host  : <span class=keyword>null</span>, <span class=comment>// Leave 'null' to listen on all hosts.</span>
+    port  : 8080,
+    root  : <span class=string>'index.htm'</span>, <span class=comment>// used for static content as the default.</span>
+    retry : { max: 4, wait: 120 }, <span class=comment>// number of retries to load a file.</span>
+    url   : [ <span class=comment>// interface between browser URL Request and Files.</span>
+
+        [/^\/app$/, <span class=string>'/app.js'</span>], <span class=comment>// run an application.</span>
+        [/^\/.*/, <span class=string>'/static/'</span>], <span class=comment>// serve content from /static/ dir.</span>
+        [/^\/.*/, <span class=string>'/'</span>] <span class=comment>// server static content from root app dir.</span>
+
+    ]
+};
+
+exports.seeker = {
+    host   : <span class=keyword>null</span>, <span class=comment>// Leave 'null' to listen on all hosts.</span>
+    port   : 8002,
+    wait   : 2000, <span class=comment>// delay in milliseconds before a new connection.</span>
+                   <span class=comment>// setting this too low will make crazziness.</span>
+    ignore : [ /git$/, /svn$/, /cvs$/, /swp$/, /~$/ ] <span class=comment>// stuff to ignore.</span>
+};
+
+exports.proxy = {
+    host  : <span class=keyword>null</span>, <span class=comment>// Leave 'null' to listen on all hosts.</span>
+    port  : 8010, <span class=comment>// access your server from this port.</span>
+    fetch : {     <span class=comment>// point to your web server.</span>
+        host : <span class=string>'localhost'</span>,
+        port : 8080
+    }
+};
+</pre>
+
+<h2>Proxy Setup for Apache</h2>
+This instruction is on the <a href=/#proxy>home page</a>.
+
+<!-- <h2>URL Routing</h2> -->
+
+<h2>WSGI Functions for Web Applications</h2>
+<div class=n>node</div><div class=j>Juice</div> sits on top of NodeJS.
+The first two arguments are modified versions of what you get from NodeJS.
+<ul>
+    <li>
+        <a href=http://nodejs.org/api.html#_tt_http_serverrequest_tt>Request Object (ServerRequest)</a>
+    </li>
+    <li>
+        <a href=http://nodejs.org/api.html#_tt_http_serverresponse_tt>Response Object (ServerResponse)</a>
+    </li>
+</ul>
+
+

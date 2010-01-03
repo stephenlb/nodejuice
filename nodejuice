@@ -168,7 +168,9 @@ startup() {
     esac
 }
 
-if [ ! "$2" ]; then startup "wsgi"; startup "seeker"; else
+if [ "$2" != "wsgi" ]; then devmode="yes"; fi
+
+if [ ! "$2" ]; then startup "seeker"; startup "wsgi"; else
     startup "$2"; startup "$3"; startup "$4"; startup "$5" 
 fi
 

@@ -7,8 +7,7 @@ var sys      = require('sys')
 ,   utility  = require(njdir + '/library/utility')
 ,   config   = utility.ignite()
 ,   clients  = []
-,   seeking  = {}
-,   rxhost   = /!host!/;
+,   seeking  = {};
 
 if (!devmode) process.exit();
 
@@ -16,11 +15,20 @@ http.createServer(function (req, res) {
     // Deliver Client JS
     if (!req.uri.params.unique) {
         return utility.noble( njdir + '/library/seeker.min.js',
-        function( type, js ) {
-            var host = req.headers.host.split(':')[0] +
+        function( type, js, encoding ) {
+            var headers = { "Content-Type" : type }
+            ,   host    = req.headers.host.split(':')[0] +
                        ':' + config.seeker.port;
-            res.sendHeader( 200, {"Content-Type" : type} );
-            res.sendBody(js.replace( rxhost, host ));
+
+            js = utility.supplant( js, {
+                host : host,
+                wait : config.seeker.wait
+            } );
+
+            headers['Content-Length'] = js.length;
+
+            res.sendHeader( 200, headers );
+            res.sendBody( js, encoding );
             res.finish();
         } );
     }

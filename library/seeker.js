@@ -323,6 +323,6 @@ function seek(wait) { setTimeout(function() {
     });
 }, wait || 2000 ); }
 
-window['-nodeJuice-'] || (window['-nodeJuice-'] = 1) && seek(100);
+window['-nodeJuice-'] || (window['-nodeJuice-'] = 1) && seek(+"{{wait}}");
 
-})("http://!host!/")
+})("http://{{host}}/")

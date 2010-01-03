@@ -16,6 +16,7 @@ exports.seeker = {
         /git$/,
         /svn$/,
         /cvs$/,
-        /swp$/
+        /swp$/,
+        /~$/
     ]
 };
