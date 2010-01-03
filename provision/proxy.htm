@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>nodeJuice - 404 Missing File</title>
+    <title>nodeJuice - Proxy Detected an Error</title>
     <style type=text/css>
         .node{color:#fff}
         body,a{color:#f8f2de}
@@ -87,13 +87,23 @@
 <body>
 
 <div id=stage>
+    <div>
+        <div class=n>node</div><div class=j>Juice</div>:
+        Proxy Detected an Error
+    </div>
 
-<div><div class=n>node</div><div class=j>Juice</div>: 404 Missing File</div>
+    <h1>Code</h1>
+    <pre class=code><span class=string>{{code}}</span></pre>
 
-<pre class=code><span class=string>{{request}}</span></pre>
+    <h1>Request URI</h1>
+    <pre class=code><span class=keyword>{{url}}</span></pre>
 
-File not found: <span class=keyword>{{path}}{{file}}</span>
+    <h1>Headers</h1>
+    <pre class=code>{{headers}}</pre>
 
+    <!-- There is an error of some sort. Here is the response from the request.-->
+    <h1>Response</h1>
+    <div class=code>{{response}}</div>
 </div>
 
 <div id=bottom>

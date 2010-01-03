@@ -1,6 +1,4 @@
-(function(){
-
-var website   = exports || {}
+var website   = exports
 ,   templates = '/templates/';
 
 website.journey = function( request, response ) {
@@ -11,9 +9,5 @@ website.journey = function( request, response ) {
     response.utility.noble( where,
     function( type, html, encoding ) {
         response.impress( templates + 'body.htm', { content : html } )
-    }, function() { error404( request, response, where ) } );
+    }, function() { response['404']( request, response, where ) } );
 };
-
-return website;
-
-})()

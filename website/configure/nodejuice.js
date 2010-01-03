@@ -1,6 +1,6 @@
 exports.wsgi = {
     host : null,
-    port : 80,
+    port : 8080,
     root : 'index.htm',
     url  : [
         [/^\/[a-z]+$/, '/controller.js'],

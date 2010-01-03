@@ -2,32 +2,47 @@
 
 # TODO
 # ====
-# -website
+# -!proxy
+# -!remove (function(){})()
+# -!default config (so that nodejuice.js can be missing!!!!!)
+# -!bash getopts
+# -!test proxy with different hosts.
+# -!WARN IF NO NodeJuice Config!
+# -redo video tutorial
+# -buy .org
+# -documentation
+# -turn nodejs and mogoDB into pages on nodeJuice.com  /nodejs /mongodb
+# -launch
 
-# Usage:
-# ======
-#
-# ./nodejuice directory [action]
-# 
-# directory = Application Directory to run you wsgi server or just the seeker.
-# [action]  = options: [d]evelopment, [p]roduction
-# [action]  = default is [d]evelopment
-# [action]  = [d]evelopment will launch all servers to host locally.
-# 
+
+# "  USAGE: "
+# "  ================================================ "
+# "  ./nodejuice /path/to/app [wsgi] [seeker] [proxy] "
+# "  "
+# "  wsgi   - servers dynamic and static content. (Web Server) "
+# "  seeker - pushes updates to your web browser. "
+# "  proxy  - use with apache and other web servers. "
+ 
+
 # Examples:
 # =========
 #
-# This will launch all seeker and wsgi servers.
-# ./nodejuice /home/stephen/application-directory
+# This will launch seeker and wsgi servers.
+# ./nodejuice /home/stephen/application
 # 
-# 
+# This will launch seeker server only.
+# ./nodejuice /home/stephen/application seeker
+#
 # This will launch only wsgi server only.
-# ./nodejuice /home/stephen/application-directory p
-# ./nodejuice /home/stephen/application-directory prod
-# ./nodejuice /home/stephen/application-directory production
-# ./nodejuice /home/stephen/application-directory k3i8sljf
+# ./nodejuice /home/stephen/application wsgi
+#
+# This will launch proxy and seeker server only.
+# Use this for APACHE (apache) or other web servers.
+# ./nodejuice /home/stephen/application proxy
+#
+# Launch ALL Servers (This is pointless and harmless).
+# ./nodejuice /home/stephen/application proxy wsgi seeker
 
-mode="$2"
 application=`echo $1 | sed -e 's#/\+$##'`
 
 if [ "${application:0:1}" != "/" ]
@@ -42,13 +57,11 @@ nodeconfig3="$application/nodejuice.js"
 
 nodejuice=`dirname $0`
 
-if [ nodejuice='.' ]
-then
-    nodejuice="`pwd`"
-fi
+if [ nodejuice='.' ]; then nodejuice="`pwd`"; fi
 
 seeker="$nodejuice/servers/seeker.js"
 wsgi="$nodejuice/servers/wsgi.js"
+proxy="$nodejuice/servers/proxy.js"
 node="$nodejuice/symlinks/node"
 
 ## Check if Application Directory exixts
@@ -58,24 +71,16 @@ then
     exit
 fi
 
+if [ -e "$nodeconfig1" ]; then nodeconfig="$nodeconfig1"; fi
+if [ -e "$nodeconfig2" ]; then nodeconfig="$nodeconfig2"; fi
+if [ -e "$nodeconfig3" ]; then nodeconfig="$nodeconfig3"; fi
+
 ## Check for configurations files
 if [[ ! -e "$nodeconfig1" && ! -e "$nodeconfig2" && ! -e "$nodeconfig3" ]]
 then
-    echo -e "\nNot a valid nodejuice application: $application"
-    exit
-fi
-
-if [ -e "$nodeconfig1" ]
-then
-    nodeconfig="$nodeconfig1"
-fi
-if [ -e "$nodeconfig2" ]
-then
-    nodeconfig="$nodeconfig2"
-fi
-if [ -e "$nodeconfig3" ]
-then
-    nodeconfig="$nodeconfig3"
+    echo -e "\n\033[0;33;1m  WARNING: 'nodejuice.js' configuration file not found. "
+    echo -e "  Using Default Configuration for: $application \033[0m"
+    nodeconfig="$nodejuice/library/nodejuice.js"
 fi
 
 nodeconfig="`echo $nodeconfig | sed -e 's#\.js$##'`"
@@ -83,7 +88,7 @@ nodeconfig="`echo $nodeconfig | sed -e 's#\.js$##'`"
 ask_for_node() {
     echo -e "Node server not detected on your system."
     echo -e "Node must be installed to use nodejuice."
-    echo -e "Download node at: http://nodejs.org/"
+    echo -e "Download node at: http://nodejs.org/#download"
     echo -e "\nIf Node is installed in a different directory, "
     echo "type /location/to/node/node and press [enter] : "
 
@@ -124,11 +129,51 @@ leave() {
     killall node
 }
 
-## Execute Seeker Server
-## Execute WSGI Server
-# echo -e "$node $seeker $application $nodejuice $nodeconfig $mode"
-# echo -e "$node $wsgi $application $nodejuice $nodeconfig $mode"
-$node $seeker $application $nodejuice $nodeconfig $mode &
-$node $wsgi $application $nodejuice $nodeconfig $mode
+startup() {
+    if [ ! "$1" ]; then return; fi
 
+    case "$1" in
+    "wsgi")
+        if [ $running_wsgi ]; then return; fi
+        running_wsgi=1
+        $node $wsgi $application $nodejuice $nodeconfig $devmode &
+        ;;
+    "seeker")
+        devmode="yes"
+        if [ $running_seeker ]; then return; fi
+        running_seeker=1
+        $node $seeker $application $nodejuice $nodeconfig $devmode &
+        ;;
+    "proxy")
+        devmode="yes"
+        if [ $running_proxy ]; then return; fi
+        running_proxy=1
+        $node $proxy $application $nodejuice $nodeconfig $devmode &
 
+        if [ $running_seeker ]; then return; fi
+        running_seeker=1
+        $node $seeker $application $nodejuice $nodeconfig $devmode &
+        ;;
+    *)
+        echo -e "\033[0;33;1m"
+        echo -e "  USAGE: "
+        echo -e "  ================================================ "
+        echo -e "  ./nodejuice /path/to/app [wsgi] [seeker] [proxy] "
+        echo -e "  "
+        echo -e "  wsgi   - servers dynamic and static content. (Web Server) "
+        echo -e "  seeker - pushes updates to your web browser. "
+        echo -e "  proxy  - use with apache and other web servers. \033[0m"
+        leave
+        ;;
+    esac
+}
+
+if [ ! "$2" ]; then startup "wsgi"; startup "seeker"; else
+    startup "$2"; startup "$3"; startup "$4"; startup "$5" 
+fi
+
+wait
+
+# echo -e "$node $seeker $application $nodejuice $nodeconfig $devmode"
+# echo -e "$node $wsgi $application $nodejuice $nodeconfig $devmode"
+# echo -e "$node $proxy $application $nodejuice $nodeconfig $devmode"

@@ -1,24 +1,41 @@
 var posix    = require("posix")
+,   http     = require('http')
 ,   sys      = require("sys")
 ,   appdir   = process.ARGV[2]
 ,   njdir    = process.ARGV[3]
 ,   njconfig = process.ARGV[4]
-,   devmode  = !process.ARGV[5]
-,   config   = require(njconfig)
-,   seekin   = '$1<script src="http://'
-,   seekout  = ':' + config.seeker.port + '"></script>'
+,   devmode  = process.ARGV[5]
 ,   mime     = require(njdir  + "/library/mime").mime
 ,   rxclever = /"([^"]+)":/g
 ,   rxmagic  = /{{([\w\-]+)}}/g
 ,   rxsneaky = /^\s*((?:<!?doc[^>]*>\s*)?(?:<htm[^>]*>\s*)?(?:<hea[^>]*>)?)?/i;
 
+var ignite = exports.ignite = function() {
+    return process.mixin( true,
+        require(njdir  + "/library/nodejuice"),
+        require(njconfig)
+    );
+};
 
-config.wsgi.retry = config.wsgi.retry || { max: 4, wait: 120 };
+var config  = ignite()
+,   seekin  = '$1<script src="http://'
+,   seekout = ':' + config.seeker.port + '"></script>';
 
 var amuse = exports.amuse = function( text, req ) {
-    return text.replace(
-        rxsneaky, seekin + req.headers.host.split(':')[0] + seekout
-    );
+    return text.replace( rxsneaky, seekin +
+        req.headers.host.split(':')[0] +
+    seekout );
+};
+
+var bolt = exports.bolt = function( file, success, fail ) {
+    noble( file, function( type, data, encoding ) {
+        try {
+            var lightning = eval('(function(){var exports={};' + data +
+                ';return exports})()');
+            return lightning ? success(lightning) : fail && fail();
+        }
+        catch(e) { fail && fail(e) }
+    }, function() { fail && fail() } );
 };
 
 var supplant = exports.supplant = function( text, args ) {
@@ -80,8 +97,67 @@ var noble = exports.noble = function( file, success, fail, retries ) {
     }
 };
 
+var fetch = exports.fetch = function(
+    port,     // 80
+    host,     // "www.google.com"
+    type,     // "GET"
+    path,     // "/"
+    headers,  // { asdf : asdf }
+    ready,    // function (response) {}
+    good,     // function ( chunk, response, encoding ) {}
+    bad,      // function ( chunk, response, encoding ) {}
+    finished  // function ( data, response, encoding ) {}
+) {
+    headers      = headers || {};
+    headers.host = host;
+
+    var data    = ''
+    ,   request = http.createClient( port, host )
+        .request( type, path, headers );
+
+    request.finish(function(response) {
+        var type = response.headers['content-type']
+        ,   encoding = (type.slice( 0, 4 ) === "text" ? "utf8" : "binary");
+
+        inform({
+            proxied  : config.proxy.fetch.host + ':' + config.proxy.fetch.port,
+            code     : response.statusCode,
+            type     : type,
+            encoding : encoding,
+            uri      : path
+        });
+
+        ready && ready(response);
+
+        response.setBodyEncoding(encoding);
+        response.addListener( "body", function(chunk) {
+            data += chunk;
+
+            if (response.statusCode == 200)
+                good && good( chunk, response, encoding );
+            else bad && bad( chunk, response, encoding );
+        } );
+
+        response.addListener( "complete", function() {
+            finished && finished( data, response, encoding );
+        } );
+    });
+
+    /*
+    request.finish(function (response) {
+      sys.puts("STATUS: " + response.statusCode);
+      sys.puts("HEADERS: " + JSON.stringify(response.headers));
+      response.setBodyEncoding("utf8");
+      response.addListener("body", function (chunk) {
+        sys.puts("BODY: " + chunk);
+      });
+    });
+    */
+};
+
 var earliest = exports.earliest = function() { return+new Date };
 
 exports.vigilant = function( text, unique ) {
     return 'window["' + unique + '"] = "' + text + '";'
 };
+

@@ -5,13 +5,12 @@ A Web Server Gateway Interface (WSGI) that lives on
 a low level http non-blocking web server. 
 <a href=http://vimeo.com/8459839>Watch the video to see a live example.</a>
 
-<pre class=code><span class=keyword>var</span> app = exports || {};
+<pre class=code><span class=keyword>var</span> app = exports;
 app.journey = <span class=keyword>function</span>( request, response ) {
     response.impress( <span class=string>'/static/index.htm'</span>, {
         dynamic : <span class=keyword>new</span> Date
     } );
-};
-<span class=keyword>return</span> app;</pre>
+};</pre>
 
 Above is an example app on
 <div class=n>node</div><div class=j>Juice</div> V8 WSGI.
@@ -27,26 +26,55 @@ Open to view:
 However, that isn't the raddest part.
 You are probably here to see what Seeker Server can do.
 
-<h1>Seeker Server: <a href=http://vimeo.com/8459839>Watch the Video</a></h1>
+<h2>Seeker Server: <a href=http://vimeo.com/8459839>Watch the Video</a></h2>
 <div>
     It updates all connected browsers when a change occurs.
     <strong>Automatic browser refresh on file change or update</strong>
     is what you can call it.
     Seeker Server works on all servers. Even without a server.
-    Seeker Server is independent of WSGI.
+    Seeker Server is independent of WSGI
+    and can be used with other servers such as Apache.
     <a href=http://vimeo.com/8459839>Watch the Video</a>
 </div>
 
-<h1>Seeker Server and Apache</h1>
+<h2>Seeker Server and Apache (Proxy)</h2>
+NOTE: This step isn't necessary if you are using nodeJuice WSGI.
+In order to easily use apache or other web servers, simply setup the proxy:
+
 <ol>
     <li>
-        Copy <em>nodejuice.js</em> configuration file into your application dir.
-        This is the directory where you PHP, Ruby, Perl or Python files live.
+        Copy <em>nodejuice.js</em> configuration into your application dir.
+        This is the directory where your PHP, Ruby, Perl or Python files live.
+        <pre class=code>cp ./nodejuice/demos/apache/nodejuice.js /my/dir/.</pre>
+    </li>
+    <li>
+        Edit the configuration file to point the 
+        <strong>fetch</strong> variable at your server.
+    </li>
+    <li>
+        Launch ./nodejuice seeker server.
+        <pre class=code>./nodejuice /my/dir/ proxy</pre>
+    </li>
+    <li>
+        Point your web browser to the proxy url.
+        <pre class=code>http://localhost:8010/</pre>
+    </li>
+</ol>
+
+<h2>Seeker Server and Apache (Bypass the Proxy)</h2>
+NOTE: This step isn't necessary if you are using nodeJuice WSGI.
+Using the proxy isn't required with Apache or another web server.
+However the proxy provides error detection and will allow <div class=n>node</div><div class=j>Juice</div> to keep a connection open even if Apache throws an error.
+
+<ol>
+    <li><strong>[OPTIONAL]</strong>
+        Copy <em>nodejuice.js</em> configuration into your application dir.
+        This is the directory where your PHP, Ruby, Perl or Python files live.
         <pre class=code>cp ./nodejuice/demos/apache/nodejuice.js /my/dir/.</pre>
     </li>
     <li>
         Launch ./nodejuice seeker server.
-        <pre class=code>./nodejuice /my/dir/</pre>
+        <pre class=code>./nodejuice /my/dir/ seeker</pre>
     </li>
     <li>
         Paste the following in the HEAD Tag of <em>all HTML files.</em>
@@ -54,13 +82,13 @@ You are probably here to see what Seeker Server can do.
     </li>
 </ol>
 <div>
-    This method won't be as cool as using nodeJuice's WSGI in the face of dangerous errors in your PHP, Ruby or Python applications.  So be careful!
+    This method won't be as cool as using nodeJuice's Proxy in the face of dangerous errors in your PHP, Ruby or Python applications.  So be careful!
 </div>
 
-<h1>
+<h2>
     <div class=mongo>Mongo</div><div class=db>DB</div> on
     <div class=node>Node</div><div class=js>JS</div>
-</h1>
+</h2>
 
 An effort to make a plan to integrate
 <div class=mongo>Mongo</div><div class=db>DB</div>.

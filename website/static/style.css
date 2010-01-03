@@ -23,7 +23,7 @@ body {
     padding: 0;
 }
 
-h1 {
+h1, h2 {
     font-size: 20px;
     font-weight: normal;
     line-height: 28px;
