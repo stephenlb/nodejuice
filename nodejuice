@@ -2,19 +2,11 @@
 
 # TODO
 # ====
-# -!proxy
-# -!remove (function(){})()
-# -!default config (so that nodejuice.js can be missing!!!!!)
-# -!bash getopts
-# -!test proxy with different hosts.
-# -!WARN IF NO NodeJuice Config!
 # -redo video tutorial
 # -proxy video tutorial
 # -buy .org
 # -github
 # -twitter
-# -documentation
-# -turn nodejs and mogoDB into pages on nodeJuice.com  /nodejs /mongodb
 # -launch
 # -aws api
 # -google analytics
