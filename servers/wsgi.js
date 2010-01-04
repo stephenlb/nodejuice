@@ -33,19 +33,21 @@ http.createServer(function ( req, res ) {
     res['500']  = error500;
 
     res.attack  = function( body, code, type, headers, encoding ) {
-        code    = code || 200;
-        type    = type || 'text/html';
-        headers = [ ["Content-Type", type] ].concat( headers || [] );
+        code    = code    || 200;
+        type    = type    || 'text/html';
+        headers = headers || {};
+
+        headers["Content-Type"] = type;
 
         if (devmode) {
-            headers.push(["Cache-Control", 'no-cache']);
-            headers.push(["Expires", new Date]);
+            headers["Cache-Control"] = 'no-cache';
+            headers["Expires"]       = 'Thu, 01 Dec 1994 16:00:00 GMT';
 
             if (rxhtml.test(type)) body = utility.amuse( body, req );
         }
 
-        headers.push(["Content-Length", body.length]);
-            
+        headers["Content-Length"] = body.length;
+
         utility.inform({
             code: code, type: type, uri: req.uri.full, time: Date()
         });
@@ -90,7 +92,9 @@ function send_file( req, res, action, retries ) {
                   (path.slice(-1) === '/' ? config.wsgi.root : '');
 
     utility.noble( syspath, function( type, data, encoding ) {
-        res.attack( data, 200, type, [], encoding )
+        res.attack( data, 200, type, devmode ? {} : {
+            "Expires" : "Thu, 01 Dec 2030 16:00:00 GMT"
+        }, encoding )
     }, function() { error404( req, res, syspath ) } );
 }
 
