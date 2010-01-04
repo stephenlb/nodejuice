@@ -2,15 +2,24 @@
 
 # TODO
 # ====
+# -!buy .org
+# -!sed killall for nodejuice bash script
 # -redo video tutorial
+# -make user stephen on rackspace server to run nodejuice
 # -proxy video tutorial
-# -buy .org
+# -write more demos
+# -update seeker demo
+# -apache benchmark
 # -github
 # -twitter
 # -launch
 # -aws api
 # -google analytics
 # -update video's with nodejuice.com href
+# -make new debian package for i386
+# -make new nodejuice release.bz2
+# -donate button
+# -add timestamp to inform command
 
 
 # USAGE:
@@ -124,7 +133,8 @@ trap leave INT TERM EXIT
 leave() {
     echo -e "\n\nnodejuice shuting down... goodbye"
     trap - INT TERM EXIT
-    killall node
+    sleep .15
+    ps -A | grep ' node' | sed -e 's,^\s*\([0-9]\+\).*$,\1,g' | xargs sudo kill
 }
 
 startup() {

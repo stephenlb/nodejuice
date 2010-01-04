@@ -151,17 +151,6 @@ var fetch = exports.fetch = function(
             finished && finished( data, response, encoding );
         } );
     });
-
-    /*
-    request.finish(function (response) {
-      sys.puts("STATUS: " + response.statusCode);
-      sys.puts("HEADERS: " + JSON.stringify(response.headers));
-      response.setBodyEncoding("utf8");
-      response.addListener("body", function (chunk) {
-        sys.puts("BODY: " + chunk);
-      });
-    });
-    */
 };
 
 var earliest = exports.earliest = function() { return+new Date };

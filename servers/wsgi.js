@@ -13,11 +13,15 @@ var http     = require("http")
 
 http.createServer(function ( req, res ) {
     if (devmode) utility.bolt( njconfig + '.js', function( obj ) {
+        var old = config;
         try { config = obj }
-        catch(e) { error500( req, res, njconfig + '.js', e ) }
+        catch(e) {
+            config = old;
+            error500( req, res, njconfig + '.js', e );
+        }
     } );
 
-    if (!config.wsgi.url[0]) return;
+    // if (!config.wsgi.url[0]) return;
 
     var action = config.wsgi.url.filter(function(url) {
         return req.uri.path.match(url[0])
@@ -42,10 +46,11 @@ http.createServer(function ( req, res ) {
 
         headers.push(["Content-Length", body.length]);
             
-        utility.inform({ code: code, type: type, uri: req.uri.full });
+        utility.inform({
+            code: code, type: type, uri: req.uri.full, time: Date()
+        });
 
         res.sendHeader( code, headers );
-
         res.sendBody( body, encoding || 'utf8' );
         res.finish();
     };
@@ -94,7 +99,6 @@ function send_script( req, res, action ) {
         .replace( action[0], action[1] )
         .replace( rxnojs, '' )
     ).journey( req, res );
-
     utility.bolt( appdir + action[1], function( app ) {
         try { app.journey( req, res ) }
         catch(e) { error500( req, res, action[1], e ) }
