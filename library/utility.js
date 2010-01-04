@@ -29,7 +29,7 @@ var amuse = exports.amuse = function( text, req ) {
     seekout );
 };
 
-var bolt = exports.bolt = function( file, success, fail ) {
+var bolt = exports.bolt = function( file, success, fail, rad ) {
     noble( file, function( type, data, encoding ) {
         try {
             var lightning = eval('(function(){var exports={};' + data +

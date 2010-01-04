@@ -318,7 +318,7 @@ function seek(wait) { setTimeout(function() {
     xdr({
         url     : host,
         type    : 'text',
-        success : function(response) { location.reload(true) },
+        success : function(response) { location.reload(false) },
         fail    : function() { seek(250) }
     });
 }, wait || 2000 ); }

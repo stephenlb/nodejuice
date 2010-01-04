@@ -3,16 +3,25 @@ This is <div class=n>node</div><div class=j>Juice</div>.
 A Web Server Gateway Interface (WSGI) that lives on
 <div class=node>Node</div><div class=js>JS</div>;
 a low level http non-blocking web server. 
-<a href=http://vimeo.com/8459839>Watch the video to see a live example.</a>
+<a href=http://vimeo.com/8459839>Watch the video to see a live example</a>.
+
+<p>To launch nodeJuice as an <strong>instant web server on any directory</strong>:</p>
+<pre class=code>./nodejuice /path/to/directory</pre>
+
+<p>To create simple web application:</p>
+
+<pre class=code><span class=keyword>rad</span> ( <span class=string>'hello world'</span> )</pre>
+
+<p>A more complex web application:</p>
 
 <pre class=code><span class=keyword>var</span> app = exports;
 app.journey = <span class=keyword>function</span>( request, response ) {
-    response.impress( <span class=string>'/static/index.htm'</span>, {
+    response.impress( <span class=string>'/templates/index.htm'</span>, {
         dynamic : <span class=keyword>new</span> Date
     } );
 };</pre>
 
-Above is an example app on
+Above are two example apps on
 <div class=n>node</div><div class=j>Juice</div> V8 WSGI.
 Simple right?
 It's like Google App Engine GAE and other WSGI Frameworks.

@@ -84,6 +84,10 @@ function error500( req, res, file, e ) {
     }, function( type, data ) { res.attack( data, 500 ) } )
 }
 
+function rad( req, res ) {
+    return function(text) { return res.attack( text, 200 ) }
+}
+
 function send_file( req, res, action, retries ) {
     var path    = req.uri.path.replace( action[0], action[1] )
     ,   syspath = appdir + path +
@@ -105,5 +109,5 @@ function send_script( req, res, action ) {
     }, function(e) {
         if (e) error500( req, res, appdir + action[1], e )
         else   error404( req, res, appdir + action[1] );
-    } );
+    }, rad( req, res ) );
 }

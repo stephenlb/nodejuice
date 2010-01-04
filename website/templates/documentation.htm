@@ -5,7 +5,9 @@ Watch the tutorial video.
 <h2>Basic Static Setup</h2>
 To launch <div class=n>node</div><div class=j>Juice</div> 
 as a static web server, simply execute the following command:
+
 <pre class=code>./nodejuice /path/to/directory</pre>
+
 This will launch both WSGI and Seeker Server.
 Open your browser and go to:
 <pre class=code>http://localhost:8080/<em>some-file-name-here.htm</em></pre>
@@ -25,10 +27,13 @@ Now you can edit <strong>*HTML*</strong> files and they will update automaticall
     <li>Copy the following text into the app.js file.
 <pre class=code><span class=keyword>var</span> app = exports;
 app.journey = <span class=keyword>function</span>( request, response ) {
-    response.impress( <span class=string>'/static/index.htm'</span>, {
+    response.impress( <span class=string>'/templates/index.htm'</span>, {
         dynamic : <span class=string>'my text here'</span>
     } );
 };</pre>
+    </li>
+    <li>
+        Create an HTML file 'your-app-dir/templates/index.htm'.
     </li>
     <li>
         Have the following configuration file in your application root directory.
@@ -131,7 +136,7 @@ This is a template rendering call which sends directly to the browser after pars
 <pre class=code><span class=comment >// Example Use of response.impress()</span>
 <span class=keyword>var</span> app = exports;
 app.journey = <span class=keyword>function</span>( request, response ) {
-    response.impress( <span class=string>'/static/index.htm'</span>, {
+    response.impress( <span class=string>'/templates/index.htm'</span>, {
         food : <span class=string>'apple'</span>
     } );
 };</pre>

@@ -2,24 +2,24 @@
 
 # TODO
 # ====
-# -!buy .org
-# -!sed killall for nodejuice bash script
+# -!github
+# -!launch
+# -!update video's with nodejuice.com href
+# -!add timestamp to inform command
+# -!doc easy server static startup on home page
+# -!doc fab example
 # -redo video tutorial
 # -make user stephen on rackspace server to run nodejuice
 # -proxy video tutorial
 # -write more demos
 # -update seeker demo
 # -apache benchmark
-# -github
 # -twitter
-# -launch
 # -aws api
 # -google analytics
-# -update video's with nodejuice.com href
 # -make new debian package for i386
 # -make new nodejuice release.bz2
 # -donate button
-# -add timestamp to inform command
 
 
 # USAGE:

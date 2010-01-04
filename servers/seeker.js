@@ -12,10 +12,11 @@ var sys      = require('sys')
 
 if (!devmode) process.exit();
 
-http.createServer(function (req, res) {
+http.createServer(function ( req, res ) {
 
     // Deliver Client JS
     if (typeof req.uri.params.unique === 'undefined') {
+        setTimeout( function() { res.finish() }, 4000 );
         if (seeker) seeker( req, res );
         
         else {

@@ -2,6 +2,9 @@
 NODEJUICE JavaScript V8 Seeker Server and WSGI
 ===============================================================================
 
+For docs go to: http://nodejuice.com
+Watch a video:  http://www.vimeo.com/8459839
+
 SEVERS
 ======
 wsgi    - (Web Server Gateway Interface) application and static content server.
