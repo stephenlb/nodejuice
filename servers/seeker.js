@@ -12,6 +12,13 @@ var sys      = require('sys')
 if (!devmode) process.exit();
 
 http.createServer(function (req, res) {
+
+    utility.bolt( njconfig + '.js', function( obj ) {
+        var old = config;
+        try { config = obj }
+        catch(e) { config = old }
+    } );
+
     // Deliver Client JS
     if (!req.uri.params.unique) {
         return utility.noble( njdir + '/library/seeker.min.js',

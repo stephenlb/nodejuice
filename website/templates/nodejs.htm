@@ -1,0 +1,10 @@
+<h1><a href=http://nodejs.org>
+<div class=node>Node</div><div class=js>JS</div>
+</a></h1>
+This is the non-blocking process which makes 
+<div class=n>node</div><div class=j>Juice</div> possible.
+Go visit <a href=http://nodejs.org><div class=node>Node</div><div class=js>JS</div></a>
+and discover amazing things.
+<p>
+Node's goal is to provide an easy way to build scalable network programs. In the above example, the two second delay does not prevent the server from handling new requests. Node tells the operating system (through epoll, kqueue, /dev/poll, or select) that it should be notified when the 2 seconds are up or if a new connection is made—then it goes to sleep. If someone new connects, then it executes the callback, if the timeout expires, it executes the inner callback. Each connection is only a small heap allocation.
+</p>

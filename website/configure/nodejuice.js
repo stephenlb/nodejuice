@@ -1,6 +1,6 @@
 exports.wsgi = {
     host : null,
-    port : 8080,
+    port : 80,
     root : 'index.htm',
     url  : [
         [/^\/[a-z]+$/, '/controller.js'],
@@ -12,6 +12,7 @@ exports.wsgi = {
 exports.seeker = {
     host    : null,
     port    : 8002,
+    wait    : 1200,
     ignore  : [
         /git$/,
         /svn$/,

@@ -9,19 +9,25 @@
 # -!test proxy with different hosts.
 # -!WARN IF NO NodeJuice Config!
 # -redo video tutorial
+# -proxy video tutorial
 # -buy .org
+# -github
+# -twitter
 # -documentation
 # -turn nodejs and mogoDB into pages on nodeJuice.com  /nodejs /mongodb
 # -launch
+# -aws api
+# -google analytics
+# -update video's with nodejuice.com href
 
 
-# "  USAGE: "
-# "  ================================================ "
-# "  ./nodejuice /path/to/app [wsgi] [seeker] [proxy] "
-# "  "
-# "  wsgi   - servers dynamic and static content. (Web Server) "
-# "  seeker - pushes updates to your web browser. "
-# "  proxy  - use with apache and other web servers. "
+# USAGE:
+# ================================================
+# ./nodejuice /path/to/app [wsgi] [seeker] [proxy]
+# 
+# wsgi   - servers dynamic and static content. (Web Server)
+# seeker - pushes updates to your web browser.
+# proxy  - use with apache and other web servers.
  
 
 # Examples:

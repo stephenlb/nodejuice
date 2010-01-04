@@ -115,7 +115,7 @@ var fetch = exports.fetch = function(
     ready,    // function (response) {}
     good,     // function ( chunk, response, encoding ) {}
     bad,      // function ( chunk, response, encoding ) {}
-    finished  // function ( data, response, encoding ) {}
+    finished  // function ( final, response, encoding ) {}
 ) {
     headers      = headers || {};
     headers.host = host;

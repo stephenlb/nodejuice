@@ -1,20 +1,47 @@
-TODO
-====
-fix xdr3 error detection and seeker response
+===============================================================================
+NODEJUICE JavaScript V8 Seeker Server and WSGI
+===============================================================================
 
 SEVERS
 ======
 wsgi    - (Web Server Gateway Interface) application and static content server.
-mongodb - python rest interface to MongoDB for disk storage.
-          http://api.mongodb.org/python
-seeker  - used in devserver mode to auto refresh all attached clients. 
-          seeker server can be used with other webservers.
+proxy   - used to keep connection with PHP, Ruby, Perl and Python on Apache.
+seeker  - used in dev server mode to auto refresh all attached clients. 
+          seeker server can be used with other webservers through proxy or.
           check out ./demos/seeker to see an example.
+
+USAGE:
+================================================
+./nodejuice /path/to/app [wsgi] [seeker] [proxy]
+
+wsgi   - servers dynamic and static content. (Web Server)
+seeker - pushes updates to your web browser.
+proxy  - use with apache and other web servers.
+ 
+
+Examples:
+=========
+Launch seeker and wsgi servers.
+./nodejuice /home/stephen/application
+
+Launch seeker server only.
+./nodejuice /home/stephen/application seeker
+
+Launch only wsgi server only.
+./nodejuice /home/stephen/application wsgi
+
+Launch proxy and seeker server only.
+Use this for APACHE (apache) or other web servers.
+./nodejuice /home/stephen/application proxy
+
+Launch ALL Servers (This is pointless and harmless).
+./nodejuice /home/stephen/application proxy wsgi seeker
 
 DIRECTORIES
 ===========
-library  - vendor code and other chuncks of functionality.
-servers  - node servers including seeker and wsgi.
-demos    - example configurations and folders to show how nodejuice works.
-symlinks - to other needed applications.
-
+library   - vendor code and other chuncks of functionality.
+servers   - node servers including seeker and wsgi.
+demos     - example configurations and folders to show how nodejuice works.
+symlinks  - pointers to other needed applications.
+provision - error templates (404, 500)
+website   - nodeJuice website

@@ -9,7 +9,13 @@ as a static web server, simply execute the following command:
 This will launch both WSGI and Seeker Server.
 Open your browser and go to:
 <pre class=code>http://localhost:8080/<em>some-file-name-here.htm</em></pre>
-Now you can edit these files and they will update automatically in your web browser.  No need to press reload every time you make a change.
+Now you can edit <strong>*HTML*</strong> files and they will update automatically in your web browser.  No need to press reload every time you make a change.
+
+<p>
+<strong>
+    ***If all you want is a simple file server, no need to read further.
+</strong>
+</p>
 
 <h2>Setup for Web Applications</h2>
 <ol>
@@ -20,7 +26,7 @@ Now you can edit these files and they will update automatically in your web brow
 <pre class=code><span class=keyword>var</span> app = exports;
 app.journey = <span class=keyword>function</span>( request, response ) {
     response.impress( <span class=string>'/static/index.htm'</span>, {
-        dynamic : <span class=keyword>new</span> Date
+        dynamic : <span class=string>'my text here'</span>
     } );
 };</pre>
     </li>
@@ -40,7 +46,7 @@ exports.wsgi = {
     url   : [ <span class=comment>// interface between browser URL Request and Files.</span>
 
         [/^\/app$/, <span class=string>'/app.js'</span>], <span class=comment>// run an application.</span>
-        [/^\/.*/, <span class=string>'/static/'</span>], <span class=comment>// serve content from /static/ dir.</span>
+        [/^\/.*/, <span class=string>'/static/'</span>],  <span class=comment>// serve content from /static/ dir.</span>
         [/^\/.*/, <span class=string>'/'</span>] <span class=comment>// server static content from root app dir.</span>
 
     ]
@@ -67,11 +73,15 @@ exports.proxy = {
 <h2>Proxy Setup for Apache</h2>
 This instruction is on the <a href=/#proxy>home page</a>.
 
-<!-- <h2>URL Routing</h2> -->
+<!-- <h2>URL Routing Examples</h2> -->
 
 <h2>WSGI Functions for Web Applications</h2>
+
+<p>
 <div class=n>node</div><div class=j>Juice</div> sits on top of NodeJS.
+All Node's functionality is available to you.
 The first two arguments are modified versions of what you get from NodeJS.
+</p>
 <ul>
     <li>
         <a href=http://nodejs.org/api.html#_tt_http_serverrequest_tt>Request Object (ServerRequest)</a>
@@ -80,5 +90,159 @@ The first two arguments are modified versions of what you get from NodeJS.
         <a href=http://nodejs.org/api.html#_tt_http_serverresponse_tt>Response Object (ServerResponse)</a>
     </li>
 </ul>
+
+<h3>App Journey</h3>
+This is the <strong>main</strong> entry in your WSGI application.
+<pre class=code><span class=keyword >var</span> app = exports;
+app.journey = <span class=keyword >function</span>( response, request ) {
+    <span class=comment >// your code here...</span>
+};</pre>
+
+<h3>Response Object</h3>
+This object is available to you in your app.journey call.
+
+<h4>response.attack</h4>
+This is the basic response call to send text or data back to the web browser.
+<pre class=code>response.attack(
+    body,       // Delivery HTML, Text or Binary
+    [code],     // OPTIONAL: HTTP 3-Digit Code (200, 404, 500, etc.)
+    [type],     // OPTIONAL: "Content-Type" "text/html" "text/plain"
+    [headers],  // OPTIONAL: HTTP Headers
+    [encoding]  // OPTIONAL: "utf8" or "binary" the default is "utf8"
+);</pre>
+<pre class=code><span class=comment >// Example Use of response.attack()</span>
+<span class=keyword>var</span> app = exports;
+app.journey = <span class=keyword>function</span>( request, response ) {
+    response.attack(
+        <span class=string>'hello!'</span>,    <span class=comment>// text (body)</span>
+        200,         <span class=comment>// response code</span>
+        <span class=string>'text/html'</span>, <span class=comment>// content type.</span>
+        {},    <span class=comment>// headers empty for no specail reason.</span>
+        "utf8" <span class=comment>// encoding</span>
+    );
+};</pre>
+
+<h4>response.impress</h4>
+This is a template rendering call which sends directly to the browser after parse complete.
+<pre class=code>response.impress(
+    file,    // point the the file relative to your application directory.
+    [object] // OPTIONAL: Will find all {{tags}} and impress data in place.
+);</pre>
+<pre class=code><span class=comment >// Example Use of response.impress()</span>
+<span class=keyword>var</span> app = exports;
+app.journey = <span class=keyword>function</span>( request, response ) {
+    response.impress( <span class=string>'/static/index.htm'</span>, {
+        food : <span class=string>'apple'</span>
+    } );
+};</pre>
+Also available is response.utility.impress( file, args, callback );
+
+
+<h4>response.appdir</h4>
+Holds the location of your application directory.
+
+
+<h4>response.utility.noble</h4>
+The Utility Object has many powerful functions.
+The first is a trustable file read command.
+<pre class=code>response.utility.noble(
+    file,   // /path/to/file/name
+    success // function( type, body, encoding ) callback on load.
+    [fail]  // OPTIONAL: callback on failure.
+);</pre>
+<pre class=code><span class=comment >// Example Use of response.utility.noble()</span>
+<span class=keyword >var</span> file = response.appdir + <span class=string >'/templates/index.htm'</span>;
+response.utility.noble( file, <span class=keyword >function</span>( type, body, encoding ) {
+    <span class=comment >// Send File to Browser</span>
+    response.attack( body, 200, type, {}, encoding );
+}, <span class=keyword >function</span>() {
+    <span class=comment >// Send Error</span>
+    response[<span class=string >'404'</span>]( request, response, file );
+} );</pre>
+
+
+<h4>response.utility.supplant</h4>
+Base template impression function.
+This is the <a href=http://javascript.crockford.com/remedial.html>Crockfordian Supplant Method</a>
+posted by <a href=http://www.crockford.com/>Douglas Crockford</a>.
+<pre class=code>response.utility.supplant(
+    text,  // string of chars to update.
+    object // Will find all {{tags}} and impress data in place.
+);</pre>
+<pre class=code><span class=comment >// Example Use of response.utility.supplant()</span>
+<span class=keyword >var</span> parsed_text = response.utility.supplant(
+    <span class=comment >// Parses as "Hello Frank Alphabet!"</span>
+    <span class=string >"Hello {{name}}!"</span>, { name : <span class=string >"Frank Alphabet"</span> }
+);</pre>
+
+
+<h4>response.utility.inform</h4>
+The Primary Logging Function.
+<strong>This is the most used function.</strong>
+This function is important to help you build your web application.
+<pre class=code>response.utility.inform(
+    object // What is to be logged.
+);</pre>
+<pre class=code><span class=comment >// Example Use of response.utility.inform()</span>
+<span class=keyword >var</span> util = response.utility;
+<span class=comment >// Print to terminal: { timestamp: 1262558727644, some_text: "log this" }</span>
+util.inform({
+    timestamp : util.earliest(),
+    some_text : <span class=string >'log this'</span>
+});</pre>
+
+
+<h4>response.utility.recurse</h4>
+Non-blocking Recursive Directory Loop.
+Use this function to safely gather all files in all directories.
+<pre class=code>response.utility.recurse(
+    start,   // Starting Directory
+    ignore,  // Array of regexs to ignore matching files/directories.
+    callback // function(file) called EVERY TIME a File or Directory is found.
+);</pre>
+<pre class=code><span class=comment >// Example Use of response.utility.recurse()</span>
+<span class=comment >// Stream a list of files to the web browser:</span>
+response.sendHeader( 200, { <span class=string >"Content-Type"</span> : <span class=string >"text/plain"</span> } );
+
+response.utility.recurse(
+    response.appdir + <span class=string >'/static'</span>,
+    [ /.git$/, /csv$/, /.svn$/, /pants/ ],
+    <span class=keyword >function</span>(file) { response.sendBody( file + <span class=string >"\n"</span>, <span class=string >"utf8"</span> ); }
+);
+
+<span class=comment >// Only allow 1 second of data streaming.</span>
+setTimeout( <span class=keyword >function</span>() {response.finish()}, 1000 );</pre>
+
+
+<h4>response.utility.fetch</h4>
+Download data from an outside source. This is a low level call and you get to play with the guts of every fetch.
+<pre class=code>response.utility.fetch(
+    port,     // 80
+    host,     // "www.google.com"
+    type,     // "GET" or "POST" or "HEAD"
+    path,     // "/" or "/index.htm" or "/someurl"
+    headers,  // { "Accept-Encoding" : "utf8" }
+    ready,    // function (response) {} when connection is made
+    good,     // function ( chunk, response, encoding ) {} chunck recieved.
+    fail,     // function ( chunk, response, encoding ) {} failure occurs.
+    finished  // function ( final, response, encoding ) {} all is done.
+);</pre>
+<pre class=code><span class=comment >// Example Use of response.utility.fetch()</span>
+response.utility.fetch(
+    <span class=string >"80"</span>, <span class=string >"www.google.com"</span>, <span class=string >"GET"</span>, <span class=string >"/"</span>, {}, <span class=keyword >null</span>, <span class=keyword >null</span>, <span class=keyword >null</span>,
+    <span class=keyword >function</span>( <span class=keyword >final</span>, res, encoding ) {
+        <span class=comment >// Proxy google's home page to browser.</span>
+        response.attack( <span class=keyword >final</span>, 200, headers[<span class=string >'content-type'</span>], {}, encoding );
+    }
+);</pre>
+
+
+<h4>response.utility.earliest</h4>
+Simple timestamp function.
+<pre class=code>response.utility.earliest();</pre>
+<pre class=code><span class=comment >// Example Use of response.utility.earliest()</span>
+<span class=keyword >var</span> timestamp = response.utility.earliest();</pre>
+
+
 
 
