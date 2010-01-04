@@ -13,7 +13,7 @@ exports.wsgi = {
 exports.seeker = {
     host    : null,
     port    : 8002,
-    wait    : 1200,
+    wait    : 200,
     ignore  : [
         /git$/,
         /svn$/,

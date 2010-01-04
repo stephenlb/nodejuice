@@ -1,14 +1,15 @@
-var sys      = require('sys')
-,   http     = require('http')
-,   appdir   = process.ARGV[2]
-,   njdir    = process.ARGV[3]
-,   njconfig = process.ARGV[4]
-,   devmode  = process.ARGV[5]
-,   utility  = require(njdir + '/library/utility')
-,   config   = utility.ignite()
-,   clients  = []
-,   seeking  = {}
-,   seeker   = false;
+var sys        = require('sys')
+,   http       = require('http')
+,   appdir     = process.ARGV[2]
+,   njdir      = process.ARGV[3]
+,   njconfig   = process.ARGV[4]
+,   devmode    = process.ARGV[5]
+,   utility    = require(njdir + '/library/utility')
+,   config     = utility.ignite()
+,   clients    = []
+,   seeking    = {}
+,   seeker     = false
+,   antecedent = utility.earliest();
 
 if (!devmode) process.exit();
 
@@ -53,8 +54,13 @@ sys.puts("\nSeeker Server("+process.pid+")");
 utility.inform(config.seeker);
 
 function update( file ) {
+    if (utility.earliest() - antecedent < config.seeker.wait) return;
+
     utility.inform({ file: file, connections: clients.length });
     while (clients.length > 0) clients.shift().vow(1);
+
+    seek(true);
+    antecedent = utility.earliest();
 }
 
 function seek( radical ) {
@@ -63,10 +69,7 @@ function seek( radical ) {
         else if (radical) update(file);
 
         seeking[file] = 1;
-        process.watchFile( file, function() {
-            seek(true);
-            update(file);
-        } );
+        process.watchFile( file, function() { update(file) } );
     } );
 }
 

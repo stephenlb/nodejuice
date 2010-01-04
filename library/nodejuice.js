@@ -1,3 +1,7 @@
+
+/* DON'T MODIFY THIS FILE!!!
+COPY THIS FILE TO YOUR APPLICATION DIRECTORY FIRST!!! */
+
 exports.wsgi = {
     host  : null, // Leave 'null' to listen on all hosts.
     port  : 8080, // port :-/
