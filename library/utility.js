@@ -169,11 +169,12 @@ var fetch = exports.fetch = function(
         .request( type, path, headers );
 
     request.finish(function(response) {
-        var type = response.headers['content-type']
-        ,   encoding = (type.slice( 0, 4 ) === "text" ? "utf8" : "binary");
+        var type     = response.headers['content-type']
+        ,   encoding = (type.slice( 0, 4 ) === "text" ? "utf8" : "binary")
+        ,   fetch    = config.sidekick.fetch;
 
         inform({
-            proxied  : config.proxy.fetch.host + ':' + config.proxy.fetch.port,
+            proxied  : fetch.host + ':' + fetch.port,
             code     : response.statusCode,
             type     : type,
             encoding : encoding,

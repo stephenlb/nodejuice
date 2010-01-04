@@ -2,28 +2,27 @@
 
 # TODO
 # ====
-# -rename proxy to sidekick!
 # -redo video tutorial
-# -proxy video tutorial
-# -write more demos
+# -sidekick video tutorial
+# -write more demos!!!!!
 # -update seeker demo
 # -twitter
 # -aws api
 # -google analytics
 # -donate button
-# -procuction cache results of utiltiy.impress?
-# -expires headers for production mode
+# -procuction cache results of utiltiy.impress? ...
+# -expires headers for production mode this one for sure.
 # -gzip and cache for production mode
 # -minify & gzip?  or that will make it slower.  
 
 
 # USAGE:
 # ================================================
-# ./nodejuice /path/to/app [wsgi] [seeker] [proxy]
+# ./nodejuice /path/to/app [wsgi] [seeker] [sidekick]
 # 
 # wsgi   - servers dynamic and static content. (Web Server)
 # seeker - pushes updates to your web browser.
-# proxy  - use with apache and other web servers.
+# sidekick  - use with apache and other web servers.
  
 
 # Examples:
@@ -38,12 +37,12 @@
 # This will launch only wsgi server only.
 # ./nodejuice /home/stephen/application wsgi
 #
-# This will launch proxy and seeker server only.
+# This will launch sidekick and seeker server only.
 # Use this for APACHE (apache) or other web servers.
-# ./nodejuice /home/stephen/application proxy
+# ./nodejuice /home/stephen/application sidekick
 #
 # Launch ALL Servers (This is pointless and harmless).
-# ./nodejuice /home/stephen/application proxy wsgi seeker
+# ./nodejuice /home/stephen/application sidekick wsgi seeker
 
 application=`echo $1 | sed -e 's#/\+$##'`
 
@@ -63,7 +62,7 @@ if [ nodejuice='.' ]; then nodejuice="`pwd`"; fi
 
 seeker="$nodejuice/servers/seeker.js"
 wsgi="$nodejuice/servers/wsgi.js"
-proxy="$nodejuice/servers/proxy.js"
+sidekick="$nodejuice/servers/sidekick.js"
 node="$nodejuice/symlinks/node"
 
 ## Check if Application Directory exixts
@@ -147,11 +146,11 @@ startup() {
         running_seeker=1
         $node $seeker $application $nodejuice $nodeconfig $devmode &
         ;;
-    "proxy")
+    "sidekick")
         devmode="yes"
-        if [ $running_proxy ]; then return; fi
-        running_proxy=1
-        $node $proxy $application $nodejuice $nodeconfig $devmode &
+        if [ $running_sidekick ]; then return; fi
+        running_sidekick=1
+        $node $sidekick $application $nodejuice $nodeconfig $devmode &
 
         if [ $running_seeker ]; then return; fi
         running_seeker=1
@@ -161,11 +160,11 @@ startup() {
         echo -e "\033[0;33;1m"
         echo -e "  USAGE: "
         echo -e "  ================================================ "
-        echo -e "  ./nodejuice /path/to/app [wsgi] [seeker] [proxy] "
+        echo -e "  ./nodejuice /path/to/app [wsgi] [seeker] [sidekick] "
         echo -e "  "
-        echo -e "  wsgi   - servers dynamic and static content. (Web Server) "
-        echo -e "  seeker - pushes updates to your web browser. "
-        echo -e "  proxy  - use with apache and other web servers. \033[0m"
+        echo -e "  wsgi     - servers dynamic and static content. (Web Server) "
+        echo -e "  seeker   - pushes updates to your web browser. "
+        echo -e "  sidekick - use with apache and other web servers. \033[0m"
         leave
         ;;
     esac
@@ -181,4 +180,4 @@ wait
 
 # echo -e "$node $seeker $application $nodejuice $nodeconfig $devmode"
 # echo -e "$node $wsgi $application $nodejuice $nodeconfig $devmode"
-# echo -e "$node $proxy $application $nodejuice $nodeconfig $devmode"
+# echo -e "$node $sidekick $application $nodejuice $nodeconfig $devmode"

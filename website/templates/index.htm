@@ -50,9 +50,9 @@ You are probably here to see what Seeker Server can do.
     <a href=http://vimeo.com/8459839>Watch the Video</a>
 </div>
 
-<h2 id=proxy>Apache and Seeker Server (Proxy)</h2>
+<h2 id=sidekick>Apache and Seeker Server (Sidekick)</h2>
 NOTE: This step isn't necessary if you are using nodeJuice WSGI.
-In order to easily use apache or other web servers, simply setup the proxy:
+In order to easily use apache or other web servers, simply setup the sidekick:
 
 <ol>
     <li>
@@ -66,18 +66,18 @@ In order to easily use apache or other web servers, simply setup the proxy:
     </li>
     <li>
         Launch ./nodejuice seeker server.
-        <pre class=code>./nodejuice /my/dir/ proxy</pre>
+        <pre class=code>./nodejuice /my/dir/ sidekick</pre>
     </li>
     <li>
-        Point your web browser to the proxy url.
+        Point your web browser to the sidekick url.
         <pre class=code>http://localhost:8010/</pre>
     </li>
 </ol>
 
-<h2>Seeker Server and Apache (Bypass the Proxy)</h2>
+<h2>Seeker Server and Apache (Bypass Sidekick Server)</h2>
 NOTE: This step isn't necessary if you are using nodeJuice WSGI.
-Using the proxy isn't required with Apache or another web server.
-However the proxy provides error detection and will allow <span class=n>node</span><span class=j>Juice</span> to keep a connection open even if Apache throws an error.
+Using the sidekick isn't required with Apache or another web server.
+However the sidekick provides error detection and will allow <span class=n>node</span><span class=j>Juice</span> to keep a connection open even if Apache throws an error.
 
 <ol>
     <li>
@@ -95,7 +95,7 @@ However the proxy provides error detection and will allow <span class=n>node</sp
     </li>
 </ol>
 <div>
-    This method won't be as cool as using nodeJuice's Proxy in the face of dangerous errors in your PHP, Ruby or Python applications.  So be careful!
+    This method won't be as cool as using nodeJuice's Sidekick in the face of dangerous errors in your PHP, Ruby or Python applications.  So be careful!
 </div>
 
 <h2>

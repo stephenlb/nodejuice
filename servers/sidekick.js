@@ -15,7 +15,7 @@ http.createServer(function (req, res) {
     var error = false;
 
     utility.fetch(
-        config.proxy.fetch.port, config.proxy.fetch.host,
+        config.sidekick.fetch.port, config.sidekick.fetch.host,
         req.method, req.uri.full, req.headers,
     function( response ) {
     }, function( chunk, response, encoding ) {
@@ -23,7 +23,7 @@ http.createServer(function (req, res) {
         error = true;
     }, function( data, response, encoding ) {
         if (error) {
-            utility.impress( njdir + '/provision/proxy.htm', {
+            utility.impress( njdir + '/provision/sidekick.htm', {
                 url      : req.uri.full,
                 code     : response.statusCode,
                 response : data.replace( rxml, '' ),
@@ -46,7 +46,7 @@ http.createServer(function (req, res) {
         }
     } );
 
-}).listen( config.proxy.port, config.proxy.host );
+}).listen( config.sidekick.port, config.sidekick.host );
 
-sys.puts("\nProxy Server("+process.pid+")");
-utility.inform(config.proxy);
+sys.puts("\nSidekick Server("+process.pid+")");
+utility.inform(config.sidekick);

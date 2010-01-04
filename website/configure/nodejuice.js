@@ -22,3 +22,12 @@ exports.seeker = {
         /~$/
     ]
 };
+
+exports.sidekick = {
+    host  : null, // Leave 'null' to listen on all hosts.
+    port  : 8010, // access your server from this port.
+    fetch : {     // point to your web server.
+        host : 'localhost',
+        port : 80
+    }
+};

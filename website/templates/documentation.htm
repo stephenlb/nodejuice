@@ -65,7 +65,7 @@ exports.seeker = {
     ignore : [ /git$/, /svn$/, /cvs$/, /swp$/, /~$/ ] <span class=comment>// stuff to ignore.</span>
 };
 
-exports.proxy = {
+exports.sidekick = {
     host  : <span class=keyword>null</span>, <span class=comment>// Leave 'null' to listen on all hosts.</span>
     port  : 8010, <span class=comment>// access your server from this port.</span>
     fetch : {     <span class=comment>// point to your web server.</span>
@@ -75,8 +75,8 @@ exports.proxy = {
 };
 </pre>
 
-<h2>Proxy Setup for Apache</h2>
-This instruction is on the <a href=/#proxy>home page</a>.
+<h2>Sidekick Setup for Apache</h2>
+This instruction is on the <a href=/#sidekick>home page</a>.
 
 <!-- <h2>URL Routing Examples</h2> -->
 
@@ -236,7 +236,7 @@ Download data from an outside source. This is a low level call and you get to pl
 response.utility.fetch(
     <span class=string >"80"</span>, <span class=string >"www.google.com"</span>, <span class=string >"GET"</span>, <span class=string >"/"</span>, {}, <span class=keyword >null</span>, <span class=keyword >null</span>, <span class=keyword >null</span>,
     <span class=keyword >function</span>( <span class=keyword >final</span>, res, encoding ) {
-        <span class=comment >// Proxy google's home page to browser.</span>
+        <span class=comment >// Sidekick google's home page to browser.</span>
         response.attack( <span class=keyword >final</span>, 200, headers[<span class=string >'content-type'</span>], {}, encoding );
     }
 );</pre>

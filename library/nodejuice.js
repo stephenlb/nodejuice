@@ -24,7 +24,7 @@ exports.seeker = {
     ignore : [ /git$/, /svn$/, /cvs$/, /swp$/, /~$/ ] // path/file to ignore.
 };
 
-exports.proxy = {
+exports.sidekick = {
     host  : null, // Leave 'null' to listen on all hosts.
     port  : 8010, // access your server from this port.
     fetch : {     // point to your web server.
