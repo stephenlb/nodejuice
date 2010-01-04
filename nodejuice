@@ -2,24 +2,19 @@
 
 # TODO
 # ====
-# -!github
-# -!launch
-# -!update video's with nodejuice.com href
-# -!add timestamp to inform command
-# -!doc easy server static startup on home page
-# -!doc fab example
 # -redo video tutorial
 # -make user stephen on rackspace server to run nodejuice
 # -proxy video tutorial
 # -write more demos
 # -update seeker demo
-# -apache benchmark
 # -twitter
 # -aws api
 # -google analytics
 # -make new debian package for i386
 # -make new nodejuice release.bz2
 # -donate button
+# -production cache bolt command
+# -procuction cache files on utiltiy.impress
 
 
 # USAGE:

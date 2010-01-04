@@ -3,6 +3,7 @@ exports.wsgi = {
     port : 80,
     root : 'index.htm',
     url  : [
+        [/^\/rad*$/, '/rad.js'],
         [/^\/[a-z]+$/, '/controller.js'],
         [/^\/$/, '/controller.js'],
         [/^\/.*?/, '/static/']

@@ -62,9 +62,8 @@ http.createServer(function ( req, res ) {
         }, function() { error404( req, res, appdir + file ) } )
     };
 
-    if (!action) return error404( req, res, appdir + file );
-
-    if (rxnojs.test(action[1])) send_script( req, res, action );
+    if (!action) error404( req, res, appdir + file );
+    else if (rxnojs.test(action[1])) send_script( req, res, action );
     else                        send_file( req, res, action );
 
 }).listen( config.wsgi.port, config.wsgi.host );
@@ -99,12 +98,14 @@ function send_file( req, res, action, retries ) {
 }
 
 function send_script( req, res, action ) {
+/*
     if (!devmode) return require(appdir + req.uri.path
         .replace( action[0], action[1] )
         .replace( rxnojs, '' )
     ).journey( req, res );
+    */
     utility.bolt( appdir + action[1], function( app ) {
-        try { app.journey( req, res ) }
+        try { app.journey && app.journey( req, res ) }
         catch(e) { error500( req, res, action[1], e ) }
     }, function(e) {
         if (e) error500( req, res, appdir + action[1], e )

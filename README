@@ -24,21 +24,22 @@ proxy  - use with apache and other web servers.
 
 Examples:
 =========
-Launch seeker and wsgi servers.
+Launch seeker and wsgi servers making a static server.
 ./nodejuice /home/stephen/application
-
-Launch seeker server only.
-./nodejuice /home/stephen/application seeker
-
-Launch only wsgi server only.
-./nodejuice /home/stephen/application wsgi
 
 Launch proxy and seeker server only.
 Use this for APACHE (apache) or other web servers.
 ./nodejuice /home/stephen/application proxy
 
+Launch only wsgi server only.
+./nodejuice /home/stephen/application wsgi
+
+Launch seeker server only.
+./nodejuice /home/stephen/application seeker
+
 Launch ALL Servers (This is pointless and harmless).
 ./nodejuice /home/stephen/application proxy wsgi seeker
+
 
 DIRECTORIES
 ===========
@@ -48,3 +49,20 @@ demos     - example configurations and folders to show how nodejuice works.
 symlinks  - pointers to other needed applications.
 provision - error templates (404, 500)
 website   - nodeJuice website
+
+
+BENCHMARK
+=========
+Server Hostname:        127.0.0.1
+Document Path:          /rad
+Time taken for tests:   7.247 seconds
+Complete requests:      10000
+Failed requests:        0
+Write errors:           0
+Total transferred:      1030000 bytes
+HTML transferred:       200000 bytes
+Requests per second:    1379.82 [#/sec] (mean)
+Time per request:       0.725 [ms] (mean)
+Time per request:       0.725 [ms] (mean, across all concurrent requests)
+
+This benchmark is with cache turned OFF.
