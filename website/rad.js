@@ -1,0 +1,1 @@
+rad ( 'hello world' )
