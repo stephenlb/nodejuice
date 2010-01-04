@@ -67,7 +67,7 @@ Failed requests:        0
 Write errors:           0
 Total transferred:      54920000 bytes
 HTML transferred:       53320000 bytes
-Requests per second:    2495.08 [#/sec] (mean)
+Requests per second:    2495.08 [#/sec] (mean)   <-----------------------------
 Time per request:       40.079 [ms] (mean)
 Time per request:       0.401 [ms] (mean, across all concurrent requests)
 Transfer rate:          13381.83 [Kbytes/sec] received
@@ -89,7 +89,7 @@ Failed requests:        0
 Write errors:           0
 Total transferred:      53720000 bytes
 HTML transferred:       52870000 bytes
-Requests per second:    3102.85 [#/sec] (mean)
+Requests per second:    3102.85 [#/sec] (mean)   <-----------------------------
 Time per request:       32.228 [ms] (mean)
 Time per request:       0.322 [ms] (mean, across all concurrent requests)
 Transfer rate:          16277.86 [Kbytes/sec] received

@@ -3,15 +3,12 @@
 # TODO
 # ====
 # -redo video tutorial
-# -make user stephen on rackspace server to run nodejuice
 # -proxy video tutorial
 # -write more demos
 # -update seeker demo
 # -twitter
 # -aws api
 # -google analytics
-# -make new debian package for i386
-# -make new nodejuice release.bz2
 # -donate button
 # -production cache bolt command
 # -procuction cache files on utiltiy.impress
