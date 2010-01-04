@@ -10,16 +10,16 @@ SEVERS
 wsgi     - (Web Server Gateway Interface) application and static content server.
 sidekick - used to keep connection with PHP, Ruby, Perl and Python on Apache.
 seeker   - used in dev server mode to auto refresh all attached clients. 
-          seeker server can be used with other webservers through sidekick or.
-          check out ./demos/seeker to see an example.
+           seeker server can be used with other webservers through sidekick or.
+           check out ./demos/seeker to see an example.
 
 USAGE:
 ================================================
 ./nodejuice /path/to/app [wsgi] [seeker] [sidekick]
 
-wsgi   - servers dynamic and static content. (Web Server)
-seeker - pushes updates to your web browser.
-sidekick  - use with apache and other web servers.
+wsgi     - servers dynamic and static content. (Web Server)
+seeker   - pushes updates to your web browser.
+sidekick - use with apache and other web servers.
  
 
 NODEJUICE WSGI + SEEKER MODE
@@ -59,7 +59,6 @@ provision - error templates (404, 500)
 website   - nodeJuice website
 
 
-
 ==============
 demo rad() app
 ==============
@@ -86,7 +85,6 @@ app.journey = function( request, response ) {
 };
 
 
-
 ===============================================================================
 BENCHMARK -> DEV (with seeker server)
 ===============================================================================
@@ -103,7 +101,7 @@ Failed requests:        0
 Write errors:           0
 Total transferred:      54920000 bytes
 HTML transferred:       53320000 bytes
-Requests per second:    2495.08 [#/sec] (mean)   <-----------------------------
+Requests per second:    2495.08 [#/sec] (mean)   <-------<-------<-------
 Time per request:       40.079 [ms] (mean)
 Time per request:       0.401 [ms] (mean, across all concurrent requests)
 Transfer rate:          13381.83 [Kbytes/sec] received
@@ -125,7 +123,7 @@ Failed requests:        0
 Write errors:           0
 Total transferred:      53720000 bytes
 HTML transferred:       52870000 bytes
-Requests per second:    3102.85 [#/sec] (mean)   <-----------------------------
+Requests per second:    3102.85 [#/sec] (mean)   <-------<-------<-------
 Time per request:       32.228 [ms] (mean)
 Time per request:       0.322 [ms] (mean, across all concurrent requests)
 Transfer rate:          16277.86 [Kbytes/sec] received

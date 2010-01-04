@@ -150,6 +150,7 @@ Holds the location of your application directory.
 <h4>response.utility.noble</h4>
 The Utility Object has many powerful functions.
 The first is a trustable file read command.
+This file read command is a reliable conncurrent non-blocking I/O function.
 <pre class=code>response.utility.noble(
     file,   // /path/to/file/name
     success // function( type, body, encoding ) callback on load.
@@ -236,7 +237,7 @@ Download data from an outside source. This is a low level call and you get to pl
 response.utility.fetch(
     <span class=string >"80"</span>, <span class=string >"www.google.com"</span>, <span class=string >"GET"</span>, <span class=string >"/"</span>, {}, <span class=keyword >null</span>, <span class=keyword >null</span>, <span class=keyword >null</span>,
     <span class=keyword >function</span>( <span class=keyword >final</span>, res, encoding ) {
-        <span class=comment >// Sidekick google's home page to browser.</span>
+        <span class=comment >// Proxy google's home page to browser.</span>
         response.attack( <span class=keyword >final</span>, 200, headers[<span class=string >'content-type'</span>], {}, encoding );
     }
 );</pre>

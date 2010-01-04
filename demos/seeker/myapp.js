@@ -1,5 +1,3 @@
-(function(){
-
 var app = exports || {};
 
 app.journey = function( request, response ) {
@@ -7,7 +5,3 @@ app.journey = function( request, response ) {
         dynamic : sys.inspect(request.headers.host.split(':')[0])
     } );
 };
-
-return app;
-
-})();

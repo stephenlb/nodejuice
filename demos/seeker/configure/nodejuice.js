@@ -9,9 +9,10 @@ exports.wsgi = {
 };
 
 exports.seeker = {
-    host    : null,
-    port    : 8002,
-    ignore  : [
+    host   : null,
+    port   : 8002,
+    wait   : 1200,
+    ignore : [
         /git$/,
         /svn$/,
         /cvs$/,

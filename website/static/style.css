@@ -37,7 +37,7 @@ h1, h2 {
     text-align: center;
 }
 
-#node, #juice, .n, .j {
+#node, #juice {
     font-size: 90px;
     line-height: 90px;
     display: inline;
@@ -70,8 +70,21 @@ h1, h2 {
 }
 
 .n, .j {
-    font-size: 14px;
-    line-height: 20px;
+    display: inline;
+    letter-spacing: -0.12em;
+}
+
+.blog {
+    display: block;
+    line-height: 4px;
+}
+.saymix {
+    display: inline-block;
+    color: #fff;
+    background-color: #ef2929;
+    padding: 4px;
+    -moz-border-radius:6px;
+    -webkit-border-radius:6px
 }
 
 .db, .mongo, .js, .node {
