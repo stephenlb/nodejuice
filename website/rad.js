@@ -1,1 +1,1 @@
-rad ( 'hello world' )
+rad ( /\/rad.*/, 'hello world' )

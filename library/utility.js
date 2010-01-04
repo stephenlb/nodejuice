@@ -34,7 +34,7 @@ var bolt = exports.bolt = function( file, success, fail, rad ) {
         try {
             var lightning = eval('(function(){var exports={};' + data +
                 ';return exports})()');
-            return lightning ? success(lightning) : fail && fail();
+            return lightning ? success( lightning, rad ) : fail && fail();
         }
         catch(e) { fail && fail(e) }
     }, function() { fail && fail() } );

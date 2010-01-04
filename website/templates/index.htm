@@ -10,21 +10,25 @@ a low level http non-blocking web server.
 
 <p>To create simple web application <a href=/rad>/rad</a>:</p>
 
-<pre class=code><span class=keyword>rad</span> ( <span class=string>'hello world'</span> )</pre>
+<pre class=code><span class=comment>// app-file.js</span>
+<span class=keyword>rad</span> ( <span class=string>/.*/</span>, <span class=string>'hello world'</span> )</pre>
 
-<p>A more complex web application:</p>
+<p>An advanced (and faster) web application will look like:</p>
 
-<pre class=code><span class=keyword>var</span> app = exports;
+<pre class=code><span class=comment>// app-file.js</span>
+<span class=keyword>var</span> app = exports;
 app.journey = <span class=keyword>function</span>( request, response ) {
     response.impress( <span class=string>'/templates/index.htm'</span>, {
-        dynamic : <span class=keyword>new</span> Date
-    } );
+        right_now : <span class=keyword>new</span> Date
+    } )
 };</pre>
 
 Above are two example apps on
 <div class=n>node</div><div class=j>Juice</div> V8 WSGI.
 Simple right?
 It's like Google App Engine GAE and other WSGI Frameworks.
+The advanced web app example is faster and provides extra fallbacks.
+However the rad() example is easy.
 To run this application type:
 
 <pre class=code>./nodejuice /path/to/directory</pre>

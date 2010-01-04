@@ -10,8 +10,10 @@
 # -aws api
 # -google analytics
 # -donate button
-# -production cache bolt command
-# -procuction cache files on utiltiy.impress
+# -procuction cache results of utiltiy.impress?
+# -expires headers for production mode
+# -gzip and cache for production mode
+# -minify & gzip?  or that will make it slower.  
 
 
 # USAGE:

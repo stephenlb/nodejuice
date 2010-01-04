@@ -6,6 +6,7 @@ var http     = require("http")
 ,   njconfig = process.ARGV[4]
 ,   devmode  = process.ARGV[5]
 ,   utility  = require(njdir  + "/library/utility")
+,   rad      = require(njdir  + "/library/rad").rad
 ,   config   = utility.ignite()
 ,   wsgi     = exports
 ,   rxnojs   = /\.js$/
@@ -51,8 +52,8 @@ http.createServer(function ( req, res ) {
 
         res.sendHeader( code, headers );
         res.sendBody( body, encoding || 'utf8' );
-        res.finished = true;
         res.finish();
+        res.finished = true;
     };
 
     res.impress = function( file, args ) {
@@ -83,10 +84,6 @@ function error500( req, res, file, e ) {
     }, function( type, data ) { res.attack( data, 500 ) } )
 }
 
-function rad( req, res ) {
-    return function(text) { return res.attack( text, 200 ) }
-}
-
 function send_file( req, res, action, retries ) {
     var path    = req.uri.path.replace( action[0], action[1] )
     ,   syspath = appdir + path +
@@ -98,17 +95,16 @@ function send_file( req, res, action, retries ) {
 }
 
 function send_script( req, res, action ) {
-    utility.bolt( appdir + action[1], function( app ) {
+    utility.bolt( appdir + action[1], function( app, rad ) {
         try {
-            app.journey && app.journey( req, res ) || setTimeout(function() {
-                res.finished || error500( req, res, action[1], {
-                    message : 'No Journey Called',
-                    stack   : 'You must use "journey" for long requests. \n' +
-                              'If using Journey, there is a problem \n' +
-                              'in your script. Otherwise use rad("asdf") \n' +
-                              'for requests that are shorter than 2 seconds.'
-                } );
-            }, 2000 );
+            (app.journey && (app.journey( req, res ) || 1)) || (rad.ran ||
+                error500( req, res, action[1], {
+                    message : 'No journey() or rad() matched.',
+                    stack   : 'You must use journey() or rad().\n' +
+                              'There is a problem in your script.\n' +
+                              'Make sure to have catch all if using rad\n\n' +
+                              'rad( /.*/, "catch all" )'
+                } ));
         }
         catch(e) { error500( req, res, action[1], e ) }
     }, function(e) {
