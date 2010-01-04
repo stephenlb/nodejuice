@@ -80,13 +80,55 @@ var inform = exports.inform = function(obj) {
     } ));
 };
 
+if (devmode) {
+    var wait   = config.seeker.wait
+    ,   interv = wait / 4;
+    setInterval( function() {
+        var now = earliest();
+        for ( var file in noblecache ) {
+            if (noblecache[file].data &&
+                now - noblecache[file].earliest > wait
+            ) {
+                noblecache[file].data    = '';
+                noblecache[file].reading = 0;
+            }
+        }
+    }, interv );
+}
+
+var noblecache = {};
 var noble = exports.noble = function( file, success, fail, retries ) {
-    var type     = mime.get(file)
-    ,   encoding = (type.slice( 0, 4 ) === "text" ? "utf8" : "binary")
-    ,   noblefile  = posix.cat( file, encoding );
+    if (noblecache[file] && noblecache[file].reading) {
+        if (noblecache[file].data) {
+            success && success(
+                noblecache[file].type,
+                noblecache[file].data,
+                noblecache[file].encoding
+            );
+            noblecache[file].earliest = earliest();
+            return;
+        }
+
+        return setTimeout( function() {
+            noblecache[file].earliest = earliest();
+            noble( file, success, fail )
+        }, 1 );
+    }
+
+    noblecache[file] = { reading : 1 };
+
+    var type      = mime.get(file)
+    ,   encoding  = (type.slice( 0, 4 ) === "text" ? "utf8" : "binary")
+    ,   noblefile = posix.cat( file, encoding );
 
     noblefile.addCallback(function(data) {
         if (typeof data !== 'string') return retry();
+
+        noblecache[file].type     = type;
+        noblecache[file].data     = data;
+        noblecache[file].encoding = encoding;
+        noblecache[file].earliest = earliest();
+
         success && success( type, data, encoding );
     });
 
@@ -98,9 +140,13 @@ var noble = exports.noble = function( file, success, fail, retries ) {
         inform({ retry : retries, file: file });
 
         if ( retries < config.wsgi.retry.max ) setTimeout( function() {
+            if (devmode) noblecache[file].reading = 0;
             noble( file, success, fail, retries + 1 )
         }, config.wsgi.retry.wait );
-        else return fail && fail() || function() {
+        else {
+            noblecache[file].reading = 0;
+            noblecache[file].data    = '';
+            fail && fail()
             inform({ fail: 'true', file: file });
         };
     }

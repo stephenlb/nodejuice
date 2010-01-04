@@ -12,6 +12,7 @@ var http     = require("http")
 ,   rxhtml   = /html/;
 
 http.createServer(function ( req, res ) {
+
     if (devmode) utility.bolt( njconfig + '.js', function( obj ) {
         var old = config;
         try { config = obj }
@@ -20,8 +21,6 @@ http.createServer(function ( req, res ) {
             error500( req, res, njconfig + '.js', e );
         }
     } );
-
-    // if (!config.wsgi.url[0]) return;
 
     var action = config.wsgi.url.filter(function(url) {
         return req.uri.path.match(url[0])
@@ -52,6 +51,7 @@ http.createServer(function ( req, res ) {
 
         res.sendHeader( code, headers );
         res.sendBody( body, encoding || 'utf8' );
+        res.finished = true;
         res.finish();
     };
 
@@ -98,14 +98,18 @@ function send_file( req, res, action, retries ) {
 }
 
 function send_script( req, res, action ) {
-/*
-    if (!devmode) return require(appdir + req.uri.path
-        .replace( action[0], action[1] )
-        .replace( rxnojs, '' )
-    ).journey( req, res );
-    */
     utility.bolt( appdir + action[1], function( app ) {
-        try { app.journey && app.journey( req, res ) }
+        try {
+            app.journey && app.journey( req, res ) || setTimeout(function() {
+                res.finised || error500( req, res, action[1], {
+                    message : 'No Journey Called',
+                    stack   : 'You must use "journey" for long requests. \n' +
+                              'If using Journey, there is a problem \n' +
+                              'in your script. Otherwise use rad("asdf") \n' +
+                              'for requests that are shorter than 2 seconds.'
+                } );
+            }, 2000 );
+        }
         catch(e) { error500( req, res, action[1], e ) }
     }, function(e) {
         if (e) error500( req, res, appdir + action[1], e )

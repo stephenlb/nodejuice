@@ -16,30 +16,27 @@ http.createServer(function ( req, res ) {
 
     // Deliver Client JS
     if (typeof req.uri.params.unique === 'undefined') {
-        setTimeout( function() { res.finish() }, 4000 );
-        if (seeker) seeker( req, res );
-        
-        else {
-            utility.noble( njdir + '/library/seeker.min.js',
-            function( type, js, encoding ) {
-                seeker = function( req, res ) {
-                    var headers = { "Content-Type" : type }
-                    ,   host    = req.headers.host.split(':')[0] +
-                               ':' + config.seeker.port;
-                    js = utility.supplant( js, {
-                        host : host,
-                        wait : config.seeker.wait
-                    } );
+        if (seeker) return seeker( req, res );
 
-                    headers['Content-Length'] = js.length;
+        utility.noble( njdir + '/library/seeker.min.js',
+        function( type, js, encoding ) {
+            seeker = function( req, res ) {
+                var headers = { "Content-Type" : type }
+                ,   host    = req.headers.host.split(':')[0] +
+                           ':' + config.seeker.port;
+                js = utility.supplant( js, {
+                    host : host,
+                    wait : config.seeker.wait
+                } );
 
-                    res.sendHeader( 200, headers );
-                    res.sendBody( js, "utf8" );
-                    res.finish();
-                };
-                seeker( req, res );
-            } );
-        }
+                headers['Content-Length'] = js.length;
+
+                res.sendHeader( 200, headers );
+                res.sendBody( js, "utf8" );
+                res.finish();
+            };
+            seeker( req, res );
+        } );
     }
 
     // Deliver Update Notice

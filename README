@@ -51,18 +51,46 @@ provision - error templates (404, 500)
 website   - nodeJuice website
 
 
-BENCHMARK
-=========
+===============================================================================
+BENCHMARK -> DEV (with seeker server)
+===============================================================================
 Server Hostname:        127.0.0.1
-Document Path:          /rad
-Time taken for tests:   7.247 seconds
+Server Port:            80
+
+Document Path:          /
+Document Length:        5332 bytes
+
+Concurrency Level:      100
+Time taken for tests:   4.008 seconds
 Complete requests:      10000
 Failed requests:        0
 Write errors:           0
-Total transferred:      1030000 bytes
-HTML transferred:       200000 bytes
-Requests per second:    1379.82 [#/sec] (mean)
-Time per request:       0.725 [ms] (mean)
-Time per request:       0.725 [ms] (mean, across all concurrent requests)
+Total transferred:      54920000 bytes
+HTML transferred:       53320000 bytes
+Requests per second:    2495.08 [#/sec] (mean)
+Time per request:       40.079 [ms] (mean)
+Time per request:       0.401 [ms] (mean, across all concurrent requests)
+Transfer rate:          13381.83 [Kbytes/sec] received
 
-This benchmark is with cache turned OFF.
+
+===============================================================================
+BENCHMARK -> PRODUCTION
+===============================================================================
+Server Hostname:        127.0.0.1
+Server Port:            80
+
+Document Path:          /
+Document Length:        5287 bytes
+
+Concurrency Level:      100
+Time taken for tests:   3.223 seconds
+Complete requests:      10000
+Failed requests:        0
+Write errors:           0
+Total transferred:      53720000 bytes
+HTML transferred:       52870000 bytes
+Requests per second:    3102.85 [#/sec] (mean)
+Time per request:       32.228 [ms] (mean)
+Time per request:       0.322 [ms] (mean, across all concurrent requests)
+Transfer rate:          16277.86 [Kbytes/sec] received
+

@@ -1,7 +1,6 @@
 var website   = exports
 ,   templates = '/templates/';
 
-
 website.journey = function( request, response ) {
     var where = response.appdir +
                 templates +
