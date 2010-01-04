@@ -19,7 +19,7 @@ exports.wsgi = {
 exports.seeker = {
     host   : null, // Leave 'null' to listen on all hosts.
     port   : 8002, // port :-/
-    wait   : 2000, // delay in milliseconds before a new connection.
+    wait   : 1200, // delay in milliseconds before a new connection.
                    // setting this too low will make crazziness.
     ignore : [ /git$/, /svn$/, /cvs$/, /swp$/, /~$/ ] // path/file to ignore.
 };
