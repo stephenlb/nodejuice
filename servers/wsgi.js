@@ -64,7 +64,7 @@ http.createServer(function ( req, res ) {
 
     if (!action) error404( req, res, appdir + file );
     else if (rxnojs.test(action[1])) send_script( req, res, action );
-    else                        send_file( req, res, action );
+    else                             send_file( req, res, action );
 
 }).listen( config.wsgi.port, config.wsgi.host );
 sys.puts("\nWSGI Server("+process.pid+")");
@@ -101,7 +101,7 @@ function send_script( req, res, action ) {
     utility.bolt( appdir + action[1], function( app ) {
         try {
             app.journey && app.journey( req, res ) || setTimeout(function() {
-                res.finised || error500( req, res, action[1], {
+                res.finished || error500( req, res, action[1], {
                     message : 'No Journey Called',
                     stack   : 'You must use "journey" for long requests. \n' +
                               'If using Journey, there is a problem \n' +

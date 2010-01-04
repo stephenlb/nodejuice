@@ -137,8 +137,6 @@ var noble = exports.noble = function( file, success, fail, retries ) {
     function retry() {
         retries = retries || 0;
 
-        inform({ retry : retries, file: file });
-
         if ( retries < config.wsgi.retry.max ) setTimeout( function() {
             if (devmode) noblecache[file].reading = 0;
             noble( file, success, fail, retries + 1 )
