@@ -59,21 +59,34 @@ provision - error templates (404, 500)
 website   - nodeJuice website
 
 
-==============
-demo rad() app
-==============
+=========
+rad() app **EASIEST**
+=========
 // app-file.js
 
+//
 // http://localhost/rad-test
+//
 rad ( /^\/rad-test$/, 'hello world rad() test!' )
 
+//
+// rad() with template.
+//
+rad ( /^\/$/, {
+    file : '/static/homepage.htm',
+    info : 'Hi, this is information.',
+    text : 'this is text!'
+} );
+
+//
 // This is the fallback catch all.
+//
 rad ( /.*/, 'hello world: last resort' )
 
 
-================
-demo journey app
-================
+===========
+journey app **FASTEST**
+===========
 // app-file.js
 
 // This file is matched by the RegEx in nodejuice.js config

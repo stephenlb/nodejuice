@@ -2,14 +2,10 @@
 
 # TODO
 # ====
-# -!expires headers for production mode this one for sure.
-# -!update seeker demo
 # -redo video tutorial
 # -sidekick video tutorial
 # -write more demos!!!!!
-# -twitter
 # -aws api
-# -google analytics
 # -donate button
 # -procuction cache results of utiltiy.impress? ...
 # -gzip and cache for production mode
