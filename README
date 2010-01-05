@@ -5,6 +5,49 @@ NODEJUICE JavaScript V8 Seeker Server and WSGI
 For docs go to: http://nodejuice.com
 Watch a video:  http://www.vimeo.com/8459839
 
+
+=========
+rad() app **EASIEST**
+=========
+
+rad ( /^\/rad-test$/, 'hello world rad() test!' )
+
+rad ( /^\/$/, {
+    file : '/static/homepage.htm', // template
+    info : 'Hi, this is information.',
+    text : 'this is text!'
+} )
+
+rad ( /^\/function$/, function( request, response ) {
+    rad.reply('something');
+} )
+
+rad.get ( /^\/get-example/, 'same as rad()' )
+
+rad.post ( /^\/post-example/, 'posted' )
+
+rad.head ( /^\/head-example/, '' )
+
+rad.put ( /^\/put-example/, '' )
+
+rad['delete'] ( /^\/delete-example/, 'data has been deleted' )
+
+rad( /.*/, 'hello world: last resort' )
+
+
+=============
+journey() app **FASTEST**
+=============
+// app-file.js
+
+var app = exports;
+app.journey = function( request, response ) {
+    response.impress( '/templates/index.htm', {
+        right_now : new Date
+    } )
+};
+
+
 SEVERS
 ======
 wsgi     - (Web Server Gateway Interface) application and static content server.
@@ -57,38 +100,6 @@ demos     - example configurations and folders to show how nodejuice works.
 symlinks  - pointers to other needed applications.
 provision - error templates (404, 500)
 website   - nodeJuice website
-
-
-=========
-rad() app **EASIEST**
-=========
-// app-file.js
-
-/* http://localhost/rad-test */
-rad ( /^\/rad-test$/, 'hello world rad() test!' )
-
-/* rad() with template. */
-rad ( /^\/$/, {
-    file : '/static/homepage.htm',
-    info : 'Hi, this is information.',
-    text : 'this is text!'
-} );
-
-/* This is the fallback catch all. */
-rad ( /.*/, 'hello world: last resort' )
-
-
-===========
-journey app **FASTEST**
-===========
-// app-file.js
-
-var app = exports;
-app.journey = function( request, response ) {
-    response.impress( '/templates/index.htm', {
-        right_now : new Date
-    } )
-};
 
 
 ===============================================================================

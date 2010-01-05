@@ -7,10 +7,28 @@ rad ( /^\/$/, {
     file : '/static/template.htm',
     url  : '/test-url',
     text : 'click this link!'
-} );
+} )
+
+
+rad ( /^\/function$/, function( request, response ) {
+    rad.reply('something');
+} )
+
 
 // rad() with text.
 rad ( /^\/?test.*/, 'you made it! Press Back Button.' )
 
-// rad() with text again.
-rad ( /special/, 'This is a secret, pffff.' )
+
+/* Picard Style */
+rad.get ( /^\/get$/,  'rad.get() is the same as rad()' )
+rad.post( /^\/post/, 'posted' )
+rad.head( /^\/head/, 'headed' )
+rad.put ( /^\/put/,  'puted' )
+rad['delete']( /^\/delete/, 'deleted' )
+
+
+rad.get ( /^\/get-params.*/, function( request, response ) {
+    rad.reply(JSON.stringify(request.uri.params))
+} )
+
+rad ( /.*/, 'Last Resort' )
