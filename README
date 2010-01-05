@@ -2,7 +2,7 @@
 NODEJUICE JavaScript V8 Seeker Server and WSGI
 ===============================================================================
 
-For docs go to: http://nodejuice.com
+For docs go to: http://nodejuice.com/documentation
 Watch a video:  http://www.vimeo.com/8459839
 
 
@@ -19,7 +19,7 @@ rad ( /^\/$/, {
 } )
 
 rad ( /^\/function$/, function( request, response ) {
-    rad.reply('something');
+    rad.reply('something')
 } )
 
 rad.get ( /^\/get-example/, 'same as rad()' )
