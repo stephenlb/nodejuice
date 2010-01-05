@@ -11,17 +11,23 @@ a low level http non-blocking web server.
 <p>To create simple web application <a href=/rad>/rad</a>:</p>
 
 <pre class=code><span class=comment>// app-file.js</span>
-<span class=keyword>rad</span> ( <span class=string>/.*/</span>, <span class=string>'hello world'</span> )</pre>
+<span class=keyword>rad</span> ( <span class=string >/^\/about$/</span>, {
+    file : <span class=string >'/templates/about.htm'</span>,
+    info : <span class=string >'some info here'</span>
+} )
+
+<span class=keyword>rad</span> ( <span class=string>/.*/</span>, <span class=string>'hello world'</span> )
+</pre>
 
 <p>An advanced (and faster) web application will look like:</p>
 
 <pre class=code><span class=comment>// app-file.js</span>
-<span class=keyword>var</span> app = exports;
+<span class=keyword>var</span> app = exports
 app.journey = <span class=keyword>function</span>( request, response ) {
     response.impress( <span class=string>'/templates/index.htm'</span>, {
         right_now : <span class=keyword>new</span> Date
     } )
-};</pre>
+}</pre>
 
 Above are two example apps on
 <span class=n>node</span><span class=j>Juice</span> V8 WSGI.

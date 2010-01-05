@@ -64,23 +64,17 @@ rad() app **EASIEST**
 =========
 // app-file.js
 
-//
-// http://localhost/rad-test
-//
+/* http://localhost/rad-test */
 rad ( /^\/rad-test$/, 'hello world rad() test!' )
 
-//
-// rad() with template.
-//
+/* rad() with template. */
 rad ( /^\/$/, {
     file : '/static/homepage.htm',
     info : 'Hi, this is information.',
     text : 'this is text!'
 } );
 
-//
-// This is the fallback catch all.
-//
+/* This is the fallback catch all. */
 rad ( /.*/, 'hello world: last resort' )
 
 
@@ -89,7 +83,6 @@ journey app **FASTEST**
 ===========
 // app-file.js
 
-// This file is matched by the RegEx in nodejuice.js config
 var app = exports;
 app.journey = function( request, response ) {
     response.impress( '/templates/index.htm', {
