@@ -91,6 +91,12 @@ function send_file( req, res, action, retries ) {
     ,   syspath = appdir + path +
                   (path.slice(-1) === '/' ? config.wsgi.root : '');
 
+utility.inform({
+    path : path,
+    syspath : syspath,
+    pathslice : path.slice(-1)
+});
+
     utility.noble( syspath, function( type, data, encoding ) {
         res.attack( data, 200, type, devmode ? {} : {
             "Expires" : "Thu, 01 Dec 2030 16:00:00 GMT"
