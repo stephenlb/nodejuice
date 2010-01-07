@@ -1,6 +1,6 @@
 <h1>Installation Instructions</h1>
 <div>
-<a href=http://nodejuice.s3.amazonaws.com/nodejuice-1.2.5-1a4185d.bz2>Download <div class=n>node</div><div class=j>Juice</div>-1.2.5-1a4185d.bz2</a>
+<a href=http://github.com/stephenlb/nodejuice/tarball/master>Download <div class=n>node</div><div class=j>Juice</div>-1.3.0</a>
 </div><br/>
 
 <div>
@@ -33,20 +33,24 @@ sudo dpkg -i node-amd64.deb
             </li>
         </ul>
     </li>
-    <li><a href=http://nodejuice.s3.amazonaws.com/nodejuice-1.2.5-1a4185d.bz2>
+    <li><a href=http://github.com/stephenlb/nodejuice/tarball/master>
         Download 
-        <div class=n>node</div><div class=j>Juice</div>-1.2.5-1a4185d.bz2</a>
+        <div class=n>node</div><div class=j>Juice</div>-1.3.0</a>
     </li>
     <li>
-        Start WSGI and Seeker
+        Extract files then Start WSGI, Seeker and Browser:
         <ul>
             <li>
                 Extract files form archive:
-                <pre class=code>tar xvfj nodejuice-1.2.5-1a4185d.bz2</pre>
+                <pre class=code>tar xvfz stephenlb-nodejuice-#######.tar.gz</pre>
             </li>
             <li>
                 Start the server:
-                <pre class=code>cd nodejuice &amp;&amp; ./nodejuice website/</pre>
+                <pre class=code>cd stephenlb-nodejuice-####### &amp;&amp; ./nodejuice demo/rad</pre>
+            </li>
+            <li>
+                Run Browser:
+                <pre class=code>http://localhost:8080/</pre>
             </li>
         </ul>
     </li>
