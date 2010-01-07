@@ -19,9 +19,11 @@ exports.wsgi = {
 exports.seeker = {
     host   : null, // Leave 'null' to listen on all hosts.
     port   : 8002, // port :-/
-    wait   : 1200, // delay in milliseconds before a new connection.
-                   // setting this too low will make crazziness.
-    ignore : [ /git$/, /svn$/, /cvs$/, /swp$/, /~$/ ] // path/file to ignore.
+    delay  : 150,  // time in ms before page starts to reload.
+                   // setting too low will cause file read errors in Apache
+    wait   : 1200, // time in milliseconds before a new connection.
+                   // setting too low will make crazziness.
+    ignore : [ /\./ ] // path/file to ignore.
 };
 
 exports.sidekick = {

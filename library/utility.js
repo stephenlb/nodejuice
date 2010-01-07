@@ -98,6 +98,12 @@ if (devmode) {
 
 var noblecache = {};
 var noble = exports.noble = function( file, success, fail, retries ) {
+
+    if (noblecache[file] && earliest() - noblecache[file].failed < 5000)
+        return fail && fail();
+    else if (noblecache[file])
+        noblecache[file].failed = 0
+
     if (noblecache[file] && noblecache[file].reading) {
         if (noblecache[file].data) {
             success && success(
@@ -112,7 +118,7 @@ var noble = exports.noble = function( file, success, fail, retries ) {
         return setTimeout( function() {
             noblecache[file].earliest = earliest();
             noble( file, success, fail )
-        }, 1 );
+        }, 100 );
     }
 
     noblecache[file] = { reading : 1 };
@@ -132,19 +138,22 @@ var noble = exports.noble = function( file, success, fail, retries ) {
         success && success( type, data, encoding );
     });
 
-    noblefile.addErrback(function() { retry() });
+    noblefile.addErrback(function() {
+    
+    retry() });
 
     function retry() {
         retries = retries || 0;
 
         if ( retries < config.wsgi.retry.max ) setTimeout( function() {
             if (devmode) noblecache[file].reading = 0;
-            noble( file, success, fail, retries + 1 )
+            noble( file, success, fail, retries + 1 );
         }, config.wsgi.retry.wait );
         else {
+            noblecache[file].failed  = earliest();
             noblecache[file].reading = 0;
             noblecache[file].data    = '';
-            fail && fail()
+            fail && fail();
             inform({ fail: 'true', file: file });
         };
     }
@@ -156,6 +165,8 @@ var fetch = exports.fetch = function(
     type,     // "GET"
     path,     // "/"
     headers,  // { asdf : asdf }
+    body,     // 'binary, text or POST data'
+    encoding, // "binary" or "utf8"
     ready,    // function (response) {}
     good,     // function ( chunk, response, encoding ) {}
     bad,      // function ( chunk, response, encoding ) {}
@@ -164,24 +175,35 @@ var fetch = exports.fetch = function(
     headers      = headers || {};
     headers.host = host;
 
+    headers['content-length'] = (body || '').length;
+
     var data    = ''
     ,   request = http.createClient( port, host )
         .request( type, path, headers );
 
+    if (body) request.sendBody( body, encoding || "utf8" );
+
     request.finish(function(response) {
-        var type     = response.headers['content-type']
-        ,   encoding = (type.slice( 0, 4 ) === "text" ? "utf8" : "binary")
+        var ctype    = response.headers['content-type']
+        ,   encoding = ctype.slice( 0, 4 ) === "text" ? "utf8" : "binary"
         ,   fetch    = config.sidekick.fetch;
 
         inform({
             proxied  : fetch.host + ':' + fetch.port,
             code     : response.statusCode,
+            ctype    : ctype,
             type     : type,
-            encoding : encoding,
+            x        : headers['x-requested-with'],
+            // encoding : encoding,
             uri      : path
         });
 
         ready && ready(response);
+
+        if (response.statusCode != 200) {
+            bad && bad( '', response, encoding );
+            return finished && finished( '', response, encoding );
+        }
 
         response.setBodyEncoding(encoding);
         response.addListener( "body", function(chunk) {

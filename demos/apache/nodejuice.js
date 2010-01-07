@@ -1,13 +1,16 @@
 /* 
     This is config for apache.
-    It assumse you are running your server on port 80.
+    It assumse you are running your server on port 80 !!!
 
-    Put this file in your application directory and run:
+    Put this very file in your application directory:
+
+        cp ./library/nodejuice.js /my/app-dir/.
+
+    Run from command line:
 
         ./nodejuice /path/to/application
 
-    Next you need to point your browser to the sidekick server.
-    This is located on port 8010 by default.
+    Next you need to point your browser to the sidekick server:
 
         http://localhost:8010/
 
@@ -25,15 +28,12 @@ exports.sidekick = {
 exports.seeker = {
     host   : null, // Leave 'null' to listen on all hosts.
     port   : 8002, // port :-/
+    delay  : 150,  // time in ms before page starts to reload.
+                   // setting too low will cause file read errors in Apache
     wait   : 1200, // delay in milliseconds before a new connection.
                    // setting this too low will make crazziness.
 
     ignore : [     // path/file to ignore.
-        /git$/,
-        /svn$/,
-        /cvs$/,
-        /swp$/,
-        /~$/
+        /\./
     ] 
 };
-

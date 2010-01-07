@@ -228,6 +228,8 @@ Download data from an outside source. This is a low level call and you get to pl
     type,     // "GET" or "POST" or "HEAD"
     path,     // "/" or "/index.htm" or "/someurl"
     headers,  // { "Accept-Encoding" : "utf8" }
+    body,     // "binary, text or POST data"
+    encoding, // "binary" or "utf8"
     ready,    // function (response) {} when connection is made
     good,     // function ( chunk, response, encoding ) {} chunck recieved.
     fail,     // function ( chunk, response, encoding ) {} failure occurs.
@@ -235,7 +237,7 @@ Download data from an outside source. This is a low level call and you get to pl
 );</pre>
 <pre class=code><span class=comment >// Example Use of response.utility.fetch()</span>
 response.utility.fetch(
-    <span class=string >"80"</span>, <span class=string >"www.google.com"</span>, <span class=string >"GET"</span>, <span class=string >"/"</span>, {}, <span class=keyword >null</span>, <span class=keyword >null</span>, <span class=keyword >null</span>,
+    <span class=string >"80"</span>, <span class=string >"www.google.com"</span>, <span class=string >"GET"</span>, <span class=string >"/"</span>, {}, <span class=keyword >null</span>, <span class=keyword >null</span>, <span class=keyword >null</span>, <span class=keyword >null</span>, <span class=keyword >null</span>,
     <span class=keyword >function</span>( <span class=keyword >final</span>, res, encoding ) {
         <span class=comment >// Proxy google's home page to browser.</span>
         response.attack( <span class=keyword >final</span>, 200, headers[<span class=string >'content-type'</span>], {}, encoding );

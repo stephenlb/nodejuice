@@ -17,6 +17,7 @@ http.createServer(function ( req, res ) {
 
     // Deliver Client JS
     if (typeof req.uri.params.unique === 'undefined') {
+
         if (seeker) return seeker( req, res );
 
         utility.noble( njdir + '/library/seeker.min.js',
@@ -36,8 +37,14 @@ http.createServer(function ( req, res ) {
                 response.sendHeader( 200, headers );
                 response.sendBody( js, "utf8" );
                 response.finish();
+                setTimeout( function() { seek() }, 1000 );
             };
             seeker( req, res );
+        }, function() {
+            utility.inform({
+                fail: 'unabled to load seeker.min.js',
+                file: njdir + '/library/seeker.min.js'
+            });
         } );
     }
 
@@ -57,25 +64,23 @@ utility.inform(config.seeker);
 function update( file ) {
     if (utility.earliest() - antecedent < config.seeker.wait) return;
 
-    antecedent = utility.earliest();
+    setTimeout( function() {
+        antecedent = utility.earliest();
 
-    utility.inform({ file: file, connections: clients.length });
-    while (clients.length > 0) clients.shift().vow(1);
+        while (clients.length > 0) clients.shift().vow(1);
 
-    seek(true);
+        seek(true);
+    }, config.seeker.delay );
 }
 
 function seek( radical ) {
     utility.recurse( appdir, config.seeker.ignore, function( file ) {
         if (seeking[file]) return;
         else if (radical) update(file);
-
         seeking[file] = 1;
         process.watchFile( file, function() { update(file) } );
     } );
 }
-
-seek();
 
 setInterval( function() {
     var instant = utility.earliest();
