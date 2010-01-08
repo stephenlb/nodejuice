@@ -6,8 +6,7 @@ var sys      = require('sys')
 ,   devmode  = process.ARGV[5]
 ,   utility  = require(njdir + '/library/utility')
 ,   config   = utility.ignite()
-,   rxml     = /<[^>]*>/g
-,   rxhtml   = /^\s*<[^>]*>/;
+,   rxml     = /<[^>]*>/g;
 
 if (!devmode) process.exit();
 
@@ -18,50 +17,42 @@ http.createServer(function (req, res) {
     ,   encoding = (req.headers['content-type'] || 'text')
                    .slice( 0, 4 ) === "text" ? "utf8" : "binary";
 
-    req.addListener( "body", function(chunk) {
-
-        body += chunk;
-    } );
-
+    req.addListener( "body", function(chunk) { body += chunk } );
     req.addListener( "complete", function() {
         req.headers['content-length'] = body.length;
 
-        method = body ? 'POST' : method;
+        utility.fetch({
+            port     : config.sidekick.fetch.port,
+            host     : config.sidekick.fetch.host,
+            type     : body ? 'POST' : method,
+            path     : req.uri.full,
+            headers  : req.headers,
+            body     : body,
+            encoding : encoding,
+            fail     : function( chunk, response, encoding ) { error = true },
+            finished : function( data, response, encoding ) {
+                if (error) return utility.impress(
+                    njdir + '/provision/sidekick.htm', {
+                        url      : req.uri.full,
+                        code     : response.statusCode,
+                        response : data.replace( rxml, '' ),
+                        headers  : sys.inspect(response.headers)
+                    }, function( type, data ) {
+                        data = utility.amuse( data, req );
+                        response.headers['content-length'] = data.length;
+                        res.sendHeader( response.statusCode, response.headers);
+                        res.sendBody( data, encoding );
+                        res.finish();
+                    } )
 
-        utility.fetch(
-            config.sidekick.fetch.port, config.sidekick.fetch.host,
-            method, req.uri.full, req.headers, body, encoding,
-        function( response ) {
-        }, function( chunk, response, encoding ) {
-        }, function( chunk, response, encoding ) {
-            error = true;
-        }, function( data, response, encoding ) {
-            if (error) {
-                utility.impress( njdir + '/provision/sidekick.htm', {
-                    url      : req.uri.full,
-                    code     : response.statusCode,
-                    response : data.replace( rxml, '' ),
-                    headers  : sys.inspect(response.headers)
-                }, function( type, data ) {
+                if ( encoding != 'binary' && !req.headers['x-requested-with'] )
                     data = utility.amuse( data, req );
-                    response.headers['content-length'] = data.length;
-                    res.sendHeader( response.statusCode, response.headers );
-                    res.sendBody( data, encoding );
-                    res.finish();
-                } )
-            }
-            else {
-                if (
-                    rxhtml.test(data) || !data &&
-                    !req.headers['x-requested-with']
-                ) data = utility.amuse( data, req );
 
                 response.headers['content-length'] = data.length;
                 res.sendHeader( response.statusCode, response.headers );
                 res.sendBody( data, encoding );
                 res.finish();
-            }
-        } );
+        } });
     } );
 
 }).listen( config.sidekick.port, config.sidekick.host );
