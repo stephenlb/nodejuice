@@ -60,7 +60,9 @@ exports.wsgi = {
 exports.seeker = {
     host   : <span class=keyword>null</span>, <span class=comment>// Leave 'null' to listen on all hosts.</span>
     port   : 8002,
-    wait   : 2000, <span class=comment>// delay in milliseconds before a new connection.</span>
+    delay  : 2000, <span class=comment>// milliseconds before page starts to reload.</span>
+                   <span class=comment>// setting too low will cause apahce read error.</span>
+    wait   : 2000, <span class=comment>// milliseconds before a new connection.</span>
                    <span class=comment>// setting this too low will make crazziness.</span>
     ignore : [ /git$/, /svn$/, /cvs$/, /swp$/, /~$/ ] <span class=comment>// stuff to ignore.</span>
 };
@@ -222,7 +224,7 @@ setTimeout( <span class=keyword >function</span>() {response.finish()}, 1000 );<
 
 <h4>response.utility.fetch</h4>
 Download data from an outside source. This is a low level call and you get to play with the guts of every fetch.
-<pre class=code>response.utility.fetch(
+<pre class=code>response.utility.fetch({
     port,     // 80
     host,     // "www.google.com"
     type,     // "GET" or "POST" or "HEAD"
@@ -234,15 +236,18 @@ Download data from an outside source. This is a low level call and you get to pl
     good,     // function ( chunk, response, encoding ) {} chunck recieved.
     fail,     // function ( chunk, response, encoding ) {} failure occurs.
     finished  // function ( final, response, encoding ) {} all is done.
-);</pre>
+})</pre>
 <pre class=code><span class=comment >// Example Use of response.utility.fetch()</span>
-response.utility.fetch(
-    <span class=string >"80"</span>, <span class=string >"www.google.com"</span>, <span class=string >"GET"</span>, <span class=string >"/"</span>, {}, <span class=keyword >null</span>, <span class=keyword >null</span>, <span class=keyword >null</span>, <span class=keyword >null</span>, <span class=keyword >null</span>,
-    <span class=keyword >function</span>( <span class=keyword >final</span>, res, encoding ) {
-        <span class=comment >// Proxy google's home page to browser.</span>
-        response.attack( <span class=keyword >final</span>, 200, headers[<span class=string >'content-type'</span>], {}, encoding );
+response.utility.fetch({
+    port     : 80,
+    host     : <span class=string>"www.google.com"</span>,
+    type     : <span class=string>"GET"</span>,
+    path     : <span class=string>"/"</span>,
+    finished : <span class=keyword>function</span>( data, res, encoding ) {
+        <span class=comment>// Proxy google's home page to browser.</span>
+        response.attack( data, 200, res.headers[<span class=string>'content-type'</span>], {}, encoding )
     }
-);</pre>
+})</pre>
 
 
 <h4>response.utility.earliest</h4>
