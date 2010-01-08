@@ -159,7 +159,7 @@ var noble = exports.noble = function( file, success, fail, retries ) {
     }
 };
 
-var fetch = exports.fetch = function(
+var fetch = exports.fetch = function(setup /*
     port,     // 80
     host,     // "www.google.com"
     type,     // "GET"
@@ -169,19 +169,29 @@ var fetch = exports.fetch = function(
     encoding, // "binary" or "utf8"
     ready,    // function (response) {}
     good,     // function ( chunk, response, encoding ) {}
-    bad,      // function ( chunk, response, encoding ) {}
+    fail,     // function ( chunk, response, encoding ) {}
     finished  // function ( final, response, encoding ) {}
-) {
-    headers      = headers || {};
-    headers.host = host;
+*/) {
+    port     = setup.port     || 80;
+    host     = setup.host     || 'localhost';
+    type     = setup.type     || 'GET';
+    path     = setup.path     || '/';
+    headers  = setup.headers  || {};
+    body     = setup.body     || '';
+    encoding = setup.encoding || "utf8" ;
+    ready    = setup.ready;
+    finished = setup.finished;
+    good     = setup.good;
+    fail     = setup.fail;
 
+    headers['host']           = host;
     headers['content-length'] = (body || '').length;
 
     var data    = ''
     ,   request = http.createClient( port, host )
         .request( type, path, headers );
 
-    if (body) request.sendBody( body, encoding || "utf8" );
+    if (body) request.sendBody( body, encoding );
 
     request.finish(function(response) {
         var ctype    = response.headers['content-type']
@@ -189,19 +199,18 @@ var fetch = exports.fetch = function(
         ,   fetch    = config.sidekick.fetch;
 
         inform({
-            proxied  : fetch.host + ':' + fetch.port,
-            code     : response.statusCode,
-            ctype    : ctype,
-            type     : type,
-            x        : headers['x-requested-with'],
-            // encoding : encoding,
-            uri      : path
+            sidekicked : fetch.host + ':' + fetch.port,
+            code       : response.statusCode,
+            ctype      : ctype,
+            type       : type,
+            x          : headers['x-requested-with'],
+            uri        : path
         });
 
         ready && ready(response);
 
         if (response.statusCode != 200) {
-            bad && bad( '', response, encoding );
+            fail && fail( '', response, encoding );
             return finished && finished( '', response, encoding );
         }
 
@@ -211,7 +220,7 @@ var fetch = exports.fetch = function(
 
             if (response.statusCode == 200)
                 good && good( chunk, response, encoding );
-            else bad && bad( chunk, response, encoding );
+            else fail && fail( chunk, response, encoding );
         } );
 
         response.addListener( "complete", function() {
