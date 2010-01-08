@@ -5,41 +5,37 @@ NODEJUICE JavaScript V8 Seeker Server and WSGI
 For docs go to: http://nodejuice.com/documentation
 Watch a video:  http://www.vimeo.com/8459839
 
-
-=========
+=====================
 rad() app **EASIEST**
-=========
+=====================
 
 rad ( /^\/rad-test$/, 'hello world rad() test!' )
 
-rad ( /^\/$/, {
+rad ( /^\/$/, { // index page
     file : '/static/homepage.htm', // template
     info : 'Hi, this is information.',
     text : 'this is text!'
 } )
 
-rad ( /^\/function$/, function( request, response ) {
+rad ( /^\/battle$/, function( request, response ) {
     rad.reply('something')
 } )
 
-rad.get ( /^\/get-example/, 'same as rad()' )
+rad.get ( /^\/hello/, 'this is a normal page' )
 
-rad.post ( /^\/post-example/, 'posted' )
+rad.post ( /^\/submit-form/, 'posted!' )
 
-rad.head ( /^\/head-example/, '' )
+rad.head ( /^\/check-file/ )
 
-rad.put ( /^\/put-example/, '' )
+rad.put ( /^\/save-something/, 'saved!' )
 
-rad['delete'] ( /^\/delete-example/, 'data has been deleted' )
+rad['delete'] ( /^\/delete-something/, 'data has been deleted' )
 
-rad( /.*/, 'hello world: last resort' )
+rad( /.*/, 'hello world: last resort catch all get/post/etc' )
 
-
-=============
+=========================
 journey() app **FASTEST**
-=============
-// app-file.js
-
+=========================
 var app = exports;
 app.journey = function( request, response ) {
     response.impress( '/templates/index.htm', {
@@ -58,7 +54,7 @@ seeker   - used in dev server mode to auto refresh all attached clients.
 
 USAGE:
 ================================================
-./nodejuice /path/to/app [wsgi] [seeker] [sidekick]
+./nodejuice /path/to/app [seeker] [wsgi] [sidekick]
 
 wsgi     - servers dynamic and static content. (Web Server)
 seeker   - pushes updates to your web browser.
