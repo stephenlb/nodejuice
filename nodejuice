@@ -2,6 +2,10 @@
 
 # TODO
 # ====
+# -make all functions({}) with object as ONLY ARG
+# -unit tests plz
+# -make recurse ignore work!!! >: /
+# -test failed function in utility.noble()
 # -redo video tutorial
 # -scrolling auto on all attached clients, only localhost can send scrolls.
 # -scrollTo() on page reload.
@@ -12,11 +16,11 @@
 
 # USAGE:
 # ================================================
-# ./nodejuice /path/to/app [wsgi] [seeker] [sidekick]
+# ./nodejuice /path/to/app [seeker] [wsgi] [sidekick]
 # 
-# wsgi   - servers dynamic and static content. (Web Server)
-# seeker - pushes updates to your web browser.
-# sidekick  - use with apache and other web servers.
+# wsgi     - servers dynamic and static content. (Web Server)
+# seeker   - pushes updates to your web browser.
+# sidekick - use with apache and other web servers.
  
 
 # Examples:
