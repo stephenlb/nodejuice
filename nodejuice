@@ -2,7 +2,6 @@
 
 # TODO
 # ====
-# -make wsgi amuse() same as seeker amuse()
 # -make all functions({}) with object as ONLY ARG
 # -unit tests plz
 # -make recurse ignore work!!! >: /
@@ -18,7 +17,7 @@
 # USAGE:
 # ================================================
 # ./nodejuice /path/to/app [seeker] [wsgi] [sidekick]
-# 
+#
 # wsgi     - servers dynamic and static content. (Web Server)
 # seeker   - pushes updates to your web browser.
 # sidekick - use with apache and other web servers.
