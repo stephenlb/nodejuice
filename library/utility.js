@@ -159,7 +159,10 @@ var noble = exports.noble = function( file, success, fail, retries ) {
     }
 };
 
-var fetch = exports.fetch = function(setup /*
+var fetching = 0
+,   fetchmax = 8
+,   fetchque = []
+,   fetch    = exports.fetch = function(setup/*
     port,     // 80
     host,     // "www.google.com"
     type,     // "GET"
@@ -172,17 +175,21 @@ var fetch = exports.fetch = function(setup /*
     fail,     // function ( chunk, response, encoding ) {}
     finished  // function ( final, response, encoding ) {}
 */) {
-    port     = setup.port     || 80;
-    host     = setup.host     || 'localhost';
-    type     = setup.type     || 'GET';
-    path     = setup.path     || '/';
-    headers  = setup.headers  || {};
-    body     = setup.body     || '';
-    encoding = setup.encoding || "utf8" ;
-    ready    = setup.ready;
-    finished = setup.finished;
-    good     = setup.good;
-    fail     = setup.fail;
+    if ( fetching >= fetchmax )
+        return fetchque.push(setup);
+    else fetching++;
+    
+    var port     = setup.port     || 80
+    ,   host     = setup.host     || 'localhost'
+    ,   type     = setup.type     || 'GET'
+    ,   path     = setup.path     || '/'
+    ,   headers  = setup.headers  || {}
+    ,   body     = setup.body     || ''
+    ,   encoding = setup.encoding || "utf8"
+    ,   ready    = setup.ready
+    ,   finished = setup.finished
+    ,   good     = setup.good
+    ,   fail     = setup.fail;
 
     headers['host']           = host;
     headers['content-length'] = (body || '').length;
@@ -209,10 +216,8 @@ var fetch = exports.fetch = function(setup /*
 
         ready && ready(response);
 
-        if (response.statusCode != 200) {
+        if (response.statusCode != 200)
             fail && fail( '', response, encoding );
-            return finished && finished( '', response, encoding );
-        }
 
         response.setBodyEncoding(encoding);
         response.addListener( "body", function(chunk) {
@@ -225,6 +230,8 @@ var fetch = exports.fetch = function(setup /*
 
         response.addListener( "complete", function() {
             finished && finished( data, response, encoding );
+            fetching--;
+            if (fetchque.length > 0) exports.fetch(fetchque.shift());
         } );
     });
 };
