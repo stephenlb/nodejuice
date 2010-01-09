@@ -9,8 +9,7 @@ var http     = require("http")
 ,   rad      = require(njdir  + "/library/rad").rad
 ,   config   = utility.ignite()
 ,   wsgi     = exports
-,   rxnojs   = /\.js$/
-,   rxhtml   = /html/;
+,   rxnojs   = /\.js$/;
 
 http.createServer(function ( req, res ) {
 
@@ -43,7 +42,8 @@ http.createServer(function ( req, res ) {
             headers["Cache-Control"] = 'no-cache';
             headers["Expires"]       = 'Thu, 01 Dec 1994 16:00:00 GMT';
 
-            if (rxhtml.test(type)) body = utility.amuse( body, req );
+            if ( encoding != 'binary' && !req.headers['x-requested-with'] )
+                body = utility.amuse( body, req );
         }
 
         headers["Content-Length"] = body.length;
