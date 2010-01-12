@@ -45,7 +45,7 @@ http.createServer(function ( req, res ) {
             if (
                 encoding != 'binary' &&
                 !req.headers['x-requested-with'] &&
-                (req.headers['content-type'] || '').indexOf('html') !== -1
+                type.indexOf('html') !== -1
             ) body = utility.amuse( body, req );
         }
 
