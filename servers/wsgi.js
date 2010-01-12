@@ -42,8 +42,11 @@ http.createServer(function ( req, res ) {
             headers["Cache-Control"] = 'no-cache';
             headers["Expires"]       = 'Thu, 01 Dec 1994 16:00:00 GMT';
 
-            if ( encoding != 'binary' && !req.headers['x-requested-with'] )
-                body = utility.amuse( body, req );
+            if (
+                encoding != 'binary' &&
+                !req.headers['x-requested-with'] &&
+                (req.headers['content-type'] || '').indexOf('html') !== -1
+            ) body = utility.amuse( body, req );
         }
 
         headers["Content-Length"] = body.length;

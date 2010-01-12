@@ -45,8 +45,11 @@ http.createServer(function (req, res) {
                         res.finish();
                     } )
 
-                if ( encoding != 'binary' && !req.headers['x-requested-with'] )
-                    data = utility.amuse( data, req );
+                if (
+                    encoding != 'binary' &&
+                    !req.headers['x-requested-with'] &&
+                    (req.headers['content-type'] || '').indexOf('html') !== -1
+                ) data = utility.amuse( data, req );
 
                 response.headers['content-length'] = data.length;
                 res.sendHeader( response.statusCode, response.headers );

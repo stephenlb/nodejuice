@@ -2,6 +2,7 @@
 
 # TODO
 # ====
+# -update amuse to unify methods between wsgi and sidekick
 # -make all functions({}) with object as ONLY ARG
 # -unit tests plz
 # -make recurse ignore work!!! >: /
