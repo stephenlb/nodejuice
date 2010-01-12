@@ -10,8 +10,8 @@ exports.wsgi = {
     url   : [ // interface between browser URL Request and Files.
 
         // [ /^\/app$/, '/app.js' ], // run an application.
-        // [/^\/.*/, '/static/'], // serve content from /static/ dir.
-        [/^\/.*/, '/'] // server static content from root app dir.
+        // [/^\/.*?/, '/static/'], // serve content from /static/ dir.
+        [/^\/.*?/, '/'] // server static content from root app dir.
 
     ]
 };
