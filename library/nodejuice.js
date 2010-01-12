@@ -23,7 +23,15 @@ exports.seeker = {
                    // setting too low will cause file read errors in Apache
     wait   : 1200, // time in milliseconds before a new connection.
                    // setting too low will make crazziness.
-    ignore : [ /\./ ] // path/file to ignore.
+    ignore : [     // path or file name to ignore.
+        /[~.]swp~?/,
+        /\.svn/,
+        /\.cvs/,
+        /\.git/,
+        /^dir_a$/,
+        /^file.txt$/,
+        /^dir_b$/
+    ]
 };
 
 exports.sidekick = {
