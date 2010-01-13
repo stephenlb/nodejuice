@@ -37,7 +37,7 @@ http.createServer(function ( req, res ) {
                 response.sendHeader( 200, headers );
                 response.sendBody( js, "utf8" );
                 response.finish();
-                setTimeout( function() { seek() }, 1000 );
+                setTimeout( function() { seek() }, 100 );
             };
             seeker( req, res );
         }, function() {
@@ -64,12 +64,11 @@ utility.inform(config.seeker);
 function update( file ) {
     if (utility.earliest() - antecedent < config.seeker.wait) return;
 
+    antecedent = utility.earliest();
+    seek(true);
+
     setTimeout( function() {
-        antecedent = utility.earliest();
-
         while (clients.length > 0) clients.shift().vow(1);
-
-        seek(true);
     }, config.seeker.delay );
 }
 
