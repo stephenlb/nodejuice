@@ -5,6 +5,68 @@ A Web Server Gateway Interface (WSGI) that lives on
 a low level http non-blocking web server. 
 <a href=http://vimeo.com/8459839>Watch the video to see a live example</a>.
 
+<h2>Seeker Server: <a href=http://vimeo.com/8459839>Watch the Video</a></h2>
+<div>
+    It updates all connected browsers when a change occurs.
+    <strong>Automatic browser refresh on file change or update</strong>
+    is what you can call it.
+    Seeker Server works on all servers. Even without a server.
+    Seeker Server is independent of WSGI
+    and can be used with other servers such as Apache.
+    <a href=http://vimeo.com/8459839>Watch the Video</a>
+</div>
+
+<h2 id=sidekick>Apache and Seeker Server (Sidekick)</h2>
+NOTE: This step isn't necessary if you are using nodeJuice WSGI.
+This step is for Apache and other web servers.
+In order to easily use apache or other web servers, simply setup Sidekick:
+
+<ol>
+    <li>
+        Copy <em>nodejuice.js</em> configuration into your application dir.
+        This is the directory where your PHP, Ruby, Perl or Python files live.
+        <pre class=code>cp ./nodejuice/demos/apache/nodejuice.js /my/dir/.</pre>
+    </li>
+    <li>
+        Edit the configuration file to point the 
+        <strong>fetch</strong> variable at your server.
+    </li>
+    <li>
+        Launch ./nodejuice seeker server.
+        <pre class=code>./nodejuice /my/dir/ sidekick</pre>
+    </li>
+    <li>
+        Point your web browser to Sidekick url.
+        <pre class=code>http://localhost:8010/</pre>
+    </li>
+</ol>
+
+<h2>Seeker Server and Apache (Bypass Sidekick Server)</h2>
+NOTE: This step isn't necessary if you are using nodeJuice WSGI.
+This is an alternative approach for Apache and other web servers.
+Using Sidekick isn't required with Apache or another web server.
+However Sidekick provides error detection and will allow <span class=n>node</span><span class=j>Juice</span> to keep a connection open even if Apache throws an error.
+
+<ol>
+    <li>
+        Copy <em>nodejuice.js</em> configuration into your application dir.
+        This is the directory where your PHP, Ruby, Perl or Python files live.
+        <pre class=code>cp ./nodejuice/demos/apache/nodejuice.js /my/dir/.</pre>
+    </li>
+    <li>
+        Launch ./nodejuice seeker server.
+        <pre class=code>./nodejuice /my/dir/ seeker</pre>
+    </li>
+    <li>
+        Paste the following in the HEAD Tag of <em>all HTML files.</em>
+        <pre class=code>&lt;script src="http://localhost:8002"&gt;&lt;/script&gt;</pre>
+    </li>
+</ol>
+<div>
+    This method won't be as cool as using nodeJuice's Sidekick in the face of dangerous errors in your PHP, Ruby or Python applications.  So be careful!
+</div>
+
+<h2>WSGI</h2>
 <p>To launch nodeJuice as an <strong>instant web server on any directory</strong>:</p>
 <pre class=code>./nodejuice /path/to/directory</pre>
 
@@ -45,61 +107,3 @@ Open to view:
 However, that isn't the raddest part.
 You are probably here to see what Seeker Server can do.
 
-<h2>Seeker Server: <a href=http://vimeo.com/8459839>Watch the Video</a></h2>
-<div>
-    It updates all connected browsers when a change occurs.
-    <strong>Automatic browser refresh on file change or update</strong>
-    is what you can call it.
-    Seeker Server works on all servers. Even without a server.
-    Seeker Server is independent of WSGI
-    and can be used with other servers such as Apache.
-    <a href=http://vimeo.com/8459839>Watch the Video</a>
-</div>
-
-<h2 id=sidekick>Apache and Seeker Server (Sidekick)</h2>
-NOTE: This step isn't necessary if you are using nodeJuice WSGI.
-In order to easily use apache or other web servers, simply setup Sidekick:
-
-<ol>
-    <li>
-        Copy <em>nodejuice.js</em> configuration into your application dir.
-        This is the directory where your PHP, Ruby, Perl or Python files live.
-        <pre class=code>cp ./nodejuice/demos/apache/nodejuice.js /my/dir/.</pre>
-    </li>
-    <li>
-        Edit the configuration file to point the 
-        <strong>fetch</strong> variable at your server.
-    </li>
-    <li>
-        Launch ./nodejuice seeker server.
-        <pre class=code>./nodejuice /my/dir/ sidekick</pre>
-    </li>
-    <li>
-        Point your web browser to Sidekick url.
-        <pre class=code>http://localhost:8010/</pre>
-    </li>
-</ol>
-
-<h2>Seeker Server and Apache (Bypass Sidekick Server)</h2>
-NOTE: This step isn't necessary if you are using nodeJuice WSGI.
-Using Sidekick isn't required with Apache or another web server.
-However Sidekick provides error detection and will allow <span class=n>node</span><span class=j>Juice</span> to keep a connection open even if Apache throws an error.
-
-<ol>
-    <li>
-        Copy <em>nodejuice.js</em> configuration into your application dir.
-        This is the directory where your PHP, Ruby, Perl or Python files live.
-        <pre class=code>cp ./nodejuice/demos/apache/nodejuice.js /my/dir/.</pre>
-    </li>
-    <li>
-        Launch ./nodejuice seeker server.
-        <pre class=code>./nodejuice /my/dir/ seeker</pre>
-    </li>
-    <li>
-        Paste the following in the HEAD Tag of <em>all HTML files.</em>
-        <pre class=code>&lt;script src="http://localhost:8002"&gt;&lt;/script&gt;</pre>
-    </li>
-</ol>
-<div>
-    This method won't be as cool as using nodeJuice's Sidekick in the face of dangerous errors in your PHP, Ruby or Python applications.  So be careful!
-</div>

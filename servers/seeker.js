@@ -9,14 +9,17 @@ var sys        = require('sys')
 ,   clients    = []
 ,   seeking    = {}
 ,   seeker     = false
-,   antecedent = utility.earliest();
+,   antecedent = utility.earliest() - config.seeker.wait;
 
 if (!devmode) process.exit();
 
+setTimeout( function() { seek() }, 1 );
+
 http.createServer(function ( req, res ) {
+    var unique = req.url.split('?unique=')[1];
 
     // Deliver Client JS
-    if (typeof req.uri.params.unique === 'undefined') {
+    if (typeof unique === 'undefined') {
 
         if (seeker) return seeker( req, res );
 
@@ -52,7 +55,7 @@ http.createServer(function ( req, res ) {
     else clients.push({ already : utility.earliest(), vow : function(ready) {
         res.sendHeader( 200, {"Content-Type" : "application/javascript"} );
         res.sendBody(utility.vigilant(
-            ready ? 'success' : '', req.uri.params.unique
+            ready ? 'success' : '', unique
         ));
         res.finish();
     } });
@@ -65,6 +68,7 @@ function update( file ) {
     if (utility.earliest() - antecedent < config.seeker.wait) return;
 
     antecedent = utility.earliest();
+    utility.inform({ pushing_update : file });
     seek(true);
 
     setTimeout( function() {

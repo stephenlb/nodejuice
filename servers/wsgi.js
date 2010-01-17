@@ -23,7 +23,7 @@ http.createServer(function ( req, res ) {
     } );
 
     var action = config.wsgi.url.filter(function(url) {
-        return req.uri.path.match(url[0])
+        return req.url.match(url[0])
     })[0];
 
     res.utility = utility;
@@ -39,7 +39,7 @@ http.createServer(function ( req, res ) {
         headers["Content-Type"] = type;
 
         if (devmode) {
-            headers["Cache-Control"] = 'no-cache';
+            headers["Cache-Control"] = 'no-cache, no-store, must-revalidate';
             headers["Expires"]       = 'Thu, 01 Dec 1994 16:00:00 GMT';
 
             if (
@@ -52,7 +52,7 @@ http.createServer(function ( req, res ) {
         headers["Content-Length"] = body.length;
 
         utility.inform({
-            code: code, type: type, uri: req.uri.full, time: Date()
+            code: code, type: type, uri: req.url, time: Date()
         });
 
         res.sendHeader( code, headers );
@@ -78,7 +78,7 @@ utility.inform(config.wsgi);
 
 function error404( req, res, file ) {
     utility.impress( njdir + '/provision/404.htm', {
-        request : sys.inspect(req.uri), file : file
+        request : req.url, file : file
     }, function( type, data ) { res.attack( data, 404 ) } )
 }
 
@@ -90,7 +90,7 @@ function error500( req, res, file, e ) {
 }
 
 function send_file( req, res, action, retries ) {
-    var path    = req.uri.path.replace( action[0], action[1] )
+    var path    = req.url.replace( action[0], action[1] )
     ,   syspath = appdir + path +
                   (path.slice(-1) === '/' ? config.wsgi.root : '');
 

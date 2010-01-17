@@ -25,7 +25,7 @@ http.createServer(function (req, res) {
             port     : config.sidekick.fetch.port,
             host     : config.sidekick.fetch.host,
             type     : body ? 'POST' : method,
-            path     : req.uri.full,
+            path     : req.url,
             headers  : req.headers,
             body     : body,
             encoding : encoding,
@@ -33,7 +33,7 @@ http.createServer(function (req, res) {
             finished : function( data, response, encoding ) {
                 if (error) return utility.impress(
                     njdir + '/provision/sidekick.htm', {
-                        url      : req.uri.full,
+                        url      : req.url,
                         code     : response.statusCode,
                         response : data.replace( rxml, '' ),
                         headers  : sys.inspect(response.headers)

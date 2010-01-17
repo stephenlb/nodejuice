@@ -5,6 +5,55 @@ NODEJUICE JavaScript V8 Seeker Server and WSGI
 For docs go to: http://nodejuice.com/documentation
 Watch a video:  http://www.vimeo.com/8459839
 
+SEVERS
+======
+wsgi     - (Web Server Gateway Interface) app and static content server.
+sidekick - used to keep connection with PHP, Ruby, Perl and Python on Apache.
+seeker   - used in dev server mode to auto refresh all attached clients. 
+           seeker server can be used with other webservers through sidekick.
+           check out ./demos/seeker to see an example.
+
+USAGE:
+================================================
+./nodejuice /path/to/app [seeker] [wsgi] [sidekick]
+
+seeker   - pushes updates to your web browser.
+sidekick - use with apache and other web servers.
+wsgi     - servers dynamic and static content. (Web Server)
+ 
+
+APACHE MODE
+===========
+Launch sidekick and seeker server only.
+Use this for APACHE (apache) or other web servers.
+./nodejuice /home/stephen/application sidekick
+
+NODEJUICE WSGI + SEEKER MODE
+============================
+Launch seeker and wsgi servers making a static server.
+./nodejuice /home/stephen/application
+
+PRODUCTION MODE
+===============
+Launch only wsgi server only. 
+./nodejuice /home/stephen/application wsgi
+
+STATIC SERVER MODE
+==================
+Launch Seeker and WSGI on any directory on your Hard Drive.
+./nodejuice /home/stephen/application
+
+DUMBASS MODE
+============
+Launch ALL Servers (This is pointless and harmless).
+./nodejuice /home/stephen/application sidekick wsgi seeker
+
+
+WSGI
+====
+As a bonus, nodeJuice comes with a full blown web server able to server
+static files and execute code on your server.  See some examples below.
+
 =====================
 rad() app **EASIEST**
 =====================
@@ -42,50 +91,6 @@ app.journey = function( request, response ) {
         right_now : new Date
     } )
 };
-
-
-SEVERS
-======
-wsgi     - (Web Server Gateway Interface) application and static content server.
-sidekick - used to keep connection with PHP, Ruby, Perl and Python on Apache.
-seeker   - used in dev server mode to auto refresh all attached clients. 
-           seeker server can be used with other webservers through sidekick or.
-           check out ./demos/seeker to see an example.
-
-USAGE:
-================================================
-./nodejuice /path/to/app [seeker] [wsgi] [sidekick]
-
-wsgi     - servers dynamic and static content. (Web Server)
-seeker   - pushes updates to your web browser.
-sidekick - use with apache and other web servers.
- 
-
-NODEJUICE WSGI + SEEKER MODE
-============================
-Launch seeker and wsgi servers making a static server.
-./nodejuice /home/stephen/application
-
-APACHE MODE
-===========
-Launch sidekick and seeker server only.
-Use this for APACHE (apache) or other web servers.
-./nodejuice /home/stephen/application sidekick
-
-PRODUCTION MODE
-===============
-Launch only wsgi server only. 
-./nodejuice /home/stephen/application wsgi
-
-STATIC SERVER MODE
-==================
-Launch seeker server only.
-./nodejuice /home/stephen/application seeker
-
-DUMBASS MODE
-============
-Launch ALL Servers (This is pointless and harmless).
-./nodejuice /home/stephen/application sidekick wsgi seeker
 
 
 DIRECTORIES

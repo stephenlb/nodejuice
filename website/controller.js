@@ -4,7 +4,7 @@ var website   = exports
 website.journey = function( request, response ) {
     var where = response.appdir +
                 templates +
-                (request.uri.path.substr(1) || 'index') + '.htm';
+                (request.url.substr(1) || 'index') + '.htm';
 
     response.utility.noble( where,
     function( type, html, encoding ) {
