@@ -25,7 +25,7 @@ var config  = ignite()
 
 var amuse = exports.amuse = function( text, req ) {
     return text.replace( rxsneaky, seekin +
-        req.headers.host.split(':')[0] +
+        (req.connection.remoteAddress || req.headers.host.split(':')[0]) +
     seekout );
 };
 
@@ -201,7 +201,7 @@ var fetching = 0
     if (body) request.sendBody( body, encoding );
 
     request.finish(function(response) {
-        var ctype    = response.headers['content-type']
+        var ctype    = response.headers['content-type'] || 'text'
         ,   encoding = ctype.slice( 0, 4 ) === "text" ? "utf8" : "binary"
         ,   fetch    = config.sidekick.fetch;
 

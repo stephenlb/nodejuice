@@ -40,7 +40,8 @@ http.createServer(function ( req, res ) {
                 response.sendHeader( 200, headers );
                 response.sendBody( js, "utf8" );
                 response.finish();
-                setTimeout( function() { seek() }, 100 );
+
+                antup();
             };
             seeker( req, res );
         }, function() {
@@ -67,19 +68,24 @@ utility.inform(config.seeker);
 function update( file ) {
     if (utility.earliest() - antecedent < config.seeker.wait) return;
 
-    antecedent = utility.earliest();
+    antup();
     utility.inform({ pushing_update : file });
-    seek(true);
+    seek();
 
     setTimeout( function() {
         while (clients.length > 0) clients.shift().vow(1);
     }, config.seeker.delay );
 }
 
-function seek( radical ) {
+function antup() {
+    antecedent = utility.earliest();
+}
+
+function seek( /*radical*/ ) {
     utility.recurse( appdir, config.seeker.ignore, function( file ) {
         if (seeking[file]) return;
-        else if (radical) update(file);
+
+        antup();
         seeking[file] = 1;
         process.watchFile( file, function() { update(file) } );
     } );

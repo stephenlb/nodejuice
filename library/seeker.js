@@ -319,9 +319,9 @@ function seek(wait) { setTimeout(function() {
         url     : host,
         type    : 'text',
         success : function(response) { location.reload(false) },
-        fail    : function() { seek(250) }
-    });
-}, wait || 2000 ); }
+        fail    : function() { seek(1000) }
+    })
+}, wait || 2000 ) }
 
 window['-nodeJuice-'] || (window['-nodeJuice-'] = 1) && seek(+"{{wait}}");
 

@@ -3,17 +3,20 @@
 # ====
 # TODO
 # ====
+# -!fix error reconnect trial to reduced frequency.
 # -!xdr3: fix urlize doc string
 # -xdr3: make easy production/dev mode with closure compiler.
 # -!Cache-Control: no-cache, no-store, must-revalidate
 # -!upgrade to 0.1.25
 # -redo debian packages.
-# -fix website by removing wsgi stuff as first thing on page.
 # -write new blog "HOW NODEJUICE WORKS" use text from jul email.
 # -broken seeker updates twice. TWICE >: ____
 # -update amuse to unify methods between wsgi and sidekick
 # -make all functions({}) with object as ONLY ARG
 # -unit tests plz
+# -make recurse ignore work!!! >: /
+# -make recurse ignore work!!! >: /
+# -make recurse ignore work!!! >: /
 # -make recurse ignore work!!! >: /
 # -make recurse ignore work!!! >: /
 # -make recurse ignore work!!! >: /
