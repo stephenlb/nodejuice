@@ -52,7 +52,11 @@ http.createServer(function ( req, res ) {
         headers["Content-Length"] = body.length;
 
         utility.inform({
-            code: code, type: type, uri: req.url, time: Date()
+            code   : code,
+            type   : type,
+            uri    : req.url,
+            time   : Date(),
+            remote : req.connection.remoteAddress
         });
 
         res.sendHeader( code, headers );
