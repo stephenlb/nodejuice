@@ -3,11 +3,9 @@
 # ====
 # TODO
 # ====
-# -!fix error reconnect trial to reduced frequency.
-# -!xdr3: fix urlize doc string
+# -process.addListener("unhandledException")
+# -allow data streaming in sidekick server.
 # -xdr3: make easy production/dev mode with closure compiler.
-# -!Cache-Control: no-cache, no-store, must-revalidate
-# -!upgrade to 0.1.25
 # -redo debian packages.
 # -write new blog "HOW NODEJUICE WORKS" use text from jul email.
 # -broken seeker updates twice. TWICE >: ____

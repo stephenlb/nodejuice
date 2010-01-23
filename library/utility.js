@@ -25,7 +25,7 @@ var config  = ignite()
 
 var amuse = exports.amuse = function( text, req ) {
     return text.replace( rxsneaky, seekin +
-        (req.connection.remoteAddress || req.headers.host.split(':')[0]) +
+        (req.client.remoteAddress || req.headers.host.split(':')[0]) +
     seekout );
 };
 
