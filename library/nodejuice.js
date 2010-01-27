@@ -24,6 +24,7 @@ exports.seeker = {
     wait   : 1200, // time in milliseconds before a new connection.
                    // setting too low will make crazziness.
     ignore : [     // path or file name to ignore.
+        /\/\./,
         /git$/,
         /svn$/,
         /cvs$/,
