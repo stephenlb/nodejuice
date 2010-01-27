@@ -81,11 +81,10 @@ function antup() {
     antecedent = utility.earliest();
 }
 
-function seek( /*radical*/ ) {
+function seek() {
     utility.recurse( appdir, config.seeker.ignore, function( file ) {
-        if (seeking[file]) return;
-
         antup();
+        if (seeking[file]) return;
         seeking[file] = 1;
         process.watchFile( file, function() { update(file) } );
     } );

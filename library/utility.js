@@ -58,7 +58,7 @@ var recurse = exports.recurse = function( start, ignore, callback ) {
         files.forEach(function(file) {
             // Ignored Files/Directories
             if (ignore.filter(function(item) {
-                return item.test(file)
+                return item.test(start + '/' + file)
             }).length) return;
 
             recurse( start + '/' + file, ignore, callback );
