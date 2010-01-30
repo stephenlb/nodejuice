@@ -56,13 +56,19 @@ var impress = exports.impress = function( file, args, success, fail ) {
 var recurse = exports.recurse = function( start, ignore, callback ) {
     posix.readdir(start).addCallback(function(files) {
         files.forEach(function(file) {
+            var path = start + '/' + file;
+
             // Ignored Files/Directories
             if (ignore.filter(function(item) {
                 return item.test(start + '/' + file)
             }).length) return;
 
-            recurse( start + '/' + file, ignore, callback );
-            callback(start + '/' + file);
+            posix.stat(path).addCallback(function(stat){
+                callback(path);
+
+                if (stat.isDirectory())
+                    recurse( path, ignore, callback );
+            });
         });
     });
 };
