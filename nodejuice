@@ -139,7 +139,8 @@ leave() {
     echo -e "\n\nnodejuice shuting down... goodbye"
     trap - INT TERM EXIT
     sleep .15
-    ps -A | grep ' node' | sed -e 's,^\s*\([0-9]\+\).*$,\1,g' | xargs kill
+    ##ps -A | grep ' node' | sed -e 's,^\s*\([0-9]\+\).*$,\1,g' | xargs kill
+    ps -aef | grep 'nodejuice/servers' | grep -v grep | awk '{print $2}' | xargs kill
 }
 
 startup() {
