@@ -8,6 +8,16 @@ Watch the tutorial video.
     <li><a href=/staticmatic>StaticMatic</a></li>
 </ul>
 
+<h2>NodeJuice Basic Explanation</h2>
+NodeJuice ships with three separate servers: Seeker, Sidekick and WSGI.
+<strong>Seeker</strong> is what allows automatic browser refresh on file change.
+<strong>Sidekick</strong> is the gateway or proxy which connects to Apache, Passenger, Nginx, Cherokee, etc.
+<strong>WSGI</strong> is a Web Server Gateway Interface and can server static files and execute V8 JavaScript on your server.
+No need to worry about managing the servers yourself.
+NodeJuice comes with a process manager and will figure this out for you.
+All you need to do is add a <a href=#config>config file</a> to your project's directory.
+Then point ./nodejuice at your project's directory and say what kind of setup you want run.
+
 <h2>Basic Static Setup</h2>
 To launch <div class=n>node</div><div class=j>Juice</div> 
 as a static web server, simply execute the following command:
@@ -46,9 +56,29 @@ app.journey = <span class=keyword>function</span>( request, response ) {
     </li>
 </ol>
 
-<h2>Configuration File</h2>
+<h2 id=config>Configuration File</h2>
 This file needs to be in your application's root directory.
 <pre class=code><span class=comment>// FILE: nodejuice.js</span>
+exports.sidekick = {
+    host  : <span class=keyword>null</span>, <span class=comment>// Leave 'null' to listen on all hosts.</span>
+    port  : 8010, <span class=comment>// access your server from this port.</span>
+    fetch : {     <span class=comment>// point to your web server.</span>
+        host : <span class=string>'localhost'</span>, <span class=comment>// point to your web server.</span>
+        port : 8080 <span class=comment>// point to your web server.</span>
+    }
+};
+
+exports.seeker = {
+    host   : <span class=keyword>null</span>, <span class=comment>// Leave 'null' to listen on all hosts.</span>
+    port   : 8002,
+    delay  : 200,   <span class=comment>// milliseconds before page starts to reload.</span>
+                    <span class=comment>// setting too low will cause apahce read file error.</span>
+    wait   : 1500,  <span class=comment>// milliseconds before a new connection.</span>
+    touch  : false, <span class=comment>// allow file touch to push updates.</span>
+                    <span class=comment>// setting this too low will make crazziness.</span>
+    ignore : [ /git$/, /svn$/, /cvs$/, /swp$/, /~$/ ] <span class=comment>// stuff to ignore.</span>
+};
+
 exports.wsgi = {
     host  : <span class=keyword>null</span>, <span class=comment>// Leave 'null' to listen on all hosts.</span>
     port  : 8080,
@@ -61,25 +91,6 @@ exports.wsgi = {
         [/^\/.*/, <span class=string>'/'</span>] <span class=comment>// server static content from root app dir.</span>
 
     ]
-};
-
-exports.seeker = {
-    host   : <span class=keyword>null</span>, <span class=comment>// Leave 'null' to listen on all hosts.</span>
-    port   : 8002,
-    delay  : 2000, <span class=comment>// milliseconds before page starts to reload.</span>
-                   <span class=comment>// setting too low will cause apahce read error.</span>
-    wait   : 2000, <span class=comment>// milliseconds before a new connection.</span>
-                   <span class=comment>// setting this too low will make crazziness.</span>
-    ignore : [ /git$/, /svn$/, /cvs$/, /swp$/, /~$/ ] <span class=comment>// stuff to ignore.</span>
-};
-
-exports.sidekick = {
-    host  : <span class=keyword>null</span>, <span class=comment>// Leave 'null' to listen on all hosts.</span>
-    port  : 8010, <span class=comment>// access your server from this port.</span>
-    fetch : {     <span class=comment>// point to your web server.</span>
-        host : <span class=string>'localhost'</span>,
-        port : 8080
-    }
 };
 </pre>
 
