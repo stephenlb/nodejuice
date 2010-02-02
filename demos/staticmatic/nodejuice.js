@@ -1,23 +1,5 @@
-/* 
-    This is config for apache.
-    It assumse you are running your server on port 80 !!!
 
-    Put this very file in your application directory:
-
-        cp ./library/nodejuice.js /my/app-dir/.
-
-    Run from command line:
-
-        ./nodejuice /path/to/application
-
-    Next you need to point your browser to the sidekick server:
-
-        http://localhost:8010/
-
-    Once loaded from that url your browser will update instatnly on file change.
-*/
 exports.sidekick = {
-    host  : null, // Leave 'null' to listen on all hosts.
     port  : 8010, // access your server from this port.
     fetch : {     // point to your web server.
         host : 'localhost',
