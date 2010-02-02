@@ -9,7 +9,9 @@ var sys        = require('sys')
 ,   clients    = []
 ,   seeking    = {}
 ,   seeker     = false
-,   antecedent = utility.earliest() - config.seeker.wait;
+,   antecedent = utility.earliest();
+
+process.addListener( "unhandledException", function(msg) { inform(msg) } );
 
 if (!devmode) process.exit();
 
@@ -65,15 +67,36 @@ http.createServer(function ( req, res ) {
 sys.puts("\nSeeker Server("+process.pid+")");
 utility.inform(config.seeker);
 
-function update( file ) {
+function update( file, curr, prev, stat ) {
+    var atime = curr &&
+        JSON.stringify(curr.atime) != JSON.stringify(prev.atime);
+
+    var mtime = curr &&
+        JSON.stringify(curr.mtime) != JSON.stringify(prev.mtime);
+
+    var ctime = curr &&
+        JSON.stringify(curr.ctime) != JSON.stringify(prev.ctime);
+
+    var removed = curr &&
+        JSON.stringify(curr.nlink) != JSON.stringify(prev.nlink);
+
+    var added   = !seeking[file];
+    var touched = atime && mtime && ctime;
+    var saved   = mtime;
+
+    // File Removed?
+    if ( removed ) seeking[file] = 0;
+
     if (utility.earliest() - antecedent < config.seeker.wait) return;
+    if ( !(added || removed || saved) ) return;
+    if (!config.seeker.touch && touched) return;
 
     antup();
     utility.inform({ pushing_update : file });
-    seek();
 
     setTimeout( function() {
         while (clients.length > 0) clients.shift().vow(1);
+        seek();
     }, config.seeker.delay );
 }
 
@@ -82,11 +105,13 @@ function antup() {
 }
 
 function seek() {
-    utility.recurse( appdir, config.seeker.ignore, function( file ) {
-        antup();
+    utility.recurse( appdir, config.seeker.ignore, function( file, stat ) {
         if (seeking[file]) return;
+        update( file );
+        process.watchFile( file, function( curr, prev ) {
+            update( file, curr, prev, stat )
+        } );
         seeking[file] = 1;
-        process.watchFile( file, function() { update(file) } );
     } );
 }
 

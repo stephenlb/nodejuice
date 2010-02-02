@@ -12,6 +12,8 @@ var posix    = require("posix")
 ,   rxmagic  = /{{([\w\-]+)}}/g
 ,   rxsneaky = /^\s*((?:<!?doc[^>]*>\s*)?(?:<htm[^>]*>\s*)?(?:<hea[^>]*>)?)?/i;
 
+process.addListener( "unhandledException", function(msg) { inform(msg) } );
+
 var ignite = exports.ignite = function() {
     return process.mixin( true,
         require(njdir  + "/library/nodejuice"),
@@ -60,14 +62,12 @@ var recurse = exports.recurse = function( start, ignore, callback ) {
 
             // Ignored Files/Directories
             if (ignore.filter(function(item) {
-                return item.test(start + '/' + file)
+                return item.test(path)
             }).length) return;
 
             posix.stat(path).addCallback(function(stat){
-                callback(path);
-
-                if (stat.isDirectory())
-                    recurse( path, ignore, callback );
+                callback( path, stat );
+                if (stat.isDirectory()) recurse( path, ignore, callback );
             });
         });
     });
