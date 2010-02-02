@@ -10,19 +10,6 @@ exports.wsgi = {
     ]
 };
 
-exports.seeker = {
-    host    : null,
-    port    : 8002,
-    wait    : 1800,
-    ignore  : [
-        /git$/,
-        /svn$/,
-        /cvs$/,
-        /swp$/,
-        /~$/
-    ]
-};
-
 exports.sidekick = {
     host  : null, // Leave 'null' to listen on all hosts.
     port  : 8010, // access your server from this port.
@@ -30,4 +17,19 @@ exports.sidekick = {
         host : 'localhost',
         port : 80
     }
+};
+
+exports.seeker = {
+    host    : null,
+    port    : 8002,
+    delay   : 10,
+    wait    : 1800,
+    touch   : false, // allow file touch to push updates.
+    ignore  : [
+        /git$/,
+        /svn$/,
+        /cvs$/,
+        /swp$/,
+        /~$/
+    ]
 };
