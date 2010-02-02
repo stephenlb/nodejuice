@@ -5,16 +5,19 @@ NODEJUICE JavaScript V8 Seeker Server and WSGI
 For docs go to: http://nodejuice.com/documentation
 Watch a video:  http://www.vimeo.com/8459839
 
+WSGI is not Python's WSGI.
+WSGI stands for Web Server Gateway Interface.
+
 SEVERS
 ======
-wsgi     - (Web Server Gateway Interface) app and static content server.
-sidekick - used to keep connection with PHP, Ruby, Perl and Python on Apache.
-seeker   - used in dev server mode to auto refresh all attached clients. 
+seeker   - used to auto refresh all attached clients. 
            seeker server can be used with other webservers through sidekick.
-           check out ./demos/seeker to see an example.
+           check out ./demos/apache to see an example.
+sidekick - used to keep connection with PHP, Ruby, Perl and Python on Apache.
+wsgi     - (Web Server Gateway Interface) app and static content server.
 
 USAGE:
-================================================
+===================================================
 ./nodejuice /path/to/app [seeker] [wsgi] [sidekick]
 
 seeker   - pushes updates to your web browser.
