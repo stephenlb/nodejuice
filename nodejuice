@@ -3,6 +3,10 @@
 # ====
 # TODO
 # ====
+# -
+# -
+# -
+# -allow xdr call to append to a head[0] or documentElement if head not exist
 # -allow data streaming in sidekick server.
 # -xdr3: make easy production/dev mode with closure compiler.
 # -redo debian packages.
