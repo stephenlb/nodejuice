@@ -3,7 +3,6 @@
 # ====
 # TODO
 # ====
-# -process.addListener("unhandledException")
 # -allow data streaming in sidekick server.
 # -xdr3: make easy production/dev mode with closure compiler.
 # -redo debian packages.
@@ -12,12 +11,6 @@
 # -update amuse to unify methods between wsgi and sidekick
 # -make all functions({}) with object as ONLY ARG
 # -unit tests plz
-# -make recurse ignore work!!! >: /
-# -make recurse ignore work!!! >: /
-# -make recurse ignore work!!! >: /
-# -make recurse ignore work!!! >: /
-# -make recurse ignore work!!! >: /
-# -make recurse ignore work!!! >: /
 # -test failed function in utility.noble()
 # -redo video tutorial
 # -scrolling auto on all attached clients, only localhost can send scrolls.
