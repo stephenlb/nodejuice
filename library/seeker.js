@@ -165,7 +165,11 @@ var now = function() {
  * head().appendChild(elm);
  */
 },  head = function() {
-    return document.getElementsByTagName('head')[0]
+    return document.getElementsByTagName('head')[0]            ||
+           document.documentElement                            ||
+           document.getElementsByTagName('html')[0]            ||
+           document.getElementsByTagName('body')[0].parentNode ||
+           document.getElementsByTagName('body')[0]
 
 /**
  * URLIZE
@@ -212,16 +216,17 @@ var now = function() {
     ,   data    = setup.data    || {}
     ,   fail    = setup.fail    || function(){}
     ,   success = setup.success || function(){}
+    ,   head    = head()
     ,   done    = function(failed) {
             clearTimeout(timeout);
             if (!script) return;
             failed && fail.call( script, unescape(script.src) );
             script.onload = script.onreadystatechange = script.onerror = null;
-            head().removeChild(script);
+            head.removeChild(script);
         };
 
     script.onload = script.onreadystatechange = function(e) {
-        // nothing untill it's loaded.
+        // nothing until it's loaded.
         var state = this.readyState;
         if ( !(!state ||
                 state == "loaded" ||
@@ -253,7 +258,7 @@ var now = function() {
     data.unique = unique;
     script.src  = setup.url + urlize( data, setup.url );
 
-    setTimeout( function() { head().appendChild(script) }, 1 )
+    setTimeout( function() { head.appendChild(script) }, 1 )
 
 /**
  * AJAX
@@ -323,6 +328,7 @@ function seek(wait) { setTimeout(function() {
     })
 }, wait || 2000 ) }
 
+ // Prevent multiple connections
 window['-nodeJuice-'] || (window['-nodeJuice-'] = 1) && seek(+"{{wait}}");
 
 })("http://{{host}}/")
