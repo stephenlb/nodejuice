@@ -92,7 +92,7 @@ if (devmode) {
     setInterval( function() {
         var now = earliest();
         for ( var file in noblecache ) {
-            if (noblecache[file].data &&
+            if (typeof noblecache[file].data === 'string' &&
                 now - noblecache[file].earliest > wait
             ) {
                 noblecache[file].data    = '';
@@ -111,7 +111,7 @@ var noble = exports.noble = function( file, success, fail, retries ) {
         noblecache[file].failed = 0
 
     if (noblecache[file] && noblecache[file].reading) {
-        if (noblecache[file].data) {
+        if (typeof noblecache[file].data === 'string') {
             success && success(
                 noblecache[file].type,
                 noblecache[file].data,
