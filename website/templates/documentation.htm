@@ -74,8 +74,14 @@ exports.seeker = {
     delay  : 200,   <span class=comment>// milliseconds before page starts to reload.</span>
                     <span class=comment>// setting too low will cause apahce read file error.</span>
     wait   : 1500,  <span class=comment>// milliseconds before a new connection.</span>
-    touch  : false, <span class=comment>// allow file touch to push updates.</span>
                     <span class=comment>// setting this too low will make crazziness.</span>
+    add    : true,  <span class=comment>// allow new file to push updates.</span>
+    remove : true,  <span class=comment>// allow file delete to push updates.</span>
+    touch  : false, <span class=comment>// allow file touch to push updates.</span>
+    access : false, <span class=comment>// allow file reads to push updates.</span>
+    bits   : true,  <span class=comment>// allow chmod/chown to push updates.</span>
+    save   : true,  <span class=comment>// allow file save to push updates.</span>
+    dir    : true,  <span class=comment>// allow directory changes to push updates.</span>
     ignore : [ /git$/, /svn$/, /cvs$/, /swp$/, /~$/ ] <span class=comment>// stuff to ignore.</span>
 };
 
