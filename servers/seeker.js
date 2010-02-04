@@ -9,7 +9,8 @@ var sys        = require('sys')
 ,   clients    = []
 ,   seeking    = {}
 ,   seeker     = false
-,   antecedent = utility.earliest();
+,   antecedent = utility.earliest()
+,   seekerinit = utility.earliest();
 
 process.addListener( "unhandledException", function(msg) { inform(msg) } );
 
@@ -70,29 +71,42 @@ utility.inform(config.seeker);
 function update( file, curr, prev, stat ) {
     var atime = curr &&
         JSON.stringify(curr.atime) != JSON.stringify(prev.atime);
-
     var mtime = curr &&
         JSON.stringify(curr.mtime) != JSON.stringify(prev.mtime);
-
     var ctime = curr &&
         JSON.stringify(curr.ctime) != JSON.stringify(prev.ctime);
-
-    var removed = curr &&
+    var lnkchg = curr &&
         JSON.stringify(curr.nlink) != JSON.stringify(prev.nlink);
 
-    var added   = !seeking[file];
-    var touched = atime && mtime && ctime;
-    var saved   = mtime;
+    var added    = !seeking[file];
+    var removed  = lnkchg;
+    var touched  = atime && mtime && ctime;
+    var accessed = atime && !mtime && !ctime;
+    var bits     = !atime && !mtime && ctime;
+    var saved    = mtime && !touched;
 
-    // File Removed?
-    if ( removed ) seeking[file] = 0;
+    if (utility.earliest() - seekerinit > config.seeker.wait) {
+        if (added)    utility.inform({ detected_add    : file });
+        if (removed)  utility.inform({ detected_remove : file });
+        if (touched)  utility.inform({ detected_touch  : file });
+        if (accessed) utility.inform({ detected_read   : file });
+        if (bits)     utility.inform({ detected_meta   : file });
+        if (saved)    utility.inform({ detected_write  : file });
+    }
 
     if (utility.earliest() - antecedent < config.seeker.wait) return;
-    if ( !(added || removed || saved) ) return;
-    if (!config.seeker.touch && touched) return;
+
+    if (!config.seeker.touch  && touched  ||
+        !config.seeker.access && accessed ||
+        !config.seeker.bits   && bits     ||
+        !config.seeker.add    && added    ||
+        !config.seeker.remove && removed  ||
+        !config.seeker.save   && saved    ||
+        !config.seeker.dir    && stat.isDirectory()
+    ) return;
 
     antup();
-    utility.inform({ pushing_update : file });
+    utility.inform({ 'pushing update to browser' : file });
 
     setTimeout( function() {
         while (clients.length > 0) clients.shift().vow(1);
