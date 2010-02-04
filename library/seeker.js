@@ -216,13 +216,13 @@ var now = function() {
     ,   data    = setup.data    || {}
     ,   fail    = setup.fail    || function(){}
     ,   success = setup.success || function(){}
-    ,   head    = head()
+    ,   attach  = head()
     ,   done    = function(failed) {
             clearTimeout(timeout);
             if (!script) return;
             failed && fail.call( script, unescape(script.src) );
             script.onload = script.onreadystatechange = script.onerror = null;
-            head.removeChild(script);
+            attach.removeChild(script);
         };
 
     script.onload = script.onreadystatechange = function(e) {
@@ -258,7 +258,7 @@ var now = function() {
     data.unique = unique;
     script.src  = setup.url + urlize( data, setup.url );
 
-    setTimeout( function() { head.appendChild(script) }, 1 )
+    setTimeout( function() { attach.appendChild(script) }, 1 )
 
 /**
  * AJAX
