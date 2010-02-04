@@ -3,7 +3,8 @@
 # ====
 # TODO
 # ====
-# -
+# -add TIMEOUT to connections in WSGI
+# -error on no drain.  always make sure there is data in NOBLE.....
 # -
 # -
 # -allow xdr call to append to a head[0] or documentElement if head not exist
