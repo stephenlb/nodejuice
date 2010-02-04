@@ -2,8 +2,9 @@
 NODEJUICE JavaScript V8 Seeker Server and WSGI
 ===============================================================================
 
-For docs go to: http://nodejuice.com/documentation
-Watch a video:  http://www.vimeo.com/8459839
+For docs go to:             http://nodejuice.com/documentation
+Watch a video:              http://www.vimeo.com/8459839
+Setup With Apache and More: http://nodejuice.com/#sidekick
 
 WSGI is not Python's WSGI.
 WSGI stands for Web Server Gateway Interface.
