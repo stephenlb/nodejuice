@@ -3,16 +3,14 @@
 # ====
 # TODO
 # ====
-# -add TIMEOUT to connections in WSGI
-# -error on no drain.  always make sure there is data in NOBLE.....
 # -
 # -
-# -allow xdr call to append to a head[0] or documentElement if head not exist
+# -
+# -allow non-relative /path/to/nodejuice /path/to/app [cmd]
 # -allow data streaming in sidekick server.
 # -xdr3: make easy production/dev mode with closure compiler.
 # -redo debian packages.
 # -write new blog "HOW NODEJUICE WORKS" use text from jul email.
-# -broken seeker updates twice. TWICE >: ____
 # -update amuse to unify methods between wsgi and sidekick
 # -make all functions({}) with object as ONLY ARG
 # -unit tests plz
@@ -46,7 +44,7 @@
 # This will launch only wsgi server only.
 # ./nodejuice /home/stephen/application wsgi
 #
-# This will launch sidekick and seeker server only.
+# This will launch sidekick and seeker server.
 # Use this for APACHE (apache) or other web servers.
 # ./nodejuice /home/stephen/application sidekick
 #

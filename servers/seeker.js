@@ -96,6 +96,9 @@ function update( file, curr, prev, stat ) {
 
     if (utility.earliest() - antecedent < config.seeker.wait) return;
 
+    // Detect new files if enabled.
+    config.seeker.add && seek();
+
     if (!config.seeker.touch  && touched  ||
         !config.seeker.access && accessed ||
         !config.seeker.bits   && bits     ||
