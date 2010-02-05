@@ -33,10 +33,10 @@ exports.seeker = {
     wait    : 1200,  // time in milliseconds before a new connection.
                      // setting too low will make crazziness.
     browser : { // !!! features don't exist yet.
-        navigate : false // keep all browsers on the same page.
+        navigate : false, // keep all browsers on the same page.
         scroll   : {
-            lkp  : true, // scroll to last know positoin each push.
-            link : true  // keep multiple browser scroll positions in sync.
+            lkp  : true,  // scroll to last know positoin each push.
+            link : true   // keep multiple browser scroll positions in sync.
         },
     },
     add     : true,  // allow new file to push updates.
