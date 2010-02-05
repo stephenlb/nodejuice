@@ -32,7 +32,13 @@ exports.seeker = {
                      // setting too low will cause file read errors in Apache
     wait    : 1200,  // time in milliseconds before a new connection.
                      // setting too low will make crazziness.
-    browser : {},
+    browser : { // !!! features don't exist yet.
+        navigate : false // keep all browsers on the same page.
+        scroll   : {
+            lkp  : true, // scroll to last know positoin each push.
+            link : true  // keep multiple browser scroll positions in sync.
+        },
+    },
     add     : true,  // allow new file to push updates.
     remove  : true,  // allow file delete to push updates.
     touch   : false, // allow file touch to push updates.

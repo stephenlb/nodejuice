@@ -6,6 +6,15 @@
 # -
 # -
 # -
+# -NodeJuice 1.5.0 Features
+# ---> Browser Scroll Push      (on scroll event, transmit scrollTop)
+# ---> Scroll TO on page load.  (all scroll to same spot after reload push)
+# ---> Follow Navigation.       (on browser changes, they all change.)
+# ---> 
+# -
+# -
+# -make twitter account for nodejuice
+# -upgrade to 0.1.27
 # -allow non-relative /path/to/nodejuice /path/to/app [cmd]
 # -allow data streaming in sidekick server.
 # -xdr3: make easy production/dev mode with closure compiler.
