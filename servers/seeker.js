@@ -97,7 +97,7 @@ function update( file, curr, prev, stat ) {
     if (utility.earliest() - antecedent < config.seeker.wait) return;
 
     // Detect new files if enabled.
-    config.seeker.add && seek();
+    config.seeker.add && setTimeout( function(){seek()}, config.seeker.delay );
 
     if (!config.seeker.touch  && touched  ||
         !config.seeker.access && accessed ||
@@ -113,7 +113,6 @@ function update( file, curr, prev, stat ) {
 
     setTimeout( function() {
         while (clients.length > 0) clients.shift().vow(1);
-        seek();
     }, config.seeker.delay );
 }
 
