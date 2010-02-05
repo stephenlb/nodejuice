@@ -80,7 +80,7 @@ function update( file, curr, prev, stat ) {
 
     var added    = !seeking[file];
     var removed  = lnkchg;
-    var touched  = atime && mtime && ctime;
+    var touched  = atime && mtime && ctime && !added && !lnkchg;
     var accessed = atime && !mtime && !ctime;
     var bits     = !atime && !mtime && ctime;
     var saved    = mtime && !touched;
