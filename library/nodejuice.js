@@ -41,7 +41,7 @@ exports.seeker = {
     },
     add     : true,  // allow new file to push updates.
     remove  : true,  // allow file delete to push updates.
-    touch   : false, // allow file touch to push updates.
+    touch   : true,  // allow file touch to push updates.
     access  : false, // allow file reads to push updates.
     bits    : true,  // allow chmod/chown to push updates.
     save    : true,  // allow file save to push updates.

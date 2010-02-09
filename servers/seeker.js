@@ -89,7 +89,7 @@ function update( file, curr, prev, stat ) {
         if (added)    utility.inform({ detected_add    : file });
         if (removed)  utility.inform({ detected_remove : file });
         if (touched)  utility.inform({ detected_touch  : file });
-        if (accessed) utility.inform({ detected_read   : file });
+        // if (accessed) utility.inform({ detected_read   : file });
         if (bits)     utility.inform({ detected_meta   : file });
         if (saved)    utility.inform({ detected_write  : file });
     }

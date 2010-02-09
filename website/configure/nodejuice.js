@@ -24,7 +24,7 @@ exports.seeker = {
     port    : 8002,
     delay   : 10,
     wait    : 1800,
-    touch   : false, // allow file touch to push updates.
+    touch   : true, // allow file touch to push updates.
     ignore  : [
         /git$/,
         /svn$/,

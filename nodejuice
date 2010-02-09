@@ -68,12 +68,12 @@
 # Launch ALL Servers (This is pointless and harmless).
 # ./nodejuice /home/stephen/application sidekick wsgi seeker
 
-application=`echo $1 | sed -e 's#/\+$##'`
+application=`echo $1 | sed -e 's#/$##'`
 
 if [ "${application:0:1}" != "/" ]
 then
     cwd=`pwd`
-    application="`echo $cwd/$1 | sed -e 's#/\+$##'`"
+    application="`echo $cwd/$1 | sed -e 's#/$##'`"
 fi
 
 nodeconfig1="$application/configure/nodejuice.js"
@@ -152,7 +152,6 @@ leave() {
     echo -e "\n\nnodejuice shuting down... goodbye"
     trap - INT TERM EXIT
     sleep .15
-    ##ps -A | grep ' node' | sed -e 's,^\s*\([0-9]\+\).*$,\1,g' | xargs kill
     ps -aef | grep servers | grep node | grep -v grep | awk '{print $2}' | xargs kill
 }
 
