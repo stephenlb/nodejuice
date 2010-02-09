@@ -1,44 +1,80 @@
 
-<!--
-<h1>Stephen Blum</h1>
-<div>
-My name is Stephen Blum, Lead Software Engineer at 
-<a href="http://trustedopinion.com">Trusted Opinion</a>.
-I'm always excited about the technical and the cutting edge.
-I founded my first company in Seattle Washington in 2005 selling a new technology:
-<a href="http://ltsun.com">ltsun.com</a>. LTSun is a first of its kind front-end real-time CMS.
-After releasing the source code and selling remaining assets I joined
-<a href="http://upsellusa.com">UpSellUSA</a> and became Lead Engineer.
-Fast forward two years.
-Now I work in SOMA San Francisco at Trusted Opinion as Lead Engineer.
-Since joining this team I say often "it's like a vacation every day."
-
-I continue to contribute new technological ideas. Here are two:
-
-<a href="http://nodejuice.com">nodeJuice</a> is a push server on i/o events and has a hijack interface.
-Connecting nodeJuicde to a browser allows instant updates and automatic browser refresh on file change.
-<a href="http://www.saymix.com">Saymix.com</a>
-is a live text broadcasting prototype which scales to an unlimited audience.
-</div>
--->
-
-
 <h1>JavaScript V8 Seeker Server and WSGI</h1>
 This is <span class=n>node</span><span class=j>Juice</span>.
-It is a set of tools which allows you to develop with a push connection to your web browser.
+It is a tool which allows you to develop with a push connection to your web browser.
 Automatic browser refresh on file change or update is what you can call it.
 Develop on one to many browsers simultaneously without needing to reload manually.
 
 <a href=http://vimeo.com/8459839>Watch the video to see what NodeJuice can do</a>.
 
+<h2>Why Use NodeJuice?</h2>
+<span class=n>node</span><span class=j>Juice</span>
+will transform the regular web developer into a <a href=#ninja>ninja programmer.*</a>
+Check out the development enhancements:
+<ul>
+    <li><strong>Multi Browser Auto Reload on File Change</strong>
+        <ul>
+            <li>Every connected browser updates when you press save on your text editor or photoshop.</li>
+            <li>Works with all web browsers. IE too.</li>
+        </ul>
+    </li>
+    <li><strong>Auto Reload Technology Functions With All Servers</strong>
+        <ul>
+            <li>Works with Apache, Passenger, Nginx, Cherokee, and more.</li>
+            <li>NodeJuice comes with a server in case you forgot yours.</li>
+        </ul>
+    </li>
+    <li><strong>Server Side Error Detection Friendly Newbie Environment</strong>
+        <ul>
+            <li>NodeJuice will keep an open connection when PHP, Ruby, Python or Perl scripts throw errors.</li>
+            <li>Correct the syntax error and press save to push updates to your browser instantly.</li>
+        </ul>
+    </li>
+    <li><strong>Repository Friendly Automatic Updates</strong>
+        <ul>
+            <li>On git pull or svn up, all browsers update on the same beat.</li>
+            <li>Catastrophy? Restore commits with git, svn, cvs or mercurial and all connected browsers will follow.</li>
+        </ul>
+    </li>
+    <li><strong>Invalid Markup Safety Provides Newbie Friendly Development Environment</strong>
+        <ul>
+            <li>NodeJuice continues to function with shit HTML.</li>
+            <li>Newb HTML is no match for the juice.</li>
+        </ul>
+    </li>
+    <li><strong>JavaScript Syntax Error Detection</strong>
+        <ul>
+            <li>Syntax errors are no match for node juice to keep an open connection.</li>
+        </ul>
+    </li>
+    <li><strong>Improve Development with the Juice from the Node</strong>
+        <ul>
+            <li>Save time reloading your web browser continuously.</li>
+            <li>Eliminates a repetative step, reducing likeliness of self harm.</li>
+            <li>Toss out the F5 key.</li>
+            <li>No more needing to CTRL+R either.</li>
+        </ul>
+    </li>
+    <li><strong>New File Discovery Invkokes Push to Browser</strong>
+        <ul>
+            <li>Adding new assets, such as images and sytle sheets, will push updates.</li>
+            <li>Deleting asset files does the same.</li>
+        </ul>
+    </li>
+    <li><strong>Customizable Browser Push Scenarios</strong>
+        <ul>
+            <li>Ignore particular directories and file types.</li>
+            <li>Ignore detection types such as reads, writes, file touch, chmod, chown, delete and new file.</li>
+        </ul>
+    </li>
+</ul>
+
 <h2>NodeJuice sits Between the Server and Browser</h2>
-NodeJuice sits between your web server and browser.
-Use with your favorite web servers.
-Works with Apache, Passenger, Nginx, Cherokee, and more.
+NodeJuice sits between your web server and browser with a BOSH style long polling comet connection.
+Works all servers such as Apache, Passenger, Nginx, Cherokee, and more.
 A web server isn't required, NodeJuice comes with one in case you forgot yours.
-Use your favorite text editor. Works with VIM, TextMate, Emacs, Dreamweaver and more.
+Works many text editos like VIM, TextMate, Emacs, Dreamweaver and more.
 NodeJuice comes with all the built-in tools you need to edit your files dynamically in real time.
-Use your favorite web browser.
 NodeJuice works with IE, Safari, FF, Opera, Chrome, and more.
 
 There is nothing like the feeling you get when you press Save on your text editor and see all your browsers update instantly.
@@ -47,6 +83,16 @@ It's Free + Open Source.
 It runs on
 <span class=node>Node</span><span class=js>JS</span>;
 a low level non-blocking network ready process with many capabilities. 
+
+<h2>Does The Juice run on Windows XP or Later?</h2>
+No. However, using any net capable text editor, such as Dreamweaver, through FTP/SSH connection to a unix system with NodeJuice will work great.  All Windows web browsers are supported.
+
+<h2>NodeJuice on OSX, Linux and a few other Open Platforms</h2>
+Develop with NodeJuice on any platform supported by nodejs. The recommended platform is a flavor of Linux with epoll dev headers.
+
+<h2>How many browsers can I have connected to NodeJuice?</h2>
+Like the Tootsie Pop, it's more than you want to count. Apache will have trouble with concurrency before nodejuice does.
+
 
 <h2>Seeker Server: <a href=http://vimeo.com/8459839>Watch the Video</a></h2>
 <div>
@@ -184,4 +230,9 @@ Open to view:
 <pre class=code>http://localhost:8080/</pre>
 However, that isn't the raddest part.
 You are probably here to see what Seeker Server can do.
+
+<h2 id=ninja><span class=n>node</span><span class=j>Juice</span>
+will transform the regular web developer into a ninja programmer.*</h2>
+This is sorta true, but don't cry if your ninja day fails to arrive.
+Using NodeJuice will provide a super interface to better assist a developer's understanding of the mechanics by visually seeing results of every action, easily.  Add some text, press save and see the change instantly.
 
