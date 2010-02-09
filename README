@@ -8,13 +8,17 @@ Documentation:              http://nodejuice.com/documentation
 Watch a video:              http://www.vimeo.com/8459839
 Setup With Apache and More: http://nodejuice.com/#sidekick
 
-This is nodeJuice. It is a tool which allows you to develop with a push
-connection to your web browser. Automatic browser refresh on file change
-or update is what you can call it. Develop on one to many browsers
-simultaneously without needing to reload manually. NodeJuice will transform
+This is nodeJuice.  It is a tool which allows you to develop with a push
+connection to your web browser.  Automatic browser refresh on file change
+or update is what you can call it.  Develop on one to many browsers
+simultaneously without needing to reload manually.  NodeJuice will transform
 the regular web developer into a ninja programmer.  This technology works
 with all servers (apache, nginx, etc.) and brwosers (Firefox, IE, Safari,
-Chrome, etc.)
+Chrome, etc.).  NodeJuice requires a Unix Host to run and is compatible with
+all other OS's afterward.  This means that you can work on Windows with
+a network capable text editor over SSH or just use WinSCP + favorite 
+text editor.
+
 
 SEVERS
 ======
