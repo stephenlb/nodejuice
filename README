@@ -2,12 +2,19 @@
 NODEJUICE JavaScript V8 Seeker Server and WSGI
 ===============================================================================
 
-For docs go to:             http://nodejuice.com/documentation
+Website:                    http://nodejuice.com
+
+Documentation:              http://nodejuice.com/documentation
 Watch a video:              http://www.vimeo.com/8459839
 Setup With Apache and More: http://nodejuice.com/#sidekick
 
-WSGI is not Python's WSGI.
-WSGI stands for Web Server Gateway Interface.
+This is nodeJuice. It is a tool which allows you to develop with a push
+connection to your web browser. Automatic browser refresh on file change
+or update is what you can call it. Develop on one to many browsers
+simultaneously without needing to reload manually. NodeJuice will transform
+the regular web developer into a ninja programmer.  This technology works
+with all servers (apache, nginx, etc.) and brwosers (Firefox, IE, Safari,
+Chrome, etc.)
 
 SEVERS
 ======
@@ -16,6 +23,10 @@ seeker   - used to auto refresh all attached clients.
            check out ./demos/apache to see an example.
 sidekick - used to keep connection with PHP, Ruby, Perl and Python on Apache.
 wsgi     - (Web Server Gateway Interface) app and static content server.
+
+WSGI is not Python's WSGI.
+WSGI stands for Web Server Gateway Interface.
+
 
 USAGE:
 ===================================================
