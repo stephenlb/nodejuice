@@ -30,7 +30,7 @@ http.createServer(function ( req, res ) {
         function( type, js, encoding ) {
             seeker = function( request, response ) {
                 var headers = { "Content-Type" : type }
-                ,   host    = request.headers.host.split(':')[0] +
+                ,   host    = req.headers.host.split(':')[0] +
                            ':' + config.seeker.port;
 
                 js = utility.supplant( js, {
