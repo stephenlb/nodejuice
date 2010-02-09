@@ -19,7 +19,8 @@ if (!devmode) process.exit();
 setTimeout( function() { seek() }, 1 );
 
 http.createServer(function ( req, res ) {
-    var unique = req.url.split('?unique=')[1];
+    var unique   = req.url.split('?unique=')[1]
+    ,   headhost = ((req.headers||{}).host||{}).split(':')[0] || 'localhost';
 
     // Deliver Client JS
     if (typeof unique === 'undefined') {
@@ -30,8 +31,7 @@ http.createServer(function ( req, res ) {
         function( type, js, encoding ) {
             seeker = function( request, response ) {
                 var headers = { "Content-Type" : type }
-                ,   host    = req.headers.host.split(':')[0] +
-                           ':' + config.seeker.port;
+                ,   host    = headhost + ':' + config.seeker.port;
 
                 js = utility.supplant( js, {
                     host : host,

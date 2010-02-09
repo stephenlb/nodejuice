@@ -13,7 +13,7 @@ if (!devmode) process.exit();
 http.createServer(function (req, res) {
     var error    = false
     ,   body     = ''
-    ,   host     = req.headers.host.split(':')[0]
+    ,   host     = ((req.headers||{}).host||{}).split(':')[0] || 'localhost'
     ,   method   = req.method || 'GET'
     ,   encoding = (req.headers['content-type'] || 'text')
                    .slice( 0, 4 ) === "text" ? "utf8" : "binary";
