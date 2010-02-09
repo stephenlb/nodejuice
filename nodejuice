@@ -5,6 +5,14 @@
 # ====
 # -
 # -
+# -
+# - the update algo seems to suck.
+# - the sidekick seesm to fail eventually...  timeouts?
+# -
+# -
+# -
+# -
+# -
 # -NodeJuice 1.5.0 Features
 # ---> Browser Scroll Push      (on scroll event, transmit scrollTop)
 # ---> Scroll TO on page load.  (all scroll to same spot after reload push)
@@ -145,7 +153,7 @@ leave() {
     trap - INT TERM EXIT
     sleep .15
     ##ps -A | grep ' node' | sed -e 's,^\s*\([0-9]\+\).*$,\1,g' | xargs kill
-    ps -aef | grep 'nodejuice/servers' | grep -v grep | awk '{print $2}' | xargs kill
+    ps -aef | grep servers | grep node | grep -v grep | awk '{print $2}' | xargs kill
 }
 
 startup() {
