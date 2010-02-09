@@ -83,7 +83,7 @@ function update( file, curr, prev, stat ) {
     var touched  = atime && mtime && ctime && !added && !lnkchg;
     var accessed = atime && !mtime && !ctime;
     var bits     = !atime && !mtime && ctime;
-    var saved    = mtime && !touched;
+    var saved    = !atime && mtime || ctime;
 
     if (utility.earliest() - seekerinit > config.seeker.wait) {
         if (added)    utility.inform({ detected_add    : file });
