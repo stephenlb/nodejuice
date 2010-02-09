@@ -25,10 +25,8 @@ var config  = ignite()
 ,   seekin  = '$1<script src="http://'
 ,   seekout = ':' + config.seeker.port + '"></script>';
 
-var amuse = exports.amuse = function( text, req ) {
-    return text.replace( rxsneaky, seekin +
-        ((req.headers||{}).host||'').split(':')[0] +
-    seekout );
+var amuse = exports.amuse = function( text, host ) {
+    return text.replace( rxsneaky, seekin + host + seekout );
 };
 
 var bolt = exports.bolt = function( file, success, fail, rad ) {

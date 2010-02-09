@@ -12,6 +12,7 @@ var http     = require("http")
 ,   rxnojs   = /\.js$/;
 
 http.createServer(function ( req, res ) {
+    var host = req.headers.host.split(':')[0];
 
     if (devmode) utility.bolt( njconfig + '.js', function( obj ) {
         var old = config;
@@ -46,7 +47,7 @@ http.createServer(function ( req, res ) {
                 encoding != 'binary' &&
                 !req.headers['x-requested-with'] &&
                 type.indexOf('html') !== -1
-            ) body = utility.amuse( body, req );
+            ) body = utility.amuse( body, host );
         }
 
         headers["Content-Length"] = body.length;

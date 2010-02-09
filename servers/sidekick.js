@@ -13,6 +13,7 @@ if (!devmode) process.exit();
 http.createServer(function (req, res) {
     var error    = false
     ,   body     = ''
+    ,   host     = req.headers.host.split(':')[0]
     ,   method   = req.method || 'GET'
     ,   encoding = (req.headers['content-type'] || 'text')
                    .slice( 0, 4 ) === "text" ? "utf8" : "binary";
@@ -38,7 +39,7 @@ http.createServer(function (req, res) {
                         response : data.replace( rxml, '' ),
                         headers  : sys.inspect(response.headers)
                     }, function( type, data ) {
-                        data = utility.amuse( data, req );
+                        data = utility.amuse( data, host );
                         response.headers['content-length'] = data.length;
                         res.sendHeader( response.statusCode, response.headers);
                         res.sendBody( data, encoding );
@@ -47,9 +48,10 @@ http.createServer(function (req, res) {
 
                 if (
                     encoding != 'binary' &&
-                    !req.headers['x-requested-with'] &&
-                    (response.headers['content-type'] || '').indexOf('html') !== -1
-                ) data = utility.amuse( data, req );
+                    !req.headers['x-requested-with'] && (
+                        response.headers['content-type'] || ''
+                    ).indexOf('html') !== -1
+                ) data = utility.amuse( data, host );
 
                 response.headers['content-length'] = data.length;
                 res.sendHeader( response.statusCode, response.headers );
