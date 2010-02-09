@@ -19,8 +19,7 @@ if (!devmode) process.exit();
 setTimeout( function() { seek() }, 1 );
 
 http.createServer(function ( req, res ) {
-    var unique   = req.url.split('?unique=')[1]
-    ,   headhost = ((req.headers||{}).host||{}).split(':')[0] || 'localhost';
+    var unique   = req.url.split('?unique=')[1];
 
     // Deliver Client JS
     if (typeof unique === 'undefined') {
@@ -30,18 +29,21 @@ http.createServer(function ( req, res ) {
         utility.noble( njdir + '/library/seeker.min.js',
         function( type, js, encoding ) {
             seeker = function( request, response ) {
-                var headers = { "Content-Type" : type }
-                ,   host    = headhost + ':' + config.seeker.port;
+                var headers  = { "Content-Type" : type }
+                ,   headhost = ((request.headers||{}).host||{}).split(':')[0]
+                               || 'localhost'
+                ,   host     = headhost + ':' + config.seeker.port
+                ,   jsseek   = '';
 
-                js = utility.supplant( js, {
+                jsseek = utility.supplant( js, {
                     host : host,
                     wait : config.seeker.wait
                 } );
 
-                headers['Content-Length'] = js.length;
+                headers['Content-Length'] = jsseek.length;
 
                 response.sendHeader( 200, headers );
-                response.sendBody( js, "utf8" );
+                response.sendBody( jsseek, "utf8" );
                 response.finish();
 
                 antup();
