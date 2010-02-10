@@ -30,7 +30,7 @@ http.createServer(function ( req, res ) {
         function( type, js, encoding ) {
             seeker = function( request, response ) {
                 var headers  = { "Content-Type" : type }
-                ,   headhost = ((request.headers||{}).host||{}).split(':')[0]
+                ,   headhost = ((request.headers||{}).host||'').split(':')[0]
                                || 'localhost'
                 ,   host     = headhost + ':' + config.seeker.port
                 ,   jsseek   = '';

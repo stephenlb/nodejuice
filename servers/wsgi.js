@@ -12,7 +12,7 @@ var http     = require("http")
 ,   rxnojs   = /\.js$/;
 
 http.createServer(function ( req, res ) {
-    var host = ((req.headers||{}).host||{}).split(':')[0] || 'localhost';
+    var host = ((req.headers||{}).host||'').split(':')[0] || 'localhost';
 
     if (devmode) utility.bolt( njconfig + '.js', function( obj ) {
         var old = config;
