@@ -53,9 +53,10 @@ http.createServer(function ( req, res ) {
                 ,   jsseek   = '';
 
                 jsseek = utility.supplant( js, {
-                    host  : host,
-                    wait  : config.seeker.wait,
-                    speed : config.seeker.browser.scroll.speed
+                    host   : host,
+                    wait   : config.seeker.wait,
+                    speed  : config.seeker.browser.scroll.speed,
+                    scroll : config.seeker.browser.scroll.sync
                 } );
 
                 headers['Content-Length'] = jsseek.length;

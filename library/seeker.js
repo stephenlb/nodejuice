@@ -334,6 +334,7 @@ var now = function() {
 
 var waitfor      = now()
 ,   scroll_speed = +"{{speed}}"
+,   scroll_okay  = "{{scroll}}"
 ,   message_wait = 0
 ,   touchable    = 0;
 
@@ -361,8 +362,10 @@ function scrollup(e) {
     return true;
 }
 
-bind( 'touchstart', document, scrollup );
-bind( 'scroll', window, scrollup );
+if (scroll_okay === "yes") {
+    bind( "touchstart", document, scrollup );
+    bind( "scroll", window, scrollup );
+}
 
 function seek(wait) { setTimeout(function() {
     xdr({
