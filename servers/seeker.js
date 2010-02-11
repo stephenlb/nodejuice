@@ -10,7 +10,8 @@ var sys        = require('sys')
 ,   seeking    = {}
 ,   seeker     = false
 ,   antecedent = utility.earliest()
-,   seekerinit = utility.earliest();
+,   seekerinit = utility.earliest()
+,   cmdspliter = /cmd=|\&/;
 
 process.addListener( "unhandledException", function(msg) { inform(msg) } );
 
@@ -19,7 +20,23 @@ if (!devmode) process.exit();
 setTimeout( function() { seek() }, 1 );
 
 http.createServer(function ( req, res ) {
-    var unique   = req.url.split('?unique=')[1];
+    var unique  = req.url.split('unique=')[1]
+    ,   command = req.url.split(cmdspliter)[1];
+
+    utility.inform({
+        command: command,
+        unique : unique
+    });
+
+    if (typeof command !== 'undefined'){
+        res.sendHeader( 200, {"Content-Type" : "application/javascript"} );
+        res.sendBody(utility.vigilant(
+            command, unique
+        ));
+        res.finish();
+        while (clients.length > 0) clients.shift().vow(command);
+        return;
+    }
 
     // Deliver Client JS
     if (typeof unique === 'undefined') {
@@ -36,8 +53,9 @@ http.createServer(function ( req, res ) {
                 ,   jsseek   = '';
 
                 jsseek = utility.supplant( js, {
-                    host : host,
-                    wait : config.seeker.wait
+                    host  : host,
+                    wait  : config.seeker.wait,
+                    speed : config.seeker.browser.scroll.speed
                 } );
 
                 headers['Content-Length'] = jsseek.length;
@@ -58,13 +76,14 @@ http.createServer(function ( req, res ) {
     }
 
     // Deliver Update Notice
-    else clients.push({ already : utility.earliest(), vow : function(ready) {
+    else clients.push({ already : utility.earliest(), vow : function(command) {
         res.sendHeader( 200, {"Content-Type" : "application/javascript"} );
         res.sendBody(utility.vigilant(
-            ready ? 'success' : '', unique
+            command, unique
         ));
         res.finish();
     } });
+
 }).listen( config.seeker.port, config.seeker.host );
 
 sys.puts("\nSeeker Server("+process.pid+")");
@@ -114,7 +133,7 @@ function update( file, curr, prev, stat ) {
     utility.inform({ 'pushing update to browser' : file });
 
     setTimeout( function() {
-        while (clients.length > 0) clients.shift().vow(1);
+        while (clients.length > 0) clients.shift().vow('update');
     }, config.seeker.delay );
 }
 
