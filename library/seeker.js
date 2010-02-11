@@ -83,7 +83,8 @@ var now = function() {
                          document.documentElement.clientHeight ||
                          document.body.clientHeight,
              scrollTop : document.documentElement.scrollTop ||
-                         document.body.scrollTop
+                         document.body.scrollTop,
+             size      : offset( document.getElementsByTagName('body')[0], 'Height' )
            }
 
 /**
@@ -155,9 +156,21 @@ var now = function() {
  * } );
  */
 },  bind = function( type, el, fun ) {
-    if ( el.addEventListener ) el.addEventListener( type, fun, false );
-    else if ( el.attachEvent ) el.attachEvent( 'on' + type, fun );
-    else  el[ 'on' + type ] = fun;
+    var rapfun = function(e) {
+        if (!fun(e)) {
+            e.cancelBubble = true;
+            e.returnValue  = false;
+            if (e.stopPropagation) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
+        }
+    };
+
+
+    if ( el.addEventListener ) el.addEventListener( type, rapfun, false );
+    else if ( el.attachEvent ) el.attachEvent( 'on' + type, rapfun );
+    else  el[ 'on' + type ] = rapfun;
 
 /**
  * HEAD
@@ -319,11 +332,63 @@ var now = function() {
     xhr.send(urlize( setup.data, setup.url ));
 };
 
+var waitfor      = now()
+,   scroll_speed = +"{{speed}}"
+,   message_wait = 0
+,   touchable    = 0;
+
+function scrollup(e) {
+    if (waitfor + scroll_speed > now()) return;
+
+    message_wait && clearTimeout(message_wait);
+    message_wait = setTimeout(function() {
+        var windowInfo = winfo()
+        ,   touch      = e && e.touches && e.touches[0]
+        ,   top        = windowInfo.scrollTop || touch && touch.pageY || 0;
+
+        if (touch) touchable = true;
+        if (touchable && e.type == 'scroll') return true;
+
+        xdr({
+            url  : host,
+            type : 'text',
+            data : { cmd : 'scroll_' + (((top) / windowInfo.size) * 100) }
+        });
+
+        waitfor = now();
+    }, scroll_speed );
+
+    return true;
+}
+
+bind( 'touchstart', document, scrollup );
+bind( 'scroll', window, scrollup );
+
 function seek(wait) { setTimeout(function() {
     xdr({
         url     : host,
         type    : 'text',
-        success : function(response) { location.reload(false) },
+        success : function(response) {
+            // console.log(response);
+            if (response == 'update') return location.reload(false);
+
+            seek(1);
+
+            if (waitfor + scroll_speed > now()) return;
+            waitfor = now();
+
+            // Special Case Connections
+            // Scroll Percentage
+            var command = response.split('_');
+            switch (command[0]) {
+                case 'scroll':
+                    var winf    = winfo()
+                    ,   percent = (+command[1] || 0) / 100;
+
+                    scrollTo( 0, (winf.size) * percent );
+                    break;
+            }
+        },
         fail    : function() { seek(1000) }
     })
 }, wait || 2000 ) }
