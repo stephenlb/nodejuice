@@ -16,6 +16,13 @@ body{background-color:#3b3b3b}
 .js{color:#ccdd55}
 .db{color:#f6d9a1}
 
+#ninja-img {
+    width: 194px;
+    height: 95px;
+    float: right;
+    padding: 10px;
+}
+
 body {
     font-family: sans-serif;
     font-size: 14px;

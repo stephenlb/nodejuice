@@ -23,7 +23,9 @@
 
     <div class=clear></div>
 
-    <div id=stage>{{content}}</div>
+    <div id=stage>
+    <img id=ninja-img title='NodeJuice Ninja' alt='NodeJuice Ninja' src=http://cdn.nodejuice.com/nodejuice-ninja.png />
+    {{content}}</div>
 
     <div id=bottom>
             <div>Hi. You made it to the bottom.</div>
@@ -42,6 +44,13 @@
         &copy; Copyright <span class=n>node</span><span class=j>Juice</span>
     </div>
 <script>
+/*
+setTimeout(function(){
+var img = document.getElementById('ninja-img');
+img.src='http://nodejuice.s3.amazonaws.com/nodejuice-ninja.png';
+img.style.display='block';
+},6000);
+*/
 (function(){
 if (location.href.indexOf('.') === -1) return;
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
