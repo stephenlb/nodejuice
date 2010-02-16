@@ -9,8 +9,10 @@ var sys        = require('sys')
 ,   clients    = []
 ,   seeking    = {}
 ,   seeker     = false
+,   quotescape = /"/g
 ,   antecedent = utility.earliest()
 ,   seekerinit = utility.earliest()
+,   lastscroll = {}
 ,   cmdspliter = /cmd=|\&/;
 
 process.addListener( "unhandledException", function(msg) { inform(msg) } );
@@ -28,7 +30,17 @@ http.createServer(function ( req, res ) {
         unique : unique
     });
 
-    if (typeof command !== 'undefined'){
+    if (typeof command !== 'undefined') {
+        var cmds = command.split('_');
+
+        switch (cmds[0]) {
+            case 'scroll' :
+                lastscroll[cmds[2]||''] = cmds[1];
+                break;
+        }
+
+utility.inform({lastscroll:lastscroll});
+
         res.sendHeader( 200, {"Content-Type" : "application/javascript"} );
         res.sendBody(utility.vigilant(
             command, unique
@@ -56,10 +68,14 @@ http.createServer(function ( req, res ) {
                     host   : host,
                     wait   : config.seeker.wait,
                     speed  : config.seeker.browser.scroll.speed,
-                    scroll : config.seeker.browser.scroll.sync
+                    scroll : config.seeker.browser.scroll.sync,
+                    lkpp   : JSON.stringify(lastscroll).replace( quotescape, '\\"'),
+                    lkp    : config.seeker.browser.scroll.lkp
                 } );
 
                 headers['Content-Length'] = jsseek.length;
+                headers["Cache-Control"]  = 'no-cache, no-store, must-revalidate';
+                headers["Expires"]        = 'Thu, 01 Dec 1994 16:00:00 GMT';
 
                 response.sendHeader( 200, headers );
                 response.sendBody( jsseek, "utf8" );

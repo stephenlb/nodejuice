@@ -333,38 +333,69 @@ var now = function() {
 };
 
 var waitfor      = now()
+,   scroll_rec   = now()
 ,   scroll_speed = +"{{speed}}"
-,   scroll_okay  = "{{scroll}}"
+,   scroll_okay  = "{{scroll}}" === "yes"
+,   lkp_pos      = eval("({{lkpp}})") || {}
+,   lkp_okay     = "{{lkp}}" === "yes"
+,   underscore   = /_/g
 ,   message_wait = 0
+,   max_wait     = 0
+,   max_rate_ms  = 10
 ,   touchable    = 0;
 
 function scrollup(e) {
-    if (waitfor + scroll_speed > now()) return;
+    if (scroll_rec + 1000 > now()) return;
 
+    // Last Scroll (For catching up with hickups)
     message_wait && clearTimeout(message_wait);
-    message_wait = setTimeout(function() {
-        var windowInfo = winfo()
-        ,   touch      = e && e.touches && e.touches[0]
-        ,   top        = windowInfo.scrollTop || touch && touch.pageY || 0;
+    message_wait = setTimeout(function() { send_scroll(e) }, scroll_speed );
 
-        if (touch) touchable = true;
-        if (touchable && e.type == 'scroll') return true;
-
-        xdr({
-            url  : host,
-            type : 'text',
-            data : { cmd : 'scroll_' + (((top) / windowInfo.size) * 100) }
-        });
-
-        waitfor = now();
-    }, scroll_speed );
+    // Max Rate (Send as fast as we can limited by max_rate_ms)
+    max_wait && clearTimeout(max_wait);
+    max_wait = setTimeout(function() { send_scroll(e) }, max_rate_ms );
 
     return true;
 }
 
-if (scroll_okay === "yes") {
+function send_scroll(e) {
+    var windowInfo = winfo()
+    ,   touch      = e && e.touches && e.touches[0]
+    ,   top        = windowInfo.scrollTop || touch && touch.pageY || 0;
+
+    if (touch) touchable = true;
+    if (touchable && e.type == 'scroll') return true;
+
+    waitfor = now() + 1000;
+
+    xdr({
+        url  : host,
+        type : 'text',
+        data : { cmd : 'scroll_' + (
+            ((top) / windowInfo.size) * 100
+        ) + '_' + location.href.replace( underscore, '-' ) },
+        success : function() {
+            waitfor = now();
+        }
+    });
+}
+
+/* -- LKP Last Know Position -- */
+if (lkp_okay) bind( "load", window, function() {
+    scroll_percent(lkp_pos[location.href.replace( underscore, '-' )] || 0)
+} );
+
+/* -- Scroll Synchronization Between Browsers -- */
+if ( scroll_okay || lkp_okay ) {
     bind( "touchstart", document, scrollup );
     bind( "scroll", window, scrollup );
+}
+
+function scroll_percent(percent) {
+    var winf     = winfo()
+    ,   real_val = (+percent || 0) / 100;
+
+    scrollTo( 0, (winf.size) * real_val );
 }
 
 function seek(wait) { setTimeout(function() {
@@ -377,18 +408,16 @@ function seek(wait) { setTimeout(function() {
 
             seek(1);
 
-            if (waitfor + scroll_speed > now()) return;
-            waitfor = now();
+            if (waitfor + 1000 > now()) return;
+            scroll_rec = now();
 
             // Special Case Connections
             // Scroll Percentage
             var command = response.split('_');
             switch (command[0]) {
                 case 'scroll':
-                    var winf    = winfo()
-                    ,   percent = (+command[1] || 0) / 100;
-
-                    scrollTo( 0, (winf.size) * percent );
+                    if (!scroll_okay) break;
+                    scroll_percent(+command[1]);
                     break;
             }
         },
