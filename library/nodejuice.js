@@ -35,9 +35,9 @@ exports.seeker = {
     browser : { // !!! features don't exist yet.
         navigate : false, // keep all browsers on the same page.
         scroll   : {
-            lkp   : 'yes', // scroll to last know positoin after page reload.
+            lkp   : 'yes', // scroll to last know position for each page.
             sync  : 'yes', // keep multiple browser scroll positions in sync.
-            speed : 200    // delay between updates.
+            speed : 300    // delay sync updates and last update in ms.
         },
     },
     add     : true,  // allow new file to push updates.
