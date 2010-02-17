@@ -25,11 +25,6 @@ http.createServer(function ( req, res ) {
     var unique  = req.url.split('unique=')[1]
     ,   command = req.url.split(cmdspliter)[1];
 
-    utility.inform({
-        command: command,
-        unique : unique
-    });
-
     if (typeof command !== 'undefined') {
         var cmds = command.split('_');
 
@@ -38,8 +33,6 @@ http.createServer(function ( req, res ) {
                 lastscroll[cmds[2]||''] = cmds[1];
                 break;
         }
-
-utility.inform({lastscroll:lastscroll});
 
         res.sendHeader( 200, {"Content-Type" : "application/javascript"} );
         res.sendBody(utility.vigilant(
