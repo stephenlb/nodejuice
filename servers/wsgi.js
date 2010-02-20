@@ -73,7 +73,7 @@ http.createServer(function ( req, res ) {
         }, function() { error404( req, res, appdir + file ) } )
     };
 
-    if (!action) error404( req, res, appdir + file );
+    if (!action) error404( req, res, req.url );
     else if (rxnojs.test(action[1])) send_script( req, res, action );
     else                             send_file( req, res, action );
 
