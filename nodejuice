@@ -4,11 +4,10 @@
 # TODO
 # ====
 # -
-# -
+# - port to newest version of node!
 # -
 # - the update algo seems to suck.
-# - the sidekick seesm to fail eventually...  timeouts?
-# -
+# - seeker fails on detecting write and then trying to stat a locked file.  FIX THIS!
 # -
 # -
 # -
