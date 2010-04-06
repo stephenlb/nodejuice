@@ -1,4 +1,4 @@
-var posix    = require("posix")
+var posix    = require("fs")
 ,   http     = require('http')
 ,   sys      = require("sys")
 ,   appdir   = process.ARGV[2]
@@ -12,14 +12,97 @@ var posix    = require("posix")
 ,   rxmagic  = /{{([\w\-]+)}}/g
 ,   rxsneaky = /^\s*((?:<!?doc[^>]*>\s*)?(?:<htm[^>]*>\s*)?(?:<hea[^>]*>)?)?/i;
 
+posix.cat = posix.readFile;
+
 process.addListener( "unhandledException", function(msg) { inform(msg) } );
 
 var ignite = exports.ignite = function() {
-    return process.mixin( true,
+    return extend( true,
         require(njdir  + "/library/nodejuice"),
         require(njconfig)
     );
 };
+
+var extend = exports.extend = function() {
+    // copy reference to target object
+    var target = arguments[0] || {}, i = 1, length = arguments.length, deep = false, options, name, src, copy;
+
+    // Handle a deep copy situation
+    if ( typeof target === "boolean" ) {
+        deep = target;
+        target = arguments[1] || {};
+        // skip the boolean and the target
+        i = 2;
+    }
+
+    // Handle case when target is a string or something (possible in deep copy)
+    if ( typeof target !== "object" && !typeof target === 'function') {
+        target = {};
+    }
+
+    var isArray = function(obj) {
+        return toString.call(copy) === "[object Array]" ? true : false;
+    };
+
+    var isPlainObject = function( obj ) {
+        // Must be an Object.
+        // Because of IE, we also have to check the presence of the constructor property.
+        // Make sure that DOM nodes and window objects don't pass through, as well
+        if ( !obj || toString.call(obj) !== "[object Object]" || obj.nodeType || obj.setInterval ) {
+            return false;
+        }
+        
+        var has_own_constructor = hasOwnProperty.call(obj, "constructor");
+        var has_is_property_of_method = hasOwnProperty.call(obj.constructor.prototype, "isPrototypeOf");
+        // Not own constructor property must be Object
+        if ( obj.constructor && !has_own_constructor && !has_is_property_of_method) {
+            return false;
+        }
+        
+        // Own properties are enumerated firstly, so to speed up,
+        // if last one is own, then all properties are own.
+    
+        var last_key;
+        for ( key in obj ) {
+            last_key = key;
+        }
+        
+        return typeof last_key === "undefined" || hasOwnProperty.call( obj, last_key );
+    };
+
+
+    for ( ; i < length; i++ ) {
+        // Only deal with non-null/undefined values
+        if ( (options = arguments[ i ]) !== null ) {
+            // Extend the base object
+            for ( name in options ) {
+                src = target[ name ];
+                copy = options[ name ];
+
+                // Prevent never-ending loop
+                if ( target === copy ) {
+                    continue;
+                }
+
+                // Recurse if we're merging object literal values or arrays
+                if ( deep && copy && ( isPlainObject(copy) || isArray(copy) ) ) {
+                    var clone = src && ( isPlainObject(src) || isArray(src) ) ? src : isArray(copy) ? [] : {};
+
+                    // Never move original objects, clone them
+                    target[ name ] = extend( deep, clone, copy );
+
+                // Don't bring in undefined values
+                } else if ( typeof copy !== "undefined" ) {
+                    target[ name ] = copy;
+                }
+            }
+        }
+    }
+
+    // Return the modified object
+    return target;
+};
+
 
 var config  = ignite()
 ,   seekin  = '$1<script src="http://'
@@ -54,7 +137,7 @@ var impress = exports.impress = function( file, args, success, fail ) {
 
 // Non Blocking Recursive Directory
 var recurse = exports.recurse = function( start, ignore, callback ) {
-    posix.readdir(start).addCallback(function(files) {
+    posix.readdir( start, function( err, files ) {
         files.forEach(function(file) {
             var path = start + '/' + file;
 
@@ -63,12 +146,12 @@ var recurse = exports.recurse = function( start, ignore, callback ) {
                 return item.test(path)
             }).length) return;
 
-            posix.stat(path).addCallback(function(stat){
+            posix.stat( path, function( err, stat ){
                 callback( path, stat );
                 if (stat.isDirectory()) recurse( path, ignore, callback );
-            });
+            } );
         });
-    });
+    } );
 };
 
 var inform = exports.inform = function(obj) {
@@ -128,10 +211,10 @@ var noble = exports.noble = function( file, success, fail, retries ) {
     noblecache[file] = { reading : 1 };
 
     var type      = mime.get(file)
-    ,   encoding  = (type.slice( 0, 4 ) === "text" ? "utf8" : "binary")
-    ,   noblefile = posix.cat( file, encoding );
+    ,   encoding  = (type.slice( 0, 4 ) === "text" ? "utf8" : "binary");
+    //,   noblefile = posix.cat( file, encoding );
 
-    noblefile.addCallback(function(data) {
+    posix.readFile( file, encoding, function( err, data ) {
         if (typeof data !== 'string') return retry();
 
         noblecache[file].type     = type;
@@ -140,11 +223,11 @@ var noble = exports.noble = function( file, success, fail, retries ) {
         noblecache[file].earliest = earliest();
 
         success && success( type, data, encoding );
-    });
+    } );
 
-    noblefile.addErrback(function() {
+    //noblefile.addErrback(function() {
     
-    retry() });
+    //retry() });
 
     function retry() {
         retries = retries || 0;
@@ -202,9 +285,10 @@ var fetching = 0
     ,   request = http.createClient( port, host )
         .request( type, path, headers );
 
-    if (body) request.sendBody( body, encoding );
+    if (body) request.write( body, encoding );
 
-    request.finish(function(response) {
+    // request.addListener( "data", function(chunk) { /*body += chunk;*/ inform(chunk); } );
+    request.addListener( 'response', function(response) {
         var ctype    = response.headers['content-type'] || 'text'
         ,   encoding = ctype.slice( 0, 4 ) === "text" ? "utf8" : "binary"
         ,   fetch    = config.sidekick.fetch;
@@ -224,7 +308,8 @@ var fetching = 0
             fail && fail( '', response, encoding );
 
         response.setBodyEncoding(encoding);
-        response.addListener( "body", function(chunk) {
+        response.addListener( "data", function(chunk) {
+
             data += chunk;
 
             if (response.statusCode == 200)
@@ -232,12 +317,14 @@ var fetching = 0
             else fail && fail( chunk, response, encoding );
         } );
 
-        response.addListener( "complete", function() {
+        response.addListener( "end", function() {
             finished && finished( data, response, encoding );
             fetching--;
             if (fetchque.length > 0) exports.fetch(fetchque.shift());
         } );
-    });
+    } );
+
+    request.close();
 };
 
 var earliest = exports.earliest = function() { return+new Date };

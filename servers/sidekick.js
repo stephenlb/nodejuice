@@ -18,8 +18,8 @@ http.createServer(function (req, res) {
     ,   encoding = (req.headers['content-type'] || 'text')
                    .slice( 0, 4 ) === "text" ? "utf8" : "binary";
 
-    req.addListener( "body", function(chunk) { body += chunk } );
-    req.addListener( "complete", function() {
+    req.addListener( "data", function(chunk) { body += chunk } );
+    req.addListener( "end", function() {
         req.headers['content-length'] = body.length;
 
         utility.fetch({
@@ -41,9 +41,9 @@ http.createServer(function (req, res) {
                     }, function( type, data ) {
                         data = utility.amuse( data, host );
                         response.headers['content-length'] = data.length;
-                        res.sendHeader( response.statusCode, response.headers);
-                        res.sendBody( data, encoding );
-                        res.finish();
+                        res.writeHead( response.statusCode, response.headers);
+                        res.write( data, encoding );
+                        res.close();
                     } )
 
                 if (
@@ -54,9 +54,9 @@ http.createServer(function (req, res) {
                 ) data = utility.amuse( data, host );
 
                 response.headers['content-length'] = data.length;
-                res.sendHeader( response.statusCode, response.headers );
-                res.sendBody( data, encoding );
-                res.finish();
+                res.writeHead( response.statusCode, response.headers );
+                res.write( data, encoding );
+                res.close();
         } });
     } );
 

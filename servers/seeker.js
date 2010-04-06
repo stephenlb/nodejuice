@@ -1,5 +1,6 @@
 var sys        = require('sys')
 ,   http       = require('http')
+,   fs         = require('fs')
 ,   appdir     = process.ARGV[2]
 ,   njdir      = process.ARGV[3]
 ,   njconfig   = process.ARGV[4]
@@ -34,11 +35,11 @@ http.createServer(function ( req, res ) {
                 break;
         }
 
-        res.sendHeader( 200, {"Content-Type" : "application/javascript"} );
-        res.sendBody(utility.vigilant(
+        res.writeHead( 200, {"Content-Type" : "application/javascript"} );
+        res.write(utility.vigilant(
             command, unique
         ));
-        res.finish();
+        res.close();
         while (clients.length > 0) clients.shift().vow(command);
         return;
     }
@@ -70,9 +71,9 @@ http.createServer(function ( req, res ) {
                 headers["Cache-Control"]  = 'no-cache, no-store, must-revalidate';
                 headers["Expires"]        = 'Thu, 01 Dec 1994 16:00:00 GMT';
 
-                response.sendHeader( 200, headers );
-                response.sendBody( jsseek, "utf8" );
-                response.finish();
+                response.writeHead( 200, headers );
+                response.write( jsseek, "utf8" );
+                response.close();
 
                 antup();
             };
@@ -87,11 +88,11 @@ http.createServer(function ( req, res ) {
 
     // Deliver Update Notice
     else clients.push({ already : utility.earliest(), vow : function(command) {
-        res.sendHeader( 200, {"Content-Type" : "application/javascript"} );
-        res.sendBody(utility.vigilant(
+        res.writeHead( 200, {"Content-Type" : "application/javascript"} );
+        res.write(utility.vigilant(
             command, unique
         ));
-        res.finish();
+        res.close();
     } });
 
 }).listen( config.seeker.port, config.seeker.host );
@@ -155,7 +156,7 @@ function seek() {
     utility.recurse( appdir, config.seeker.ignore, function( file, stat ) {
         if (seeking[file]) return;
         update( file );
-        process.watchFile( file, function( curr, prev ) {
+        fs.watchFile( file, function( curr, prev ) {
             update( file, curr, prev, stat )
         } );
         seeking[file] = 1;

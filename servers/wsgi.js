@@ -1,5 +1,5 @@
 var http     = require("http")
-,   posix    = require("posix")
+,   posix    = require("fs")
 ,   sys      = require("sys")
 ,   appdir   = process.ARGV[2]
 ,   njdir    = process.ARGV[3]
@@ -60,9 +60,9 @@ http.createServer(function ( req, res ) {
             remote : req.connection.remoteAddress
         });
 
-        res.sendHeader( code, headers );
-        res.sendBody( body, encoding || 'utf8' );
-        res.finish();
+        res.writeHead( code, headers );
+        res.write( body, encoding || 'utf8' );
+        res.close();
         res.finished = true;
     };
 

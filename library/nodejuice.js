@@ -36,7 +36,7 @@ exports.seeker = {
         navigate : false, // keep all browsers on the same page.
         scroll   : {
             lkp   : 'yes', // scroll to last know position for each page.
-            sync  : 'yes', // keep multiple browser scroll positions in sync.
+            sync  : 'no',  // keep multiple browser scroll positions in sync.
             speed : 300    // delay sync updates and last update in ms.
         },
     },
