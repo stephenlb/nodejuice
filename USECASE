@@ -57,22 +57,29 @@ Develop your app Client and Server Code
 ===============================================================================
  -- Presentations --
 ===============================================================================
-Let people access a page on thier mobile device or laptop.
-blank page.
-remove css
-git checkout branch
-git stash
-git reset --hard
-add flying sprite thing
-add many flying sprite things.
-create syntax on server error
-create syntax on js client error
-shutdown the server
 
-cp file, rm file css, img?
+-
+-
+-
+-go to this website: http://nodejuice.com
+-blank page
+-remove css (from text)
+-demo LKP
+-demo Sync Scrolling
+-git checkout branch
+-git stash
+-git reset --hard
+-add flying sprite thing
+-add many flying sprite things.
+-create syntax on server error
+-create syntax on js client error
+-shutdown the server
 
-turn website into UBIKTUNE
-turn website into TRUSTED OPINION
+-cp file, rm file css, img?
+-remove css (file)
+
+-turn website into UBIKTUNE
+-turn website into TRUSTED OPINION
 
 
 ===============================================================================
