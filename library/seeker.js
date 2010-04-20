@@ -79,13 +79,14 @@ var now = function() {
  * log(window_info.height);
  */
 },  winfo = function() {
-    return { height    : window.innerHeight ||
-                         document.documentElement.clientHeight ||
-                         document.body.clientHeight,
-             scrollTop : document.documentElement.scrollTop ||
-                         document.body.scrollTop,
-             size      : offset( document.getElementsByTagName('body')[0], 'Height' )
-           }
+    return {
+        height    : window.innerHeight ||
+                    document.documentElement.clientHeight ||
+                    document.body.clientHeight,
+        scrollTop : document.documentElement.scrollTop ||
+                    document.body.scrollTop,
+        size      : offset(document.getElementsByTagName('body')[0], 'Height')
+    }
 
 /**
  * OFFSET
@@ -107,6 +108,15 @@ var now = function() {
     return pos
 
 /**
+ * $
+ * =
+ * var div = $('divid');
+ */
+},  $ = function(id) {
+    return document.getElementById(id);
+
+
+/**
  * SEARCH
  * ======
  * var elements = search('a div span');
@@ -125,9 +135,32 @@ var now = function() {
  * ====
  * each( [1,2,3], function(item) { console.log(item) } )
  */
-},  each = function( list, fun ) {
-    for ( var i = 0, len = list.length; i < len; i++ ) fun(list[i])
-    
+},  each = function( o, f ) {
+    if ( !o || !f ) return;
+
+    if ( o[0] )
+        for ( var i = 0, l = o.length; i < l; )
+            f.call( o[i], o[i], i++ );
+    else 
+        for ( var i in o )
+            o.hasOwnProperty          &&
+            o.hasOwnProperty(i)       &&
+            typeof o[i] != 'function' &&
+            f.call( o[i], i, o[i] );
+
+/**
+ * WALK
+ * ====
+ * walk( search('body')[0], function(node) { node.doSomething; } )
+ */
+},  walk = function( n, f ) {
+    f.call( n, n );
+    n = n.firstChild;
+    while (n) {
+        walk( n, f );
+        n = n.nextSibling;
+    }
+
 /**
  * MAP
  * ===
@@ -167,33 +200,78 @@ var now = function() {
         }
     };
 
-
     if ( el.addEventListener ) el.addEventListener( type, rapfun, false );
     else if ( el.attachEvent ) el.attachEvent( 'on' + type, rapfun );
     else  el[ 'on' + type ] = rapfun;
+
+/**
+ * UNBIND
+ * ======
+ * unbind( 'keydown', search('a')[0] );
+ */
+},  unbind = function( type, el, fun ) {
+    if ( el.removeEventListener ) el.removeEventListener( type, false );
+    else if ( el.detachEvent ) el.detachEvent( 'on' + type, false );
+    else  el[ 'on' + type ] = null;
+
 
 /**
  * HEAD
  * ====
  * head().appendChild(elm);
  */
-},  head = function() {
-    return document.getElementsByTagName('head')[0]            ||
-           document.documentElement                            ||
-           document.getElementsByTagName('html')[0]            ||
-           document.getElementsByTagName('body')[0].parentNode ||
-           document.getElementsByTagName('body')[0]
+},  head = function() { return document.getElementsByTagName('head')[0] }
 
 /**
  * URLIZE
  * ======
  * var query_string = urlize({key:'dat'});
  */
-},  urlize = function( data, url ) {
+,   urlize = function( data, url ) {
     if (!data) return '';
     var params = [], key = '';
-    for ( key in data ) params.push( key + '=' + data[key] );
+    for ( key in data ) params.push( escape(key) + '=' + escape(data[key]) );
     return (url.indexOf('?') === -1 ? '?' : '&') + params.join('&')
+
+/**
+ * ATTR
+ * ====
+ * var attribute = attr( node, 'attribute' );
+ */
+},  attr = function( node, attribute, value ) {
+    if (value) node.setAttribute( attribute, value );
+    else return node.getAttribute && node.getAttribute(attribute);
+
+
+/**
+ * CSS
+ * ===
+ * var obj = create('div');
+ */
+},  css = function( element, styles ) {
+    for (var style in styles) if (styles.hasOwnProperty(style))
+        element.style[style] = styles[style] + (
+            '|width|height|top|left|'.indexOf(style) > 0 ? 'px' : ''
+        );
+
+/**
+ * CREATE
+ * ======
+ * var obj = create('div');
+ */
+},  create = function(element) {
+    return document.createElement(element);
+
+
+/**
+ * BEGET
+ * =====
+ * var obj = beget(oldObject);
+ */
+},  beget = function(o) {
+    function F() {}
+    F.prototype = o;
+    return new F();
 
 /**
  * PARSE
@@ -201,7 +279,8 @@ var now = function() {
  * var obj = parse("{obj:'dat'}");
  */
 },  parse = function(string) {
-    return JSON && JSON.parse(string) || eval('('+string+')')
+    return typeof JSON !== 'undefined' &&
+        JSON.parse(string) || eval('('+string+')')
 
 /**
  * XDR Cross Domain Request
@@ -229,17 +308,21 @@ var now = function() {
     ,   data    = setup.data    || {}
     ,   fail    = setup.fail    || function(){}
     ,   success = setup.success || function(){}
-    ,   attach  = head()
+    ,   append  = function() { setTimeout( function() { 
+            // if (!head()) return append();
+            try { head().appendChild(script); }
+            catch(err) { append(); }
+         }, 100 ) }
     ,   done    = function(failed) {
             clearTimeout(timeout);
             if (!script) return;
             failed && fail.call( script, unescape(script.src) );
             script.onload = script.onreadystatechange = script.onerror = null;
-            attach.removeChild(script);
+            try {head().removeChild(script);} catch(error) {}
         };
 
     script.onload = script.onreadystatechange = function(e) {
-        // nothing until it's loaded.
+        // nothing untill it's loaded.
         var state = this.readyState;
         if ( !(!state ||
                 state == "loaded" ||
@@ -268,10 +351,11 @@ var now = function() {
 
     bind( 'error', script, function() { done(1) } );
 
-    data.unique = unique;
+    data['unique'] = unique;
     script.src  = setup.url + urlize( data, setup.url );
 
-    setTimeout( function() { attach.appendChild(script) }, 1 )
+    // try to call xdr as soon as possible.
+    append();
 
 /**
  * AJAX
@@ -320,17 +404,30 @@ var now = function() {
             }
         }
     ,   done = 0
+    ,   data = setup.data
+    ,   url  = setup.url
     ,   ival = setInterval( rsc, 14 ); // polling method
 
-    xhr.open( setup.type || 'get', setup.url );
+    xhr.open( setup.type || 'get', data ? urlize( data, url ) : url );
+    /*
     xhr.setRequestHeader(
         "Content-Type",
         "application/x-www-form-urlencoded"
     );
+    */
 
     // Send
-    xhr.send(urlize( setup.data, setup.url ));
+    xhr.send(null /*urlize( data, setup.url )*/);
 };
+
+
+
+/* =-=====================================================================-= */
+/* =-=====================================================================-= */
+/* =-=======================      NODEJUICE      =========================-= */
+/* =-=====================================================================-= */
+/* =-=====================================================================-= */
+
 
 var waitfor      = now()
 ,   scroll_rec   = now()
@@ -403,7 +500,6 @@ function seek(wait) { setTimeout(function() {
         url     : host,
         type    : 'text',
         success : function(response) {
-            // console.log(response);
             if (response == 'update') return location.reload(false);
 
             seek(1);
@@ -425,7 +521,7 @@ function seek(wait) { setTimeout(function() {
     })
 }, wait || 2000 ) }
 
- // Prevent multiple connections
+// Prevent multiple connections
 window['-nodeJuice-'] || (window['-nodeJuice-'] = 1) && seek(+"{{wait}}");
 
 })("http://{{host}}/")
