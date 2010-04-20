@@ -39,7 +39,7 @@ http.createServer(function ( req, res ) {
         res.write(utility.vigilant(
             command, unique
         ));
-        res.close();
+        res.end();
         while (clients.length > 0) clients.shift().vow(command);
         return;
     }
@@ -73,7 +73,7 @@ http.createServer(function ( req, res ) {
 
                 response.writeHead( 200, headers );
                 response.write( jsseek, "utf8" );
-                response.close();
+                response.end();
 
                 antup();
             };
@@ -92,7 +92,7 @@ http.createServer(function ( req, res ) {
         res.write(utility.vigilant(
             command, unique
         ));
-        res.close();
+        res.end();
     } });
 
 }).listen( config.seeker.port, config.seeker.host );

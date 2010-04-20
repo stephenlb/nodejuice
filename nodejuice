@@ -12,7 +12,6 @@
 # -
 # -
 # -(maybe fixed) error, same problem when you delete a file.  stat failure?
-# -make twitter account for nodejuice
 # -allow data streaming in sidekick server.
 # -xdr3: make easy production/dev mode with closure compiler.
 # -redo debian packages.
@@ -27,6 +26,12 @@
 # -sticky pages, if localhost changes a page, then all other clients will go.
 # -sidekick video tutorial
 # -aws api
+
+# BUILD COMMAND
+# =============
+# java -jar /opt/minify/compiler.jar \
+# --js /opt/nodejuice/library/seeker.js \
+# > /opt/nodejuice/library/seeker.min.js
 
 
 # USAGE:

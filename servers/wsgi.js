@@ -62,7 +62,7 @@ http.createServer(function ( req, res ) {
 
         res.writeHead( code, headers );
         res.write( body, encoding || 'utf8' );
-        res.close();
+        res.end();
         res.finished = true;
     };
 

@@ -324,7 +324,7 @@ var fetching = 0
         } );
     } );
 
-    request.close();
+    request.end();
 };
 
 var earliest = exports.earliest = function() { return+new Date };

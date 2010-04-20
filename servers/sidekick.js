@@ -43,7 +43,7 @@ http.createServer(function (req, res) {
                         response.headers['content-length'] = data.length;
                         res.writeHead( response.statusCode, response.headers);
                         res.write( data, encoding );
-                        res.close();
+                        res.end();
                     } )
 
                 if (
@@ -56,7 +56,7 @@ http.createServer(function (req, res) {
                 response.headers['content-length'] = data.length;
                 res.writeHead( response.statusCode, response.headers );
                 res.write( data, encoding );
-                res.close();
+                res.end();
         } });
     } );
 
