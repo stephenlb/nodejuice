@@ -4,9 +4,11 @@ a:hover,#node,#juice,.n,.j{color:#ffcb16}
 #git:hover,#node,.n{color:#31a0ff}
 .outlinks,#git{color:#3b3b3b}
 
+/*body{background-color:#ff00ff}*/
+body{background-color:#3b3b3b}
+
 .code,#bottom{background-color:#050505}
 #nodejuice{background-color:#fff}
-body{background-color:#3b3b3b}
 #git{background-color:#ffcb16}
 
 .comment{color:#4e9a06}
