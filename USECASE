@@ -62,18 +62,28 @@ Develop your app Client and Server Code
 -
 -
 -go to this website: http://nodejuice.com
+-on your keyboard, what does F5 do? (web browser context)
+-you have pressed F5 right?
+-you've told someone to Press F5
+-F5 in browser context, will reload the page.
+-this tool I'm showing you is for development ENV only
+-do not use this tool for production!
+-save questions till the end.
+-hello world
 -blank page
--remove css (from text)
+-remove css (from header link)
 -change css color bg to magenta!
+-add flying sprite thing
+
+-nodeJuice is versitile.
+-supports all languages: ruby, python, php, javascript
+-supports all web servers: apache & enginX 
+-nodeJuice is fault tolerant.
+-create syntax on server error
+
 -demo LKP
 -demo Sync Scrolling
--git checkout branch
--git stash
--git reset --hard
--add flying sprite thing
--add many flying sprite things.
--create syntax on server error
--create syntax on js client error
+
 -shutdown the server
 
 -cp file, rm file css, img?
@@ -81,6 +91,7 @@ Develop your app Client and Server Code
 
 -turn website into TRUSTED OPINION
 
+-git reset --hard
 
 ===============================================================================
  -- Long Distance Client Walkthrough --

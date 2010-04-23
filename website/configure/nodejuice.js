@@ -23,13 +23,13 @@ exports.seeker = {
     host    : null,
     port    : 8002,
     delay   : 10,
-    wait    : 5800,
+    wait    : 2000,
     touch   : true, // allow file touch to push updates.
     browser : { // !!! features don't exist yet.
         navigate : false, // keep all browsers on the same page.
         scroll   : {
-            lkp   : 'yes', // scroll to last know position for each page.
-            sync  : 'yes',  // keep multiple browser scroll positions in sync.
+            lkp   : 'no', // scroll to last know position for each page.
+            sync  : 'no',  // keep multiple browser scroll positions in sync.
             speed : 300    // delay sync updates and last update in ms.
         },
     },
