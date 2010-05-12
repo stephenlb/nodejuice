@@ -321,6 +321,8 @@ var now = function() {
             try {head().removeChild(script);} catch(error) {}
         };
 
+    attr( script, 'async', 'true' );
+
     script.onload = script.onreadystatechange = function(e) {
         // nothing untill it's loaded.
         var state = this.readyState;
