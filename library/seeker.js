@@ -323,6 +323,9 @@ var now = function() {
 
     attr( script, 'async', 'true' );
 
+    // script.async = 'true';
+    // script.defer = 'true';
+
     script.onload = script.onreadystatechange = function(e) {
         // nothing untill it's loaded.
         var state = this.readyState;
@@ -502,7 +505,7 @@ function seek(wait) { setTimeout(function() {
         url     : host,
         type    : 'text',
         success : function(response) {
-            if (response == 'update') return location.reload(false);
+            if (response == 'update') return location.reload(true);
 
             seek(1);
 
