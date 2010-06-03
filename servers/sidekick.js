@@ -8,6 +8,8 @@ var sys      = require('sys')
 ,   config   = utility.ignite()
 ,   rxml     = /<[^>]*>/g;
 
+process.addListener( "unhandledException", function(msg) { utility.inform(msg) } );
+
 if (!devmode) process.exit();
 
 http.createServer(function (req, res) {

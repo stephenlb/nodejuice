@@ -11,6 +11,8 @@ var http     = require("http")
 ,   wsgi     = exports
 ,   rxnojs   = /\.js$/;
 
+process.addListener( "unhandledException", function(msg) { inform(msg) } );
+
 http.createServer(function ( req, res ) {
     var host = ((req.headers||{}).host||'').split(':')[0] || 'localhost';
 

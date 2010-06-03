@@ -16,7 +16,7 @@ var sys        = require('sys')
 ,   lastscroll = {}
 ,   cmdspliter = /cmd=|\&/;
 
-process.addListener( "unhandledException", function(msg) { inform(msg) } );
+process.addListener( "unhandledException", function(msg) { utility.inform(msg) } );
 
 if (!devmode) process.exit();
 
