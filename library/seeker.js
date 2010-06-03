@@ -505,7 +505,7 @@ function seek(wait) { setTimeout(function() {
         url     : host,
         type    : 'text',
         success : function(response) {
-            if (response == 'update') return location.reload(true);
+            if (response == 'update') return location.reload(false);
 
             seek(1);
 

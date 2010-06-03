@@ -307,7 +307,7 @@ var fetching = 0
         if (response.statusCode != 200)
             fail && fail( '', response, encoding );
 
-        response.setBodyEncoding(encoding);
+        response.setEncoding(encoding);
         response.addListener( "data", function(chunk) {
 
             data += chunk;
