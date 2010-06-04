@@ -44,7 +44,8 @@ http.createServer(function (req, res) {
                         data = utility.amuse( data, host );
                         response.headers['content-length'] = data.length;
                         res.writeHead( response.statusCode, response.headers);
-                        res.write( data, encoding );
+                        if (+response.statusCode != 304)
+                            res.write( data, encoding );
                         res.end();
                     } )
 
@@ -57,7 +58,8 @@ http.createServer(function (req, res) {
 
                 response.headers['content-length'] = data.length;
                 res.writeHead( response.statusCode, response.headers );
-                res.write( data, encoding );
+                if (+response.statusCode != 304)
+                    res.write( data, encoding );
                 res.end();
         } });
     } );
