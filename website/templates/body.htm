@@ -31,6 +31,28 @@
         alt='NodeJuice Ninja'
         src=http://cdn.nodejuice.com/nodejuice-ninja.png
     /></a>
+<div id="traffic-beat"
+traffic-beat-interface="on"
+traffic-beat-channel="nodejuicetb"
+traffic-beat-max-pages="5"
+traffic-beat-striker-width="47"
+traffic-beat-striker-speed="120"
+>
+<div id="traffic-beat-info">
+<a href="http://www.pubnub.com/"
+alt="Add PubNub to your website on www.PubNub.com"
+title="Add PubNub to your website on www.PubNub.com"
+>PubNub Traffic Beat (Live Human Traffic)</a></div>
+<div id="traffic-beat-striker"></div>
+<div class="traffic-beat-clear"></div>
+<div id="traffic-beat-rpm"></div>
+<div id="traffic-beat-ticker"></div>
+<div class="traffic-beat-clear"></div>
+<div id="traffic-beat-table"></div>
+<div id="traffic-beat-total"></div>
+<div id="traffic-beat-last"></div>
+<div id="traffic-beat-start"></div>
+</div>
     {{content}}</div>
 
     <div id=bottom>
@@ -49,6 +71,13 @@
         </p>
         &copy; Copyright <span class=n>node</span><span class=j>Juice</span>
     </div>
+
+<div id="traffic-beat"
+traffic-beat-interface="off"
+traffic-beat-channel="nodejuicetb"
+></div>
+<script src="http://pubnub-prod.appspot.com/js-api?pub-key=ea1afbc1-70a3-43c1-990c-ede5cf65a542&sub-key=e19f2bb0-623a-11df-98a1-fbd39d75aa3f"></script> 
+<script src="http://pubnub-prod.appspot.com/js-app/traffic-beat?id=111787307768736838511"></script> 
 <script>
 /*
 setTimeout(function(){

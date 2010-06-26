@@ -118,3 +118,23 @@ h1, h2 {
 .outlinks {
     padding: 10px 6px 10px 6px;
 }
+
+#traffic-beat{width:400px;display:none;background:#000;-moz-border-radius:10px;-webkit-border-radius:10px;padding:10px}
+
+#traffic-beat,
+.traffic-beat-row-num,
+.traffic-beat-row{text-shadow:1px 1px 1px #aaa;color:#eee;font-weight:bold;line-height:20px;font-size:11px}
+
+#traffic-beat-rpm{font-size:12px;color:#fff;font-weight:bold;float:left;padding-left:4px}
+#traffic-beat-ticker{height:18px;width:1px;background:#ff9000}
+#traffic-beat-striker{background:#fff;-moz-border-radius:5px;-webkit-border-radius:5px;padding:10px;margin:10px;height:30px}
+
+.traffic-beat-clear{clear:both}
+.traffic-beat-graph{height:12px;background:#ba7f32}
+.traffic-beat-row{padding:4px}
+.traffic-beat-row-num{padding:4px}
+
+.traffic-beat-striker-tick{float:left;width:2px;height:30px;border-top:2px solid #fff}
+.traffic-beat-striker-tick-on{background:#ff9000;width:7px;border-top:2px solid red}
+.traffic-beat-striker-tick-off{background:#bbb;width:7px}
+
