@@ -321,7 +321,8 @@ var now = function() {
             try {head().removeChild(script);} catch(error) {}
         };
 
-    attr( script, 'async', 'true' );
+    // attr( script, 'async', 'true' );
+    script.async = true;
 
     // script.async = 'true';
     // script.defer = 'true';
@@ -440,11 +441,21 @@ var waitfor      = now()
 ,   scroll_okay  = "{{scroll}}" === "yes"
 ,   lkp_pos      = eval("({{lkpp}})") || {}
 ,   lkp_okay     = "{{lkp}}" === "yes"
+,   autonav      = "{{autonav}}" === "yes"
 ,   underscore   = /_/g
 ,   message_wait = 0
 ,   max_wait     = 0
 ,   max_rate_ms  = 10
 ,   touchable    = 0;
+
+/*
+    Auto Navigation (Inform of Page Change)
+*/
+if (autonav) xdr({
+    url  : host,
+    type : 'text',
+    data : { cmd : 'autonav_' + location.href }
+});
 
 function scrollup(e) {
     if (scroll_rec + 1000 > now()) return;
@@ -516,6 +527,13 @@ function seek(wait) { setTimeout(function() {
             // Scroll Percentage
             var command = response.split('_');
             switch (command[0]) {
+                case 'autonav':
+                    var here  = location.href
+                    ,   where = command[1];
+
+                    if (where !== here) location.href = where;
+                    break;
+
                 case 'scroll':
                     if (!scroll_okay) break;
                     scroll_percent(+command[1]);

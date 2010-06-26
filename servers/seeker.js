@@ -33,6 +33,11 @@ http.createServer(function ( req, res ) {
             case 'scroll' :
                 lastscroll[cmds[2]||''] = cmds[1];
                 break;
+            /*
+            case 'autonav' :
+                lastscroll[cmds[2]||''] = cmds[1];
+                break;
+            */
         }
 
         res.writeHead( 200, {"Content-Type" : "application/javascript"} );
@@ -49,7 +54,7 @@ http.createServer(function ( req, res ) {
 
         if (seeker) return seeker( req, res );
 
-        utility.noble( njdir + '/library/seeker.min.js',
+        utility.noble( njdir + '/library/seeker.js',
         function( type, js, encoding ) {
             seeker = function( request, response ) {
                 var headers  = { "Content-Type" : type }
@@ -59,12 +64,13 @@ http.createServer(function ( req, res ) {
                 ,   jsseek   = '';
 
                 jsseek = utility.supplant( js, {
-                    host   : host,
-                    wait   : config.seeker.wait,
-                    speed  : config.seeker.browser.scroll.speed,
-                    scroll : config.seeker.browser.scroll.sync,
-                    lkpp   : JSON.stringify(lastscroll).replace( quotescape, '\\"'),
-                    lkp    : config.seeker.browser.scroll.lkp
+                    host    : host,
+                    wait    : config.seeker.wait,
+                    speed   : config.seeker.browser.scroll.speed,
+                    scroll  : config.seeker.browser.scroll.sync,
+                    autonav : config.seeker.browser.navigate,
+                    lkpp    : JSON.stringify(lastscroll).replace( quotescape, '\\"'),
+                    lkp     : config.seeker.browser.scroll.lkp
                 } );
 
                 headers['Content-Length'] = jsseek.length;
