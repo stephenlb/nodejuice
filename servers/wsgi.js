@@ -52,7 +52,8 @@ http.createServer(function ( req, res ) {
             ) body = utility.amuse( body, host );
         }
 
-        headers["Content-Length"] = body.length;
+        headers["Content-Length"] = Buffer.byteLength(body);
+
 
         utility.inform({
             code   : code,
