@@ -73,7 +73,7 @@ http.createServer(function ( req, res ) {
                     lkp     : config.seeker.browser.scroll.lkp
                 } );
 
-                headers['Content-Length'] = jsseek.length;
+                headers["Content-Length"] = Buffer.byteLength(jsseek);
                 headers["Cache-Control"]  = 'no-cache, no-store, must-revalidate';
                 headers["Expires"]        = 'Thu, 01 Dec 1994 16:00:00 GMT';
 
