@@ -1,6 +1,6 @@
 exports.wsgi = {
     host : null,
-    port : 80,
+    port : 8888,
     root : 'index.htm',
     url  : [
         [/^\/rad*$/, '/rad.js'],
@@ -15,7 +15,7 @@ exports.sidekick = {
     port  : 8010, // access your server from this port.
     fetch : {     // point to your web server.
         host : 'localhost',
-        port : 80
+        port : 8888
     }
 };
 
