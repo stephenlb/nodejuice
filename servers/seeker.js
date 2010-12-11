@@ -56,6 +56,7 @@ http.createServer(function ( req, res ) {
 
         utility.noble( njdir + '/library/seeker.js',
         function( type, js, encoding ) {
+            if (type == "text/html") type = type + "; charset=\"UTF-8\"";
             seeker = function( request, response ) {
                 var headers  = { "Content-Type" : type }
                 ,   headhost = ((request.headers||{}).host||'').split(':')[0]
@@ -73,7 +74,11 @@ http.createServer(function ( req, res ) {
                     lkp     : config.seeker.browser.scroll.lkp
                 } );
 
-                headers["Content-Length"] = Buffer.byteLength(jsseek);
+                if (type.indexOf('text') != -1)
+                    headers["Content-Length"] = Buffer.byteLength(jsseek);
+                else
+                    headers["Content-Length"] = jsseek.length;
+
                 headers["Cache-Control"]  = 'no-cache, no-store, must-revalidate';
                 headers["Expires"]        = 'Thu, 01 Dec 1994 16:00:00 GMT';
 

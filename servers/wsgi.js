@@ -39,6 +39,8 @@ http.createServer(function ( req, res ) {
         type    = type    || 'text/html';
         headers = headers || {};
 
+        type = type || "text/html";
+        if (type == "text/html") type = type + "; charset=\"UTF-8\"";
         headers["Content-Type"] = type;
 
         if (devmode) {
@@ -52,8 +54,10 @@ http.createServer(function ( req, res ) {
             ) body = utility.amuse( body, host );
         }
 
-        headers["Content-Length"] = Buffer.byteLength(body);
-
+        if (type.indexOf('text') != -1)
+            headers["Content-Length"] = Buffer.byteLength(body);
+        else
+            headers["Content-Length"] = body.length;
 
         utility.inform({
             code   : code,
