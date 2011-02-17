@@ -153,6 +153,7 @@ var mime = exports.mime = {
           , "tiff"  : "image/tiff"
           , "torrent" : "application/x-bittorrent"
           , "tr"    : "text/troff"
+          , "ttf"   : "font/ttf"
           , "txt"   : "text/plain"
           , "vcf"   : "text/x-vcard"
           , "vcs"   : "text/x-vcalendar"
