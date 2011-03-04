@@ -7,8 +7,8 @@ exports.wsgi = {
     port  : 8080, // port :-/
     root  : 'index.htm', // used for static content as the default.
     retry : { max: 4, wait: 120 }, // number of retries to load a file.
+    query_string : false, // include query string from file requests.
     url   : [ // interface between browser URL Request and Files.
-
         // [ /^\/app$/, '/app.js' ], // run an application.
         // [/^\/.*?/, '/static/'], // serve content from /static/ dir.
         [/^\/.*?/, '/'] // server static content from root app dir.
@@ -32,12 +32,12 @@ exports.seeker = {
                      // setting too low will cause file read errors in Apache
     wait    : 1200,  // time in milliseconds before a new connection.
                      // setting too low will make crazziness.
-    browser : { // !!! features don't exist yet.
+    browser : {
         navigate : false, // keep all browsers on the same page.
         scroll   : {
-            lkp   : 'no', // scroll to last know position for each page.
-            sync  : 'no', // keep multiple browser scroll positions in sync.
-            speed : 300   // delay sync updates and last update in ms.
+            lkp   : 'yes', // scroll to last know position for each page.
+            sync  : 'yes', // keep multiple browser scroll positions in sync.
+            speed : 300    // delay sync updates and last update in ms.
         },
     },
     add     : true,  // allow new file to push updates.

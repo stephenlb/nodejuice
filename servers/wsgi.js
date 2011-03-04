@@ -102,8 +102,12 @@ function error500( req, res, file, e ) {
 }
 
 function send_file( req, res, action, retries ) {
-    var path    = req.url.replace( action[0], action[1] )
-    ,   syspath = appdir + path +
+    var path = req.url.replace( action[0], action[1] )
+
+    if (!config.wsgi.query_string)
+        path = path.replace( /\?.*$/, '' );
+
+    var syspath = appdir + path +
                   (path.slice(-1) === '/' ? config.wsgi.root : '');
 
     utility.noble( syspath, function( type, data, encoding ) {
