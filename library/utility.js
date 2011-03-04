@@ -18,7 +18,7 @@ process.addListener( "unhandledException", function(msg) { inform(msg) } );
 
 var ignite = exports.ignite = function() {
     return extend( true,
-        require(njdir  + "/library/nodejuice"),
+        require(njdir  + "/config/nodejuice"),
         require(njconfig)
     );
 };

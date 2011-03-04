@@ -12,7 +12,6 @@ exports.wsgi = {
         // [ /^\/app$/, '/app.js' ], // run an application.
         // [/^\/.*?/, '/static/'], // serve content from /static/ dir.
         [/^\/.*?/, '/'] // server static content from root app dir.
-
     ]
 };
 

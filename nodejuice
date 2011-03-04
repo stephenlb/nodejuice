@@ -97,9 +97,10 @@ if [ -e "$nodeconfig3" ]; then nodeconfig="$nodeconfig3"; fi
 ## Check for configurations files
 if [[ ! -e "$nodeconfig1" && ! -e "$nodeconfig2" && ! -e "$nodeconfig3" ]]
 then
+    nodeconfig="$nodejuice/config/nodejuice.js"
     echo -e "\n\033[0;33;1m  WARNING: 'nodejuice.js' configuration file not found. "
-    echo -e "  Using Default Configuration for: $application \033[0m"
-    nodeconfig="$nodejuice/nodejuice.js"
+    echo -e "  Using Default Configuration for: $application"
+    echo -e "  Default Configuration is Here: $nodeconfig \033[0m"
 fi
 
 nodeconfig="`echo $nodeconfig | sed -e 's#\.js$##'`"
