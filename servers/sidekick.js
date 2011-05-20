@@ -6,9 +6,12 @@ var sys      = require('sys')
 ,   devmode  = process.ARGV[5]
 ,   utility  = require(njdir + '/library/utility')
 ,   config   = utility.ignite()
-,   rxml     = /<[^>]*>/g;
+,   rxml     = /<[^>]*>/g
+,   report   = function(msg) { utility.inform(msg) };
 
-process.addListener( "unhandledException", function(msg) { utility.inform(msg) } );
+process
+.addListener( "unhandledException", report )
+.addListener( "uncaughtException", report );
 
 if (!devmode) process.exit();
 

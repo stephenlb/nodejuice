@@ -29,14 +29,14 @@ exports.seeker = {
     port    : 8002,  // port :-/
     delay   : 180,   // time in ms before page starts to reload.
                      // setting too low will cause file read errors in Apache
-    wait    : 1200,  // time in milliseconds before a new connection.
+    wait    : 3500,  // time in milliseconds before a new connection.
                      // setting too low will make crazziness.
     browser : {
         navigate : false, // keep all browsers on the same page.
         scroll   : {
-            lkp   : 'yes', // scroll to last know position for each page.
-            sync  : 'yes', // keep multiple browser scroll positions in sync.
-            speed : 300    // delay sync updates and last update in ms.
+            lkp   : 'no', // scroll to last know position for each page.
+            sync  : 'no', // keep multiple browser scroll positions in sync.
+            speed : 400    // delay sync updates and last update in ms.
         },
     },
     add     : true,  // allow new file to push updates.
