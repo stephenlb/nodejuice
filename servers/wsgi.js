@@ -1,10 +1,11 @@
 var http     = require("http")
 ,   posix    = require("fs")
 ,   sys      = require("sys")
-,   appdir   = process.ARGV[2]
-,   njdir    = process.ARGV[3]
-,   njconfig = process.ARGV[4]
-,   devmode  = process.ARGV[5]
+,   argv     = process.ARGV || process.argv
+,   appdir   = argv[2]
+,   njdir    = argv[3]
+,   njconfig = argv[4]
+,   devmode  = argv[5]
 ,   utility  = require(njdir  + "/library/utility")
 ,   rad      = require(njdir  + "/library/rad").rad
 ,   config   = utility.ignite()
