@@ -52,22 +52,22 @@ var extend = exports.extend = function() {
         if ( !obj || toString.call(obj) !== "[object Object]" || obj.nodeType || obj.setInterval ) {
             return false;
         }
-        
+
         var has_own_constructor = hasOwnProperty.call(obj, "constructor");
         var has_is_property_of_method = hasOwnProperty.call(obj.constructor.prototype, "isPrototypeOf");
         // Not own constructor property must be Object
         if ( obj.constructor && !has_own_constructor && !has_is_property_of_method) {
             return false;
         }
-        
+
         // Own properties are enumerated firstly, so to speed up,
         // if last one is own, then all properties are own.
-    
+
         var last_key;
         for ( key in obj ) {
             last_key = key;
         }
-        
+
         return typeof last_key === "undefined" || hasOwnProperty.call( obj, last_key );
     };
 
@@ -227,7 +227,7 @@ var noble = exports.noble = function( file, success, fail, retries ) {
     } );
 
     //noblefile.addErrback(function() {
-    
+
     //retry() });
 
     function retry() {
@@ -266,7 +266,7 @@ var fetching = 0
     if ( fetching >= fetchmax )
         return fetchque.push(setup);
     else fetching++;
-    
+
     var port     = setup.port     || 80
     ,   host     = setup.host     || 'localhost'
     ,   type     = setup.type     || 'GET'
@@ -283,8 +283,14 @@ var fetching = 0
     headers['content-length'] = (body || '').length;
 
     var data    = ''
-    ,   request = http.createClient( port, host )
-        .request( type, path, headers );
+
+    var options = {
+        port     : setup.port     || 80
+    ,   host     : setup.host     || 'localhost'
+    ,   method   : setup.type     || 'GET'
+    ,   path     : setup.path     || '/'
+    }
+    request = http.request(options);
 
     if (body) request.write( body, encoding );
 
